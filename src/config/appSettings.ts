@@ -4,6 +4,10 @@ export const DEFAULT_MOCK_SETTING = {
   content: 'I am a mock',
 };
 
+export const DEFAULT_TEXT_RESOURCE_SETTING = {
+  text: '',
+};
+
 export const DEFAULT_CONTEXT = Context.BUILDER;
 export const DEFAULT_PERMISSION = PermissionLevel.Read;
 

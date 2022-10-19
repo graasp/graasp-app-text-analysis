@@ -10,6 +10,7 @@ import i18n from '../config/i18n';
 import { AppDataProvider } from './context/AppDataContext';
 import { AppSettingProvider } from './context/AppSettingContext';
 import { MembersProvider } from './context/MembersContext';
+import MockPlayerView from './views/read/MockPlayerView';
 import PlayerView from './views/read/PlayerView';
 
 const App: FC = () => {
@@ -34,11 +35,12 @@ const App: FC = () => {
 
       // eslint-disable-next-line no-fallthrough
       case Context.PLAYER:
+        return <PlayerView />;
       // todo: add the view to show in the player
 
       // eslint-disable-next-line no-fallthrough
       default:
-        return <PlayerView />;
+        return <MockPlayerView />;
     }
   };
 
