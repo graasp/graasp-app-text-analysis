@@ -10,6 +10,7 @@ import i18n from '../config/i18n';
 import { AppDataProvider } from './context/AppDataContext';
 import { AppSettingProvider } from './context/AppSettingContext';
 import { MembersProvider } from './context/MembersContext';
+import BuilderView from './views/admin/BuilderView';
 import MockPlayerView from './views/read/MockPlayerView';
 import PlayerView from './views/read/PlayerView';
 
@@ -27,6 +28,7 @@ const App: FC = () => {
   const renderContent = (): ReactElement => {
     switch (context.get('context')) {
       case Context.BUILDER:
+        return <BuilderView />;
       // todo: add the view to show in the builder
 
       // eslint-disable-next-line no-fallthrough

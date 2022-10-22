@@ -8,6 +8,10 @@ export const DEFAULT_TEXT_RESOURCE_SETTING = {
   text: '',
 };
 
+export const DEFAULT_LESSON_TITLE = {
+  text: 'Your Lesson',
+};
+
 export const DEFAULT_CONTEXT = Context.BUILDER;
 export const DEFAULT_PERMISSION = PermissionLevel.Read;
 

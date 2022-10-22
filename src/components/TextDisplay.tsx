@@ -2,8 +2,9 @@ import { FC } from 'react';
 
 import { Box, Button, Typography } from '@mui/material';
 
-type Prop = { text: string };
-const BOX_DEFAULT = {
+type Prop = { text: string; title: string };
+
+const bannerBox = {
   height: '70px',
   backgroundColor: '#BABABA',
   padding: '2px',
@@ -11,7 +12,7 @@ const BOX_DEFAULT = {
 };
 
 // eslint-disable-next-line arrow-body-style
-const TextDisplay: FC<Prop> = ({ text }) => {
+const TextDisplay: FC<Prop> = ({ text, title }) => {
   return (
     <div>
       <Box
@@ -19,7 +20,7 @@ const TextDisplay: FC<Prop> = ({ text }) => {
         justifyContent="space-between"
         display="flex"
         alignItems="center"
-        sx={BOX_DEFAULT}
+        sx={bannerBox}
       >
         <Typography
           variant="h4"
@@ -29,7 +30,7 @@ const TextDisplay: FC<Prop> = ({ text }) => {
             fontWeight: '500',
           }}
         >
-          Lesson Title
+          {title}
         </Typography>
         <Button
           variant="contained"
@@ -45,7 +46,7 @@ const TextDisplay: FC<Prop> = ({ text }) => {
         sx={{
           margin: '25px',
           border: '2px solid #5050d2',
-          borderRadius: '25px',
+          borderRadius: '10px',
           padding: '25px',
         }} // la couleur ne s'affiche pas avec --graasp-primary
       >
