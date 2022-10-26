@@ -6,6 +6,7 @@ import {
   LESSON_TITLE_KEY,
   TEXT_RESOURCE_KEY,
 } from '../../../config/appSettingTypes';
+import KeyWords from '../../KeyWords';
 import SetText from '../../SetText';
 
 // eslint-disable-next-line arrow-body-style
@@ -29,6 +30,7 @@ const BuilderView: FC = () => {
         resourceKey={TEXT_RESOURCE_KEY}
         textFieldLabel="Enter the text students will see"
       />
+      <KeyWords />
     </>
   );
 };
