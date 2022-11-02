@@ -1,3 +1,4 @@
+/// <reference types="../../src/interfaces/window" />
 import '@testing-library/cypress/add-commands';
 
 import { MOCK_SERVER_API_HOST, MOCK_SERVER_ITEM } from '../fixtures/appData';
