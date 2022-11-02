@@ -4,9 +4,19 @@ import { Box, Button, TextField } from '@mui/material';
 
 import { useAppSettingContext } from './context/AppSettingContext';
 
-type Prop = { resourceKey: string; textFieldLabel: string };
+type Prop = {
+  resourceKey: string;
+  textFieldLabel: string;
+  textDataCy: string;
+  buttonDataCy: string;
+};
 
-const SetText: FC<Prop> = ({ resourceKey, textFieldLabel }) => {
+const SetText: FC<Prop> = ({
+  resourceKey,
+  textFieldLabel,
+  textDataCy,
+  buttonDataCy,
+}) => {
   const [resourceText, setResourceText] = useState('');
   const { patchAppSetting, postAppSetting, appSettingArray } =
     useAppSettingContext();
@@ -34,6 +44,7 @@ const SetText: FC<Prop> = ({ resourceKey, textFieldLabel }) => {
       sx={{ margin: '25px' }}
     >
       <TextField
+        data-cy={textDataCy}
         multiline
         label={textFieldLabel}
         variant="outlined"
@@ -41,6 +52,7 @@ const SetText: FC<Prop> = ({ resourceKey, textFieldLabel }) => {
         sx={{ width: '100%', marginRight: '25px' }}
       />
       <Button
+        data-cy={buttonDataCy}
         variant="contained"
         sx={{
           marginRight: '25px',

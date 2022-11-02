@@ -10,7 +10,7 @@ import { REACT_APP_API_HOST } from '../config/env';
 export const mockContext: LocalContext = {
   apiHost: REACT_APP_API_HOST,
   permission: 'admin',
-  context: 'builder',
+  context: 'player',
   itemId: '1234-1234-123456-8123-123456',
   memberId: 'mock-member-id',
 };
@@ -68,7 +68,7 @@ const buildDatabase = (
       name: TEXT_RESOURCE_KEY,
       data: {
         ...DEFAULT_TEXT_RESOURCE_SETTING,
-        text: 'Lorem ipsum dolor sit amet. A dolorum impedit et fugit doloribus quo asperiores aliquid qui ullam omnis sed reiciendis minus et galisum Quis et quaerat asperiores! Eum doloremque quam eum similique optio ex atque distinctio. Et magnam neque qui galisum modi et aliquid doloremque aut ipsam amet aut eligendi  et omnis voluptate. 33 expedita voluptatibus id consequatur eveniet hic nihil iste non molestiae rerum et debitis obcaecati eos quam itaque et neque corrupti.',
+        text: '',
         // todo: place here any setting you would like to overwrite
         // settingKey: value
       },
