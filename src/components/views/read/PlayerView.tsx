@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import {
   KEYWORDS_SETTING_KEY,
@@ -18,9 +18,33 @@ import { useAppSettingContext } from '../../context/AppSettingContext';
 type textSetting = { text: string };
 type keywordsSetting = { keywords: string[] };
 
+const DICTIONARY_API_BASE_URL =
+  'https://api.dictionaryapi.dev/api/v2/entries/en/';
+
 const PlayerView: FC = () => {
   const { appSettingArray } = useAppSettingContext();
   const [summon, setSummon] = useState(false);
+  const [dictionary, setDictionary] = useState(new Map<string, string>());
+
+  const keywords = (appSettingArray.find((s) => s.name === KEYWORDS_KEY)
+    ?.data || DEFAULT_KEYWORDS_LIST) as keywordsSetting;
+
+  const fetchKeywordDef = async (word: string): Promise<string> => {
+    const response = await fetch(DICTIONARY_API_BASE_URL + word);
+    const json = await response.json();
+    return json[0].meanings[0].definitions[0];
+  };
+
+  useEffect(() => {
+    console.log('In useEffect');
+    if (summon) {
+      keywords.keywords.forEach((word) => {
+        fetchKeywordDef(word).then((def) =>
+          setDictionary(dictionary.set(word, def)),
+        );
+      });
+    }
+  }, [summon, keywords]);
 
   const fetchSetting = (
     key: string,
