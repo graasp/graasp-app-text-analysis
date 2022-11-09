@@ -10,6 +10,7 @@ import {
   DEFAULT_LESSON_TITLE,
   DEFAULT_TEXT_RESOURCE_SETTING,
 } from '../../../config/appSettings';
+import { DICTIONARY_API_BASE_URL } from '../../../config/constants';
 import { PLAYER_VIEW_CY } from '../../../config/selectors';
 import Banner from '../../common/display/Banner';
 import TextDisplay from '../../common/display/TextDisplay';
@@ -18,32 +19,47 @@ import { useAppSettingContext } from '../../context/AppSettingContext';
 type textSetting = { text: string };
 type keywordsSetting = { keywords: string[] };
 
-const DICTIONARY_API_BASE_URL =
-  'https://api.dictionaryapi.dev/api/v2/entries/en/';
+const DEFAULT_DEF = 'Cannot find the definitions for this word';
 
 const PlayerView: FC = () => {
   const { appSettingArray } = useAppSettingContext();
   const [summon, setSummon] = useState(false);
-  const [dictionary, setDictionary] = useState(new Map<string, string>());
+  const [dictionary, setDictionary] = useState({});
 
   const keywords = (appSettingArray.find((s) => s.name === KEYWORDS_KEY)
     ?.data || DEFAULT_KEYWORDS_LIST) as keywordsSetting;
 
+  const uniqueKeywords = keywords.keywords.reduce(
+    (acc: string[], currentVal: string): string[] =>
+      acc.includes(currentVal) ? acc : [...acc, currentVal],
+    [],
+  );
+
   const fetchKeywordDef = async (word: string): Promise<string> => {
-    const response = await fetch(DICTIONARY_API_BASE_URL + word);
+    const response = await fetch(`${DICTIONARY_API_BASE_URL}${word}`);
     const json = await response.json();
-    return json[0].meanings[0].definitions[0];
+    return json[0].meanings[0].definitions.map(
+      ({ definition, example }: { definition: string; example: string }) => ({
+        definition,
+        example,
+      }),
+    );
   };
 
   useEffect(() => {
-    console.log('In useEffect');
     if (summon) {
-      keywords.keywords.forEach((word) => {
-        fetchKeywordDef(word).then((def) =>
-          setDictionary(dictionary.set(word, def)),
-        );
+      uniqueKeywords.forEach((word) => {
+        fetchKeywordDef(word)
+          .then((def) => {
+            setDictionary((prevDict) => ({ ...prevDict, [word]: def }));
+          })
+          .catch((err) =>
+            setDictionary({ ...dictionary, [word]: DEFAULT_DEF }),
+          );
       });
     }
+    console.log(dictionary);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [summon, keywords]);
 
   const fetchSetting = (
