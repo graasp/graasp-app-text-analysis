@@ -25,7 +25,7 @@ Sentry.init({
 /* istanbul ignore next */
 if (MOCK_API) {
   mockApi({
-    externalUrls: ['https://api.dictionaryapi.dev/api/v2/entries/en/'],
+    externalUrls: ['https://api.dictionaryapi.dev/api/v2/entries/en/**'],
     appContext: window.Cypress ? window.appContext : mockContext,
     database: window.Cypress
       ? window.database
