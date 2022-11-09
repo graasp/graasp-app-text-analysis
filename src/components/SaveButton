@@ -1,0 +1,38 @@
+import { FC } from 'react';
+
+import { Button } from '@mui/material';
+
+type Prop = {
+  buttonDataCy: string;
+  handleOnClick: () => void;
+  buttonWidth: string;
+  marginRight: string;
+};
+
+const SaveButton: FC<Prop> = ({
+  buttonDataCy,
+  handleOnClick,
+  buttonWidth,
+  marginRight,
+}) => {
+  return (
+    <div>
+      <Button
+        data-cy={buttonDataCy}
+        variant="contained"
+        sx={{
+          backgroundColor: '#5050d2',
+          minHeight: '55px',
+          width: { buttonWidth },
+          marginRight: { marginRight },
+        }}
+        onclick={handleOnClick}
+      >
+        Save
+      </Button>
+    </div>
+  );
+};
+
+export default SaveButton;
+/
