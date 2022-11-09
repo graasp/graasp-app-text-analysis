@@ -1,23 +1,22 @@
 import { FC, KeyboardEventHandler, useState } from 'react';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import {
-  Box,
-  Button,
-  IconButton,
-  List,
-  ListItem,
-  TextField,
-} from '@mui/material';
+import { Box, IconButton, List, ListItem, TextField } from '@mui/material';
 
-import { KEYWORDS_SETTING_KEY } from '../config/appSettingTypes';
+import { KEYWORDS_SETTING_KEY } from '../../../config/appSettingTypes';
 import {
   DELETE_KEYWORD_BUTTON_CY,
   ENTER_KEYWORD_FIELD_CY,
   KEYWORD_LIST_ITEM_CY,
   SAVE_KEYWORDS_BUTTON_CY,
-} from '../config/selectors';
-import { useAppSettingContext } from './context/AppSettingContext';
+} from '../../../config/selectors';
+import {
+  DEFAULT_MARGIN,
+  FULL_WIDTH,
+  GREY,
+} from '../../../config/stylingConstants';
+import { useAppSettingContext } from '../../context/AppSettingContext';
+import SaveButton from './SaveButton';
 
 const ENTER_KEY = 'Enter';
 
@@ -68,7 +67,7 @@ const KeyWords: FC = () => {
     <ListItem
       data-cy={KEYWORD_LIST_ITEM_CY}
       key={keyword}
-      sx={{ bgcolor: '#BABABA' }}
+      sx={{ bgcolor: GREY }}
       secondaryAction={
         <IconButton
           data-cy={DELETE_KEYWORD_BUTTON_CY}
@@ -85,7 +84,7 @@ const KeyWords: FC = () => {
   ));
 
   return (
-    <Box maxWidth={210} width="100%" marginLeft="25px">
+    <Box maxWidth={210} width={FULL_WIDTH} marginLeft={DEFAULT_MARGIN}>
       <TextField
         data-cy={ENTER_KEYWORD_FIELD_CY}
         label="Enter keyword"
@@ -94,17 +93,11 @@ const KeyWords: FC = () => {
         onKeyPress={onEnterPress}
       />
       <List>{keyWordsItems}</List>
-      <Button
-        data-cy={SAVE_KEYWORDS_BUTTON_CY}
-        variant="contained"
-        sx={{
-          backgroundColor: '#5050d2',
-          width: '100%',
-        }}
-        onClick={handleClickSave}
-      >
-        Save
-      </Button>
+      <SaveButton
+        buttonDataCy={SAVE_KEYWORDS_BUTTON_CY}
+        fullWidth
+        handleOnClick={handleClickSave}
+      />
     </Box>
   );
 };

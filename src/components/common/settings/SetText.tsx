@@ -1,8 +1,10 @@
 import { FC, useState } from 'react';
 
-import { Box, Button, TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 
-import { useAppSettingContext } from './context/AppSettingContext';
+import { DEFAULT_MARGIN, FULL_WIDTH } from '../../../config/stylingConstants';
+import { useAppSettingContext } from '../../context/AppSettingContext';
+import SaveButton from './SaveButton';
 
 type Prop = {
   resourceKey: string;
@@ -41,7 +43,7 @@ const SetText: FC<Prop> = ({
       justifyContent="space-around"
       display="flex"
       alignItems="center"
-      sx={{ margin: '25px' }}
+      sx={{ margin: DEFAULT_MARGIN }}
     >
       <TextField
         data-cy={textDataCy}
@@ -49,20 +51,14 @@ const SetText: FC<Prop> = ({
         label={textFieldLabel}
         variant="outlined"
         onChange={onChange}
-        sx={{ width: '100%', marginRight: '25px' }}
+        sx={{ width: FULL_WIDTH, marginRight: DEFAULT_MARGIN }}
       />
-      <Button
-        data-cy={buttonDataCy}
-        variant="contained"
-        sx={{
-          marginRight: '25px',
-          backgroundColor: '#5050d2',
-          minHeight: '55px',
-        }}
-        onClick={() => handleClickSaveText(resourceKey, resourceText)}
-      >
-        Save
-      </Button>
+      <SaveButton
+        buttonDataCy={buttonDataCy}
+        handleOnClick={() => handleClickSaveText(resourceKey, resourceText)}
+        marginRight={DEFAULT_MARGIN}
+        minHeight="55px"
+      />
     </Box>
   );
 };
