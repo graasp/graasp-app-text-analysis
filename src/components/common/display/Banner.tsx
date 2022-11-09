@@ -2,7 +2,8 @@ import { FC } from 'react';
 
 import { Box, Button, Typography } from '@mui/material';
 
-import { BANNER_CY, SUMMON_BUTTON_CY } from '../config/selectors';
+import { BANNER_CY, SUMMON_BUTTON_CY } from '../../../config/selectors';
+import { DEFAULT_MARGIN } from '../../../config/stylingConstants';
 
 type Prop = {
   title: string;
@@ -32,7 +33,7 @@ const Banner: FC<Prop> = ({ title, onSummonClick, buttonDisable }) => (
       data-cy={SUMMON_BUTTON_CY}
       variant="contained"
       color="success"
-      sx={{ marginRight: '25px' }}
+      sx={{ marginRight: DEFAULT_MARGIN }}
       onClick={onSummonClick}
       disabled={buttonDisable}
     >

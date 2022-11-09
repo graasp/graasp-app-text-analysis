@@ -5,8 +5,8 @@ declare global {
   namespace Cypress {
     interface Chainable {
       /**
-       * Custom command to select DOM element by data-cy attribute.
-       * @example cy.dataCy('greeting')
+       * Custom command to set up the API elements
+       * @example cy.setUpApi(datataBase: Database, currentMember: Member, appContext: LocalContext)
        */
       setUpApi({
         database,

@@ -13,8 +13,8 @@ import {
   TEXT_INPUT_FIELD_CY,
   TITLE_INPUT_FIELD_CY,
 } from '../../../config/selectors';
-import KeyWords from '../../KeyWords';
-import SetText from '../../SetText';
+import KeyWords from '../../common/settings/KeyWords';
+import SetText from '../../common/settings/SetText';
 
 // eslint-disable-next-line arrow-body-style
 const BuilderView: FC = () => {

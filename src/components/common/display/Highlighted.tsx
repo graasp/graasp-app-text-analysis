@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { Button } from '@mui/material';
 
-import { KEYWORD_BUTTON_CY } from '../config/selectors';
+import { KEYWORD_BUTTON_CY } from '../../../config/selectors';
 
 type Prop = { text: string; words: string[]; highlight: boolean };
 

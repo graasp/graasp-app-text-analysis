@@ -11,8 +11,8 @@ import {
   DEFAULT_TEXT_RESOURCE_SETTING,
 } from '../../../config/appSettings';
 import { PLAYER_VIEW_CY } from '../../../config/selectors';
-import Banner from '../../Banner';
-import TextDisplay from '../../TextDisplay';
+import Banner from '../../common/display/Banner';
+import TextDisplay from '../../common/display/TextDisplay';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 
 type textSetting = { text: string };
