@@ -3,8 +3,8 @@ import { FC } from 'react';
 import { Typography } from '@mui/material';
 
 import {
-  LESSON_TITLE_KEY,
-  TEXT_RESOURCE_KEY,
+  LESSON_TITLE_SETTING_KEY,
+  TEXT_RESOURCE_SETTING_KEY,
 } from '../../../config/appSettingTypes';
 import {
   BUILDER_VIEW_CY,
@@ -32,13 +32,13 @@ const BuilderView: FC = () => {
       <SetText
         textDataCy={TITLE_INPUT_FIELD_CY}
         buttonDataCy={SAVE_TITLE_BUTTON_CY}
-        resourceKey={LESSON_TITLE_KEY}
+        resourceKey={LESSON_TITLE_SETTING_KEY}
         textFieldLabel="Enter the lesson title"
       />
       <SetText
         textDataCy={TEXT_INPUT_FIELD_CY}
         buttonDataCy={SAVE_TEXT_BUTTON_CY}
-        resourceKey={TEXT_RESOURCE_KEY}
+        resourceKey={TEXT_RESOURCE_SETTING_KEY}
         textFieldLabel="Enter the text students will see"
       />
       <KeyWords />

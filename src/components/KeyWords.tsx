@@ -10,7 +10,7 @@ import {
   TextField,
 } from '@mui/material';
 
-import { KEYWORDS_KEY } from '../config/appSettingTypes';
+import { KEYWORDS_SETTING_KEY } from '../config/appSettingTypes';
 import {
   DELETE_KEYWORD_BUTTON_CY,
   ENTER_KEYWORD_FIELD_CY,
@@ -48,7 +48,7 @@ const KeyWords: FC = () => {
 
   const handleClickSave = (): void => {
     const keywordsResourceSetting = appSettingArray.find(
-      (s) => s.name === KEYWORDS_KEY,
+      (s) => s.name === KEYWORDS_SETTING_KEY,
     );
 
     if (keywordsResourceSetting) {
@@ -57,7 +57,10 @@ const KeyWords: FC = () => {
         id: keywordsResourceSetting.id,
       });
     } else {
-      postAppSetting({ data: { keywords: keywordsList }, name: KEYWORDS_KEY });
+      postAppSetting({
+        data: { keywords: keywordsList },
+        name: KEYWORDS_SETTING_KEY,
+      });
     }
   };
 
@@ -82,13 +85,7 @@ const KeyWords: FC = () => {
   ));
 
   return (
-    <Box
-      sx={{
-        width: '100%',
-        maxWidth: 210,
-        marginLeft: '25px',
-      }}
-    >
+    <Box maxWidth={210} width="100%" marginLeft="25px">
       <TextField
         data-cy={ENTER_KEYWORD_FIELD_CY}
         label="Enter keyword"

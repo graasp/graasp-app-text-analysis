@@ -1,9 +1,5 @@
 import { Context, PermissionLevel } from '@graasp/sdk';
 
-export const DEFAULT_MOCK_SETTING = {
-  content: 'I am a mock',
-};
-
 export const DEFAULT_TEXT_RESOURCE_SETTING = {
   text: '',
 };

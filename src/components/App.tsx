@@ -11,7 +11,6 @@ import { AppDataProvider } from './context/AppDataContext';
 import { AppSettingProvider } from './context/AppSettingContext';
 import { MembersProvider } from './context/MembersContext';
 import BuilderView from './views/admin/BuilderView';
-import MockPlayerView from './views/read/MockPlayerView';
 import PlayerView from './views/read/PlayerView';
 
 const App: FC = () => {
@@ -29,7 +28,6 @@ const App: FC = () => {
     switch (context.get('context')) {
       case Context.BUILDER:
         return <BuilderView />;
-      // todo: add the view to show in the builder
 
       // eslint-disable-next-line no-fallthrough
       case Context.ANALYTICS:
@@ -38,11 +36,10 @@ const App: FC = () => {
       // eslint-disable-next-line no-fallthrough
       case Context.PLAYER:
         return <PlayerView />;
-      // todo: add the view to show in the player
 
       // eslint-disable-next-line no-fallthrough
       default:
-        return <MockPlayerView />;
+        return <PlayerView />;
     }
   };
 

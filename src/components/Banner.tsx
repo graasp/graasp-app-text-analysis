@@ -10,13 +10,6 @@ type Prop = {
   buttonDisable: boolean;
 };
 
-const bannerBox = {
-  height: '70px',
-  backgroundColor: '#BABABA',
-  padding: '2px',
-  minWidth: '600px',
-};
-
 const Banner: FC<Prop> = ({ title, onSummonClick, buttonDisable }) => (
   <Box
     data-cy={BANNER_CY}
@@ -24,7 +17,7 @@ const Banner: FC<Prop> = ({ title, onSummonClick, buttonDisable }) => (
     justifyContent="space-between"
     display="flex"
     alignItems="center"
-    sx={bannerBox}
+    sx={{ minHeight: '70px', backgroundColor: '#BABABA' }}
   >
     <Typography
       variant="h4"
