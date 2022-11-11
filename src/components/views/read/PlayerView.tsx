@@ -58,7 +58,6 @@ const PlayerView: FC = () => {
           );
       });
     }
-    console.log(dictionary);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [summon, keywords]);
 
