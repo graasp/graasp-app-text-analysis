@@ -3,8 +3,8 @@ import { v4 } from 'uuid';
 import { AppSetting } from '@graasp/apps-query-client';
 
 import {
-  KEYWORDS_KEY,
-  TEXT_RESOURCE_KEY,
+  KEYWORDS_SETTING_KEY,
+  TEXT_RESOURCE_SETTING_KEY,
 } from '../../src/config/appSettingTypes';
 import { MOCK_SERVER_ITEM } from './appData';
 import { CURRENT_MEMBER } from './members';
@@ -16,7 +16,7 @@ export const MOCK_KEYWORDS = ['ipsum', 'et', 'expedita'];
 
 export const MOCK_TEXT_RESOURCE_SETTING: AppSetting = {
   id: v4(),
-  name: TEXT_RESOURCE_KEY,
+  name: TEXT_RESOURCE_SETTING_KEY,
   data: { text: MOCK_TEXT_RESOURCE },
   itemId: MOCK_SERVER_ITEM.id,
   creator: CURRENT_MEMBER.id,
@@ -26,7 +26,7 @@ export const MOCK_TEXT_RESOURCE_SETTING: AppSetting = {
 
 export const MOCK_KEYWORDS_SETTING: AppSetting = {
   id: v4(),
-  name: KEYWORDS_KEY,
+  name: KEYWORDS_SETTING_KEY,
   data: { keywords: MOCK_KEYWORDS },
   itemId: MOCK_SERVER_ITEM.id,
   creator: CURRENT_MEMBER.id,
