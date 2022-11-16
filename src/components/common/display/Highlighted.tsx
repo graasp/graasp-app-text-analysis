@@ -4,9 +4,14 @@ import { Button } from '@mui/material';
 
 import { KEYWORD_BUTTON_CY } from '../../../config/selectors';
 
-type Prop = { text: string; words: string[]; highlight: boolean };
+type Prop = {
+  text: string;
+  words: string[];
+  highlight: boolean;
+  openChatbot: () => void;
+};
 
-const Highlighted: FC<Prop> = ({ text, words, highlight }) => {
+const Highlighted: FC<Prop> = ({ text, words, highlight, openChatbot }) => {
   if (!highlight || words.length === 0) {
     return <span>{text}</span>;
   }
@@ -30,6 +35,7 @@ const Highlighted: FC<Prop> = ({ text, words, highlight }) => {
               fontWeight: '400',
             }}
             key={i}
+            onClick={openChatbot}
           >
             {part}
           </Button>

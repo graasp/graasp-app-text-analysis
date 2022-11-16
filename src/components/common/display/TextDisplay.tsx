@@ -6,25 +6,43 @@ import { TEXT_DISPLAY_FIELD_CY } from '../../../config/selectors';
 import { DEFAULT_MARGIN } from '../../../config/stylingConstants';
 import Highlighted from './Highlighted';
 
-type Prop = { text: string; highlight: boolean; keywords: string[] };
+type Prop = {
+  text: string;
+  highlight: boolean;
+  openChatbot: () => void;
+  keywords: string[];
+  width?: string;
+};
 
 // eslint-disable-next-line arrow-body-style
-const TextDisplay: FC<Prop> = ({ text, highlight, keywords }) => {
+const TextDisplay: FC<Prop> = ({
+  text,
+  highlight,
+  keywords,
+  openChatbot,
+  width,
+  // eslint-disable-next-line arrow-body-style
+}) => {
   return (
-    <div>
-      <Typography
-        data-cy={TEXT_DISPLAY_FIELD_CY}
-        variant="body1"
-        sx={{
-          margin: DEFAULT_MARGIN,
-          border: '2px solid #5050d2',
-          borderRadius: '10px',
-          padding: '25px',
-        }}
-      >
-        <Highlighted text={text} words={keywords} highlight={highlight} />
-      </Typography>
-    </div>
+    <Typography
+      data-cy={TEXT_DISPLAY_FIELD_CY}
+      variant="body1"
+      sx={{
+        margin: DEFAULT_MARGIN,
+        border: '2px solid #5050d2',
+        borderRadius: '10px',
+        padding: '25px',
+        minWidth: '350px',
+        width,
+      }}
+    >
+      <Highlighted
+        text={text}
+        words={keywords}
+        highlight={highlight}
+        openChatbot={openChatbot}
+      />
+    </Typography>
   );
 };
 

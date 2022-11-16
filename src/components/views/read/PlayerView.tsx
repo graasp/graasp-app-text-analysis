@@ -1,4 +1,6 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, ReactElement, useEffect, useState } from 'react';
+
+import { Box } from '@mui/material';
 
 import {
   KEYWORDS_SETTING_KEY,
@@ -14,6 +16,7 @@ import { DICTIONARY_API_BASE_URL } from '../../../config/constants';
 import { PLAYER_VIEW_CY } from '../../../config/selectors';
 import Banner from '../../common/display/Banner';
 import TextDisplay from '../../common/display/TextDisplay';
+import ChatbotWindow from '../../common/ChatbotWindow';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 
 type textSetting = { text: string };
@@ -25,6 +28,7 @@ const PlayerView: FC = () => {
   const { appSettingArray } = useAppSettingContext();
   const [summon, setSummon] = useState(false);
   const [dictionary, setDictionary] = useState({});
+  const [chatbot, setChatbot] = useState(false);
 
   const keywords = (appSettingArray.find((s) => s.name === KEYWORDS_KEY)
     ?.data || DEFAULT_KEYWORDS_LIST) as keywordsSetting;
@@ -53,9 +57,7 @@ const PlayerView: FC = () => {
           .then((def) => {
             setDictionary((prevDict) => ({ ...prevDict, [word]: def }));
           })
-          .catch((err) =>
-            setDictionary({ ...dictionary, [word]: DEFAULT_DEF }),
-          );
+          .catch(() => setDictionary({ ...dictionary, [word]: DEFAULT_DEF }));
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -78,6 +80,39 @@ const PlayerView: FC = () => {
     DEFAULT_TEXT_RESOURCE_SETTING,
   ).text;
 
+  const renderContent = (): ReactElement => {
+    if (chatbot) {
+      return (
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="flex-start"
+        >
+          <TextDisplay
+            text={textResource}
+            keywords={keywords.keywords}
+            highlight={summon}
+            openChatbot={() => {
+              setChatbot(true);
+            }}
+            width="100%"
+          />
+          <ChatbotWindow />
+        </Box>
+      );
+    }
+    return (
+      <TextDisplay
+        text={textResource}
+        keywords={keywords.keywords}
+        highlight={summon}
+        openChatbot={() => {
+          setChatbot(true);
+        }}
+      />
+    );
+  };
+
   return (
     <div data-cy={PLAYER_VIEW_CY}>
       <Banner
@@ -89,11 +124,7 @@ const PlayerView: FC = () => {
         }}
         buttonDisable={textResource === '' || keywords.keywords.length === 0}
       />
-      <TextDisplay
-        text={textResource}
-        keywords={keywords.keywords}
-        highlight={summon}
-      />
+      {renderContent()}
     </div>
   );
 };
