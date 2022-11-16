@@ -4,8 +4,10 @@ import { Box } from '@mui/material';
 
 import {
   KEYWORDS_SETTING_KEY,
+  KeywordsData,
   LESSON_TITLE_SETTING_KEY,
   TEXT_RESOURCE_SETTING_KEY,
+  TextResourceData,
 } from '../../../config/appSettingTypes';
 import {
   DEFAULT_KEYWORDS_LIST,
@@ -14,13 +16,10 @@ import {
 } from '../../../config/appSettings';
 import { DICTIONARY_API_BASE_URL } from '../../../config/constants';
 import { PLAYER_VIEW_CY } from '../../../config/selectors';
+import ChatbotWindow from '../../common/ChatbotWindow';
 import Banner from '../../common/display/Banner';
 import TextDisplay from '../../common/display/TextDisplay';
-import ChatbotWindow from '../../common/ChatbotWindow';
 import { useAppSettingContext } from '../../context/AppSettingContext';
-
-type textSetting = { text: string };
-type keywordsSetting = { keywords: string[] };
 
 const DEFAULT_DEF = 'Cannot find the definitions for this word';
 
@@ -30,8 +29,8 @@ const PlayerView: FC = () => {
   const [dictionary, setDictionary] = useState({});
   const [chatbot, setChatbot] = useState(false);
 
-  const keywords = (appSettingArray.find((s) => s.name === KEYWORDS_KEY)
-    ?.data || DEFAULT_KEYWORDS_LIST) as keywordsSetting;
+  const keywords = (appSettingArray.find((s) => s.name === KEYWORDS_SETTING_KEY)
+    ?.data || DEFAULT_KEYWORDS_LIST) as KeywordsData;
 
   const uniqueKeywords = keywords.keywords.reduce(
     (acc: string[], currentVal: string): string[] =>
@@ -65,15 +64,12 @@ const PlayerView: FC = () => {
 
   const fetchSetting = (
     key: string,
-    defaultSetting: textSetting,
-  ): textSetting => {
+    defaultSetting: TextResourceData,
+  ): TextResourceData => {
     const setting = (appSettingArray.find((s) => s.name === key)?.data ||
-      defaultSetting) as textSetting;
+      defaultSetting) as TextResourceData;
     return setting;
   };
-
-  const keywords = (appSettingArray.find((s) => s.name === KEYWORDS_SETTING_KEY)
-    ?.data || DEFAULT_KEYWORDS_LIST) as keywordsSetting;
 
   const textResource = fetchSetting(
     TEXT_RESOURCE_SETTING_KEY,
@@ -97,7 +93,7 @@ const PlayerView: FC = () => {
             }}
             width="100%"
           />
-          <ChatbotWindow />
+          <ChatbotWindow closeChatbot={() => setChatbot(false)} />
         </Box>
       );
     }

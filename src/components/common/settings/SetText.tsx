@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 
 import { Box, TextField } from '@mui/material';
 
+import { TextResourceSetting } from '../../../config/appSettingTypes';
 import { DEFAULT_TEXT_RESOURCE_SETTING } from '../../../config/appSettings';
 import { DEFAULT_MARGIN, FULL_WIDTH } from '../../../config/stylingConstants';
 import { useAppSettingContext } from '../../context/AppSettingContext';
@@ -29,13 +30,13 @@ const SetText: FC<Prop> = ({
   const onChange = ({ target }: { target: { value: string } }): void => {
     setResourceText(target.value);
   };
+
   const textResourceSetting = appSettingArray.find(
     (s) => s.name === resourceKey,
-  );
+  ) as TextResourceSetting;
 
   useEffect(() => {
-    const text = (textResourceSetting?.data || DEFAULT_TEXT_RESOURCE_SETTING)
-      .text as string;
+    const { text } = textResourceSetting?.data || DEFAULT_TEXT_RESOURCE_SETTING;
     setResourceText(text);
   }, [textResourceSetting]);
 
@@ -68,7 +69,7 @@ const SetText: FC<Prop> = ({
       />
       <SaveButton
         buttonDataCy={buttonDataCy}
-        handleOnClick={() => handleClickSaveText(resourceKey, resourceText)}
+        handleOnClick={() => handleClickSaveText()}
         marginRight={DEFAULT_MARGIN}
         minHeight="55px"
       />
