@@ -2,15 +2,18 @@ import { FC } from 'react';
 
 import { Box, Button } from '@mui/material';
 
+import { DEFAULT_MARGIN, GREY } from '../../config/stylingConstants';
+
+type Prop = { closeChatbot: () => void };
 // eslint-disable-next-line arrow-body-style
-const ChatbotWindow: FC = () => {
+const ChatbotWindow: FC<Prop> = ({ closeChatbot }) => {
   return (
     <Box
       sx={{
         minHeight: '200px',
-        border: '2px solid #BABABA',
+        border: `2px solid ${GREY}`,
         borderRadius: '10px',
-        margin: '25px',
+        margin: DEFAULT_MARGIN,
         marginLeft: '0px',
         width: '550px',
         minWidth: '175px',
@@ -23,11 +26,11 @@ const ChatbotWindow: FC = () => {
             minWidth: '25px',
             height: '25px',
           }}
+          onClick={closeChatbot}
         >
           X
         </Button>
       </Box>
-      Chatbot Window
     </Box>
   );
 };

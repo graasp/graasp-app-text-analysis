@@ -3,7 +3,10 @@ import { FC } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 
 import { BANNER_CY, SUMMON_BUTTON_CY } from '../../../config/selectors';
-import { DEFAULT_MARGIN } from '../../../config/stylingConstants';
+import {
+  DEFAULT_MARGIN,
+  GRAASP_VIOLET,
+} from '../../../config/stylingConstants';
 
 type Prop = {
   title: string;
@@ -18,13 +21,13 @@ const Banner: FC<Prop> = ({ title, onSummonClick, buttonDisable }) => (
     justifyContent="space-between"
     display="flex"
     alignItems="center"
-    sx={{ minHeight: '70px', backgroundColor: '#BABABA' }}
+    sx={{ minHeight: '70px' }}
   >
     <Typography
       variant="h4"
       sx={{
-        color: '#5050d2',
-        marginLeft: '25px',
+        color: GRAASP_VIOLET,
+        marginLeft: DEFAULT_MARGIN,
       }}
     >
       {title}
@@ -37,7 +40,7 @@ const Banner: FC<Prop> = ({ title, onSummonClick, buttonDisable }) => (
       onClick={onSummonClick}
       disabled={buttonDisable}
     >
-      Summon
+      Show Keywords
     </Button>
   </Box>
 );

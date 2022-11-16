@@ -3,7 +3,10 @@ import { FC } from 'react';
 import { Typography } from '@mui/material';
 
 import { TEXT_DISPLAY_FIELD_CY } from '../../../config/selectors';
-import { DEFAULT_MARGIN } from '../../../config/stylingConstants';
+import {
+  DEFAULT_MARGIN,
+  GRAASP_VIOLET,
+} from '../../../config/stylingConstants';
 import Highlighted from './Highlighted';
 
 type Prop = {
@@ -29,11 +32,12 @@ const TextDisplay: FC<Prop> = ({
       variant="body1"
       sx={{
         margin: DEFAULT_MARGIN,
-        border: '2px solid #5050d2',
+        border: `2px solid ${GRAASP_VIOLET}`,
         borderRadius: '10px',
         padding: '25px',
         minWidth: '350px',
         width,
+        whiteSpace: 'pre-line',
       }}
     >
       <Highlighted

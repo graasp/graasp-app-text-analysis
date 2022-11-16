@@ -1,3 +1,5 @@
+import randomColor from 'randomcolor';
+
 import { FC } from 'react';
 
 import { Button } from '@mui/material';
@@ -27,8 +29,8 @@ const Highlighted: FC<Prop> = ({ text, words, highlight, openChatbot }) => {
           <Button
             data-cy={KEYWORD_BUTTON_CY}
             sx={{
-              backgroundColor: 'yellow',
-              maxHeight: '25px',
+              backgroundColor: randomColor({ seed: part.toLocaleLowerCase() }),
+              maxHeight: '23px',
               minWidth: '10px',
               textTransform: 'none',
               color: 'black',
