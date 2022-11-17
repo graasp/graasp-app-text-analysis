@@ -14,7 +14,7 @@ jobs:
     name: Text Analysis
     # Replace 'main' with the hash of a commit, so it points to an specific version of the reusable workflow that is used
     # Reference reusable workflow file. Using the commit SHA is the safest for stability and security
-    uses: graasp/graasp-deploy/.github/workflows/cdeployment-s3-apps.yml@7b5dd84304458c3c5ab03cbbde059670f77b1687
+    uses: graasp/graasp-deploy/.github/workflows/cdeployment-s3-apps.yml@v1
     # Replace input build-folder or version if needed.
     with:
       build-folder: 'build'
@@ -28,4 +28,4 @@ jobs:
       aws-s3-bucket-name: ${{ secrets.AWS_S3_BUCKET_NAME_APPS_PROD }}
       cloudfront-distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_APPS_PROD }}
       app-id: ${{ secrets.APP_ID }}
-      graasp-domain: ${{ secrets.PROD_GRAASP_DOMAIN }}
+      graasp-domain: ${{ secrets.REACT_APP_DOMAIN_PROD }}
