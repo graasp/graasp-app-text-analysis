@@ -28,3 +28,4 @@ jobs:
       cloudfront-distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_APPS_DEV }}
       app-id: ${{ secrets.APP_ID }}
       graasp-domain: ${{ secrets.REACT_APP_DOMAIN_DEV }}
+      sentry-dsn: ${{ secrets.SENTRY_DSN }}
