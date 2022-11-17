@@ -1,12 +1,19 @@
+import randomColor from 'randomcolor';
+
 import { FC } from 'react';
 
 import { Button } from '@mui/material';
 
 import { KEYWORD_BUTTON_CY } from '../../../config/selectors';
 
-type Prop = { text: string; words: string[]; highlight: boolean };
+type Prop = {
+  text: string;
+  words: string[];
+  highlight: boolean;
+  openChatbot: () => void;
+};
 
-const Highlighted: FC<Prop> = ({ text, words, highlight }) => {
+const Highlighted: FC<Prop> = ({ text, words, highlight, openChatbot }) => {
   if (!highlight || words.length === 0) {
     return <span>{text}</span>;
   }
@@ -22,14 +29,15 @@ const Highlighted: FC<Prop> = ({ text, words, highlight }) => {
           <Button
             data-cy={KEYWORD_BUTTON_CY}
             sx={{
-              backgroundColor: 'yellow',
-              maxHeight: '25px',
+              backgroundColor: randomColor({ seed: part.toLocaleLowerCase() }),
+              maxHeight: '23px',
               minWidth: '10px',
               textTransform: 'none',
               color: 'black',
               fontWeight: '400',
             }}
             key={i}
+            onClick={openChatbot}
           >
             {part}
           </Button>

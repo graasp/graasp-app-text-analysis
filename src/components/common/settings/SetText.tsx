@@ -1,7 +1,9 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { Box, TextField } from '@mui/material';
 
+import { TextResourceSetting } from '../../../config/appSettingTypes';
+import { DEFAULT_TEXT_RESOURCE_SETTING } from '../../../config/appSettings';
 import { DEFAULT_MARGIN, FULL_WIDTH } from '../../../config/stylingConstants';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 import SaveButton from './SaveButton';
@@ -19,7 +21,9 @@ const SetText: FC<Prop> = ({
   textDataCy,
   buttonDataCy,
 }) => {
-  const [resourceText, setResourceText] = useState('');
+  const [resourceText, setResourceText] = useState(
+    DEFAULT_TEXT_RESOURCE_SETTING.text,
+  );
   const { patchAppSetting, postAppSetting, appSettingArray } =
     useAppSettingContext();
 
@@ -27,13 +31,23 @@ const SetText: FC<Prop> = ({
     setResourceText(target.value);
   };
 
-  const handleClickSaveText = (name: string, value: string): void => {
-    const textResourceSetting = appSettingArray.find((s) => s.name === name);
+  const textResourceSetting = appSettingArray.find(
+    (s) => s.name === resourceKey,
+  ) as TextResourceSetting;
 
+  useEffect(() => {
+    const { text } = textResourceSetting?.data || DEFAULT_TEXT_RESOURCE_SETTING;
+    setResourceText(text);
+  }, [textResourceSetting]);
+
+  const handleClickSaveText = (): void => {
     if (textResourceSetting) {
-      patchAppSetting({ data: { text: value }, id: textResourceSetting.id });
+      patchAppSetting({
+        data: { text: resourceText },
+        id: textResourceSetting.id,
+      });
     } else {
-      postAppSetting({ data: { text: value }, name });
+      postAppSetting({ data: { text: resourceText }, name: resourceKey });
     }
   };
 
@@ -55,7 +69,7 @@ const SetText: FC<Prop> = ({
       />
       <SaveButton
         buttonDataCy={buttonDataCy}
-        handleOnClick={() => handleClickSaveText(resourceKey, resourceText)}
+        handleOnClick={() => handleClickSaveText()}
         marginRight={DEFAULT_MARGIN}
         minHeight="55px"
       />

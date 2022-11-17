@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { Button } from '@mui/material';
 
-import { FULL_WIDTH } from '../../../config/stylingConstants';
+import { FULL_WIDTH, GRAASP_VIOLET } from '../../../config/stylingConstants';
 
 type Prop = {
   buttonDataCy: string;
@@ -23,7 +23,7 @@ const SaveButton: FC<Prop> = ({
     data-cy={buttonDataCy}
     variant="contained"
     sx={{
-      backgroundColor: '#5050d2',
+      backgroundColor: GRAASP_VIOLET,
       minHeight,
       marginRight,
       ...(fullWidth && { width: FULL_WIDTH }),

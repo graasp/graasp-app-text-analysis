@@ -82,7 +82,11 @@
       "version": "detect"
     },
     "import/resolver": {
-      "typescript": {}
+      "typescript": {},
+      "node": {
+        "extensions": [".ts", ".tsx"],
+        "moduleDirectory": ["src", "node_modules"]
+      }
     },
     "import/parsers": {
       "@typescript-eslint/parser": [".ts", ".tsx"]

@@ -19,6 +19,7 @@ const App: FC = () => {
   useEffect(() => {
     // handle a change of language
     const lang = context?.get('lang') ?? DEFAULT_CONTEXT_LANGUAGE;
+
     if (i18n.language !== lang) {
       i18n.changeLanguage(lang);
     }

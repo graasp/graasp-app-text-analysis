@@ -1,14 +1,16 @@
 import { Context, PermissionLevel } from '@graasp/sdk';
 
-export const DEFAULT_TEXT_RESOURCE_SETTING = {
+import { KeywordsData, TextResourceData } from './appSettingTypes';
+
+export const DEFAULT_TEXT_RESOURCE_SETTING: TextResourceData = {
   text: '',
 };
 
-export const DEFAULT_LESSON_TITLE = {
+export const DEFAULT_LESSON_TITLE: TextResourceData = {
   text: 'Your Lesson',
 };
 
-export const DEFAULT_KEYWORDS_LIST = {
+export const DEFAULT_KEYWORDS_LIST: KeywordsData = {
   keywords: [],
 };
 
