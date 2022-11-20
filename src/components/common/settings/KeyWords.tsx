@@ -4,6 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, IconButton, List, ListItem, TextField } from '@mui/material';
 
 import { KEYWORDS_SETTING_KEY } from '../../../config/appSettingTypes';
+import { DEFAULT_KEYWORDS_LIST } from '../../../config/appSettings';
 import {
   DELETE_KEYWORD_BUTTON_CY,
   ENTER_KEYWORD_FIELD_CY,
@@ -20,11 +21,16 @@ import SaveButton from './SaveButton';
 
 const ENTER_KEY = 'Enter';
 
+type keywordsResourceData = { keywords: string[] };
+
 const KeyWords: FC = () => {
   const [word, setWord] = useState('');
   const [keywordsList, setKeyWordsList] = useState<string[]>([]);
   const { patchAppSetting, postAppSetting, appSettingArray } =
     useAppSettingContext();
+
+  const areEqual = (arr1: string[], arr2: string[]): boolean =>
+    arr1.length === arr2.length && arr1.every((s, i) => s === arr2[i]);
 
   const onChange = ({ target }: { target: { value: string } }): void => {
     setWord(target.value);
@@ -45,11 +51,14 @@ const KeyWords: FC = () => {
     setKeyWordsList(keywordsList.filter((keyword) => keyword !== id));
   };
 
-  const handleClickSave = (): void => {
-    const keywordsResourceSetting = appSettingArray.find(
-      (s) => s.name === KEYWORDS_SETTING_KEY,
-    );
+  const keywordsResourceSetting = appSettingArray.find(
+    (s) => s.name === KEYWORDS_SETTING_KEY,
+  );
 
+  const keywordsResourceData = (keywordsResourceSetting?.data ||
+    DEFAULT_KEYWORDS_LIST) as keywordsResourceData;
+
+  const handleClickSave = (): void => {
     if (keywordsResourceSetting) {
       patchAppSetting({
         data: { keywords: keywordsList },
@@ -97,6 +106,7 @@ const KeyWords: FC = () => {
         buttonDataCy={SAVE_KEYWORDS_BUTTON_CY}
         fullWidth
         handleOnClick={handleClickSave}
+        disabled={areEqual(keywordsList, keywordsResourceData.keywords)}
       />
     </Box>
   );

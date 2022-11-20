@@ -7,6 +7,7 @@ import { FULL_WIDTH, GRAASP_VIOLET } from '../../../config/stylingConstants';
 type Prop = {
   buttonDataCy: string;
   handleOnClick: () => void;
+  disabled: boolean;
   fullWidth?: boolean;
   marginRight?: string;
   minHeight?: string;
@@ -15,6 +16,7 @@ type Prop = {
 const SaveButton: FC<Prop> = ({
   buttonDataCy,
   handleOnClick,
+  disabled,
   fullWidth = false,
   marginRight,
   minHeight,
@@ -29,6 +31,7 @@ const SaveButton: FC<Prop> = ({
       ...(fullWidth && { width: FULL_WIDTH }),
     }}
     onClick={handleOnClick}
+    disabled={disabled}
   >
     Save
   </Button>

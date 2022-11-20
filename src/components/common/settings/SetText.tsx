@@ -8,6 +8,8 @@ import { DEFAULT_MARGIN, FULL_WIDTH } from '../../../config/stylingConstants';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 import SaveButton from './SaveButton';
 
+type textData = { text: string };
+
 type Prop = {
   resourceKey: string;
   textFieldLabel: string;
@@ -72,6 +74,7 @@ const SetText: FC<Prop> = ({
         handleOnClick={() => handleClickSaveText()}
         marginRight={DEFAULT_MARGIN}
         minHeight="55px"
+        disabled={textResourceSetting.data.text === resourceText}
       />
     </Box>
   );
