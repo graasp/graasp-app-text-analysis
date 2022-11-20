@@ -38,6 +38,12 @@ describe('Enter Settings', () => {
       .type('Title');
 
     cy.get(buildDataCy(SAVE_TITLE_BUTTON_CY)).click();
+
+    cy.get(buildDataCy(SAVE_TEXT_BUTTON_CY)).should('be.disabled');
+
+    cy.get(buildDataCy(TITLE_INPUT_FIELD_CY)).clear();
+
+    cy.get(buildDataCy(SAVE_TITLE_BUTTON_CY)).should('not.be.disabled');
   });
 
   it('set text', () => {
@@ -48,6 +54,14 @@ describe('Enter Settings', () => {
       );
 
     cy.get(buildDataCy(SAVE_TEXT_BUTTON_CY)).click();
+
+    cy.get(buildDataCy(SAVE_TEXT_BUTTON_CY)).should('be.disabled');
+
+    cy.get(buildDataCy(TEXT_INPUT_FIELD_CY)).type(
+      '{backspace}{backspace}{backspace}{backspace}{backspace}',
+    );
+
+    cy.get(buildDataCy(SAVE_TEXT_BUTTON_CY)).should('not.be.disabled');
   });
 
   it('set keywords', () => {
@@ -60,9 +74,15 @@ describe('Enter Settings', () => {
     cy.get(buildDataCy(ENTER_KEYWORD_FIELD_CY)).type('{enter}');
     cy.get(buildDataCy(KEYWORD_LIST_ITEM_CY)).should('exist');
 
+    cy.get(buildDataCy(SAVE_KEYWORDS_BUTTON_CY))
+      .should('be.visible')
+      .should('not.be.disabled')
+      .click()
+      .should('be.disabled');
+
     cy.get(buildDataCy(DELETE_KEYWORD_BUTTON_CY)).should('be.visible').click();
     cy.get(buildDataCy(KEYWORD_LIST_ITEM_CY)).should('not.exist');
 
-    cy.get(buildDataCy(SAVE_KEYWORDS_BUTTON_CY)).should('be.visible').click();
+    cy.get(buildDataCy(SAVE_KEYWORDS_BUTTON_CY)).should('not.be.disabled');
   });
 });
