@@ -35,7 +35,7 @@ const TextDisplay: FC<Prop> = ({
         border: `2px solid ${GRAASP_VIOLET}`,
         borderRadius: '10px',
         padding: '25px',
-        minWidth: '350px',
+        flex: 2,
         width,
         whiteSpace: 'pre-line',
       }}

@@ -1,9 +1,15 @@
-import { FC, KeyboardEventHandler, useState } from 'react';
+import isEqual from 'lodash.isequal';
+
+import { FC, KeyboardEventHandler, useEffect, useState } from 'react';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, IconButton, List, ListItem, TextField } from '@mui/material';
 
-import { KEYWORDS_SETTING_KEY } from '../../../config/appSettingTypes';
+import {
+  KEYWORDS_SETTING_KEY,
+  KeywordsData,
+} from '../../../config/appSettingTypes';
+import { DEFAULT_KEYWORDS_LIST } from '../../../config/appSettings';
 import {
   DELETE_KEYWORD_BUTTON_CY,
   ENTER_KEYWORD_FIELD_CY,
@@ -34,7 +40,7 @@ const KeyWords: FC = () => {
     if (event.key === ENTER_KEY) {
       const element = event.target as HTMLInputElement;
       const wordToLowerCase = element.value.toLocaleLowerCase();
-      if (!keywordsList.includes(wordToLowerCase)) {
+      if (wordToLowerCase !== '' && !keywordsList.includes(wordToLowerCase)) {
         setKeyWordsList([...keywordsList, wordToLowerCase]);
       }
       setWord('');
@@ -45,11 +51,18 @@ const KeyWords: FC = () => {
     setKeyWordsList(keywordsList.filter((keyword) => keyword !== id));
   };
 
-  const handleClickSave = (): void => {
-    const keywordsResourceSetting = appSettingArray.find(
-      (s) => s.name === KEYWORDS_SETTING_KEY,
-    );
+  const keywordsResourceSetting = appSettingArray.find(
+    (s) => s.name === KEYWORDS_SETTING_KEY,
+  );
 
+  const keywordsResourceData = (keywordsResourceSetting?.data ||
+    DEFAULT_KEYWORDS_LIST) as KeywordsData;
+
+  useEffect(() => {
+    setKeyWordsList(keywordsResourceData.keywords);
+  }, [keywordsResourceData]);
+
+  const handleClickSave = (): void => {
     if (keywordsResourceSetting) {
       patchAppSetting({
         data: { keywords: keywordsList },
@@ -97,6 +110,7 @@ const KeyWords: FC = () => {
         buttonDataCy={SAVE_KEYWORDS_BUTTON_CY}
         fullWidth
         handleOnClick={handleClickSave}
+        disabled={isEqual(keywordsList, keywordsResourceData.keywords)}
       />
     </Box>
   );

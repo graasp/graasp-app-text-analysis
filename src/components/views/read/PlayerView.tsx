@@ -118,7 +118,11 @@ const PlayerView: FC = () => {
         onSummonClick={() => {
           setSummon(true);
         }}
-        buttonDisable={textResource === '' || keywords.keywords.length === 0}
+        buttonDisable={
+          textResource === '' ||
+          keywords.keywords.length === 0 ||
+          summon === true
+        }
       />
       {renderContent()}
     </div>
