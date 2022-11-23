@@ -1,11 +1,14 @@
 import isEqual from 'lodash.isequal';
 
-import { FC, KeyboardEventHandler, useState } from 'react';
+import { FC, KeyboardEventHandler, useEffect, useState } from 'react';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, IconButton, List, ListItem, TextField } from '@mui/material';
 
-import { KEYWORDS_SETTING_KEY } from '../../../config/appSettingTypes';
+import {
+  KEYWORDS_SETTING_KEY,
+  KeywordsData,
+} from '../../../config/appSettingTypes';
 import { DEFAULT_KEYWORDS_LIST } from '../../../config/appSettings';
 import {
   DELETE_KEYWORD_BUTTON_CY,
@@ -22,8 +25,6 @@ import { useAppSettingContext } from '../../context/AppSettingContext';
 import SaveButton from './SaveButton';
 
 const ENTER_KEY = 'Enter';
-
-type keywordsResourceData = { keywords: string[] };
 
 const KeyWords: FC = () => {
   const [word, setWord] = useState('');
@@ -55,7 +56,11 @@ const KeyWords: FC = () => {
   );
 
   const keywordsResourceData = (keywordsResourceSetting?.data ||
-    DEFAULT_KEYWORDS_LIST) as keywordsResourceData;
+    DEFAULT_KEYWORDS_LIST) as KeywordsData;
+
+  useEffect(() => {
+    setKeyWordsList(keywordsResourceData.keywords);
+  }, [keywordsResourceData]);
 
   const handleClickSave = (): void => {
     if (keywordsResourceSetting) {

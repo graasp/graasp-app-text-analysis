@@ -10,13 +10,12 @@ const ChatbotWindow: FC<Prop> = ({ closeChatbot }) => {
   return (
     <Box
       sx={{
-        minHeight: '200px',
+        alignSelf: 'stretch',
         border: `2px solid ${GREY}`,
         borderRadius: '10px',
         margin: DEFAULT_MARGIN,
         marginLeft: '0px',
-        width: '550px',
-        minWidth: '175px',
+        flex: 1,
       }}
     >
       <Box display="flex" justifyContent="flex-end" alignItems="flex-start">

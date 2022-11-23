@@ -1,5 +1,6 @@
 import { Context, PermissionLevel } from '@graasp/sdk';
 
+import { KeywordsData } from '../../../src/config/appSettingTypes';
 import {
   BUILDER_VIEW_CY,
   DELETE_KEYWORD_BUTTON_CY,
@@ -12,6 +13,7 @@ import {
   TITLE_INPUT_FIELD_CY,
   buildDataCy,
 } from '../../../src/config/selectors';
+import { MOCK_APP_SETTINGS } from '../../fixtures/appSettings';
 
 describe('Enter Settings', () => {
   beforeEach(() => {
@@ -86,5 +88,34 @@ describe('Enter Settings', () => {
     cy.get(buildDataCy(KEYWORD_LIST_ITEM_CY)).should('not.exist');
 
     cy.get(buildDataCy(SAVE_KEYWORDS_BUTTON_CY)).should('not.be.disabled');
+  });
+});
+
+describe('Load Settings', () => {
+  beforeEach(() => {
+    cy.setUpApi({
+      database: {
+        appData: [],
+        appSettings: MOCK_APP_SETTINGS,
+      },
+      appContext: {
+        context: Context.BUILDER,
+        permission: PermissionLevel.Admin,
+      },
+    });
+    cy.visit('/');
+  });
+
+  it.only('display existing mock text resource', () => {
+    cy.get(buildDataCy(TEXT_INPUT_FIELD_CY)).should(
+      'contain',
+      MOCK_APP_SETTINGS[0].data.text,
+    );
+
+    const list = MOCK_APP_SETTINGS[1].data as KeywordsData;
+
+    list.keywords.forEach((element) => {
+      cy.get(buildDataCy(KEYWORD_LIST_ITEM_CY)).should('contain', element);
+    });
   });
 });

@@ -8,8 +8,6 @@ import { DEFAULT_MARGIN, FULL_WIDTH } from '../../../config/stylingConstants';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 import SaveButton from './SaveButton';
 
-type textData = { text: string };
-
 type Prop = {
   resourceKey: string;
   textFieldLabel: string;
@@ -68,13 +66,17 @@ const SetText: FC<Prop> = ({
         variant="outlined"
         onChange={onChange}
         sx={{ width: FULL_WIDTH, marginRight: DEFAULT_MARGIN }}
+        value={resourceText}
       />
       <SaveButton
         buttonDataCy={buttonDataCy}
         handleOnClick={() => handleClickSaveText()}
         marginRight={DEFAULT_MARGIN}
         minHeight="55px"
-        disabled={textResourceSetting.data.text === resourceText}
+        disabled={
+          (textResourceSetting?.data || DEFAULT_TEXT_RESOURCE_SETTING).text ===
+          resourceText
+        }
       />
     </Box>
   );
