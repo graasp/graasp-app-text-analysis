@@ -1,3 +1,5 @@
+import isEqual from 'lodash.isequal';
+
 import { FC, KeyboardEventHandler, useState } from 'react';
 
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -29,9 +31,6 @@ const KeyWords: FC = () => {
   const { patchAppSetting, postAppSetting, appSettingArray } =
     useAppSettingContext();
 
-  const areEqual = (arr1: string[], arr2: string[]): boolean =>
-    arr1.length === arr2.length && arr1.every((s, i) => s === arr2[i]);
-
   const onChange = ({ target }: { target: { value: string } }): void => {
     setWord(target.value);
   };
@@ -40,7 +39,7 @@ const KeyWords: FC = () => {
     if (event.key === ENTER_KEY) {
       const element = event.target as HTMLInputElement;
       const wordToLowerCase = element.value.toLocaleLowerCase();
-      if (!keywordsList.includes(wordToLowerCase)) {
+      if (wordToLowerCase !== '' && !keywordsList.includes(wordToLowerCase)) {
         setKeyWordsList([...keywordsList, wordToLowerCase]);
       }
       setWord('');
@@ -106,7 +105,7 @@ const KeyWords: FC = () => {
         buttonDataCy={SAVE_KEYWORDS_BUTTON_CY}
         fullWidth
         handleOnClick={handleClickSave}
-        disabled={areEqual(keywordsList, keywordsResourceData.keywords)}
+        disabled={isEqual(keywordsList, keywordsResourceData.keywords)}
       />
     </Box>
   );

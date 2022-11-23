@@ -39,9 +39,11 @@ describe('Enter Settings', () => {
 
     cy.get(buildDataCy(SAVE_TITLE_BUTTON_CY)).click();
 
-    cy.get(buildDataCy(SAVE_TEXT_BUTTON_CY)).should('be.disabled');
+    cy.get(buildDataCy(SAVE_TITLE_BUTTON_CY)).should('be.disabled');
 
-    cy.get(buildDataCy(TITLE_INPUT_FIELD_CY)).clear();
+    cy.get(buildDataCy(TITLE_INPUT_FIELD_CY)).type(
+      '{backspace}{backspace}{backspace}',
+    );
 
     cy.get(buildDataCy(SAVE_TITLE_BUTTON_CY)).should('not.be.disabled');
   });
