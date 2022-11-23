@@ -106,7 +106,7 @@ describe('Load Settings', () => {
     cy.visit('/');
   });
 
-  it.only('display existing mock text resource', () => {
+  it('display existing mock text resource', () => {
     cy.get(buildDataCy(TEXT_INPUT_FIELD_CY)).should(
       'contain',
       MOCK_APP_SETTINGS[0].data.text,
