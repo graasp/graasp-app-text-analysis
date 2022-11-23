@@ -1,0 +1,15 @@
+name: Cypress tests
+
+on:
+  push:
+
+
+jobs:
+  cypress:
+  uses: graasp/graasp-deploy/.github/workflows/cypress.yml@v1
+  with:
+    tsc: false
+    graasp-app-id: 12345
+    mock-api-test: true
+  secrets:
+    api-host-test: http://localhost:3636
