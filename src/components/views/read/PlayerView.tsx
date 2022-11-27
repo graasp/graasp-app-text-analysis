@@ -1,4 +1,4 @@
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { FC, ReactElement, useState } from 'react';
 
 import { Box } from '@mui/material';
 
@@ -8,36 +8,39 @@ import {
   LESSON_TITLE_SETTING_KEY,
   TEXT_RESOURCE_SETTING_KEY,
   TextResourceData,
+  keyword,
 } from '../../../config/appSettingTypes';
 import {
+  DEFAULT_KEYWORD,
   DEFAULT_KEYWORDS_LIST,
   DEFAULT_LESSON_TITLE,
   DEFAULT_TEXT_RESOURCE_SETTING,
 } from '../../../config/appSettings';
-import { DICTIONARY_API_BASE_URL } from '../../../config/constants';
+// import { DICTIONARY_API_BASE_URL } from '../../../config/constants';
 import { PLAYER_VIEW_CY } from '../../../config/selectors';
+import { FULL_WIDTH } from '../../../config/stylingConstants';
 import ChatbotWindow from '../../common/ChatbotWindow';
 import Banner from '../../common/display/Banner';
 import TextDisplay from '../../common/display/TextDisplay';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 
-const DEFAULT_DEF = 'Cannot find the definitions for this word';
-
 const PlayerView: FC = () => {
   const { appSettingArray } = useAppSettingContext();
   const [summon, setSummon] = useState(false);
-  const [dictionary, setDictionary] = useState({});
+  // const [dictionary, setDictionary] = useState({});
   const [chatbot, setChatbot] = useState(false);
+  const [focusWord, setFocusWord] = useState<keyword>(DEFAULT_KEYWORD);
 
-  const keywords = (appSettingArray.find((s) => s.name === KEYWORDS_SETTING_KEY)
-    ?.data || DEFAULT_KEYWORDS_LIST) as KeywordsData;
-
-  const uniqueKeywords = keywords.keywords.reduce(
-    (acc: string[], currentVal: string): string[] =>
-      acc.includes(currentVal) ? acc : [...acc, currentVal],
+  const { keywords } = (appSettingArray.find(
+    (s) => s.name === KEYWORDS_SETTING_KEY,
+  )?.data || DEFAULT_KEYWORDS_LIST) as KeywordsData;
+  /* 
+  const uniqueKeywords = keywords.reduce(
+    (acc: keyword[], currentVal: keyword): keyword[] =>
+      acc.some((k) => k.word === currentVal.word) ? acc : [...acc, currentVal],
     [],
   );
-
+  
   const fetchKeywordDef = async (word: string): Promise<string> => {
     const response = await fetch(`${DICTIONARY_API_BASE_URL}${word}`);
     const json = await response.json();
@@ -61,7 +64,7 @@ const PlayerView: FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [summon, keywords]);
-
+*/
   const fetchSetting = (
     key: string,
     defaultSetting: TextResourceData,
@@ -86,24 +89,29 @@ const PlayerView: FC = () => {
         >
           <TextDisplay
             text={textResource}
-            keywords={keywords.keywords}
+            keywords={keywords}
             highlight={summon}
-            openChatbot={() => {
+            openChatbot={(word: keyword) => {
               setChatbot(true);
+              setFocusWord(word);
             }}
-            width="100%"
+            width={FULL_WIDTH}
           />
-          <ChatbotWindow closeChatbot={() => setChatbot(false)} />
+          <ChatbotWindow
+            closeChatbot={() => setChatbot(false)}
+            focusWord={focusWord}
+          />
         </Box>
       );
     }
     return (
       <TextDisplay
         text={textResource}
-        keywords={keywords.keywords}
+        keywords={keywords}
         highlight={summon}
-        openChatbot={() => {
+        openChatbot={(word: keyword) => {
           setChatbot(true);
+          setFocusWord(word);
         }}
       />
     );
@@ -119,9 +127,7 @@ const PlayerView: FC = () => {
           setSummon(true);
         }}
         buttonDisable={
-          textResource === '' ||
-          keywords.keywords.length === 0 ||
-          summon === true
+          textResource === '' || keywords.length === 0 || summon === true
         }
       />
       {renderContent()}

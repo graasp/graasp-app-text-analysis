@@ -4,13 +4,15 @@ import { FC } from 'react';
 
 import { Button } from '@mui/material';
 
+import { keyword } from '../../../config/appSettingTypes';
+import { DEFAULT_KEYWORD } from '../../../config/appSettings';
 import { KEYWORD_BUTTON_CY } from '../../../config/selectors';
 
 type Prop = {
   text: string;
-  words: string[];
+  words: keyword[];
   highlight: boolean;
-  openChatbot: () => void;
+  openChatbot: (word: keyword) => void;
 };
 
 const Highlighted: FC<Prop> = ({ text, words, highlight, openChatbot }) => {
@@ -18,9 +20,12 @@ const Highlighted: FC<Prop> = ({ text, words, highlight, openChatbot }) => {
     return <span>{text}</span>;
   }
 
-  const expr = words.join('|');
+  const wordsLowerCase = words.map(({ word }) => word.toLocaleLowerCase());
+  const expr = wordsLowerCase.join('|');
   const parts = text.split(new RegExp(`(${expr})`, 'gi'));
-  const wordsLowerCase = words.map((word) => word.toLocaleLowerCase());
+
+  const findKeyword = (part: string): keyword =>
+    words.find((w) => w.word === part) || DEFAULT_KEYWORD;
 
   return (
     <span>
@@ -37,7 +42,7 @@ const Highlighted: FC<Prop> = ({ text, words, highlight, openChatbot }) => {
               fontWeight: '400',
             }}
             key={i}
-            onClick={openChatbot}
+            onClick={() => openChatbot(findKeyword(part.toLocaleLowerCase()))}
           >
             {part}
           </Button>

@@ -6,6 +6,6 @@ export const KEYWORDS_SETTING_KEY = 'keywords_setting';
 
 export type TextResourceData = { text: string };
 export type TextResourceSetting = AppSetting & { data: TextResourceData };
-
-export type KeywordsData = { keywords: string[] };
+export type keyword = { word: string; def: string };
+export type KeywordsData = { keywords: keyword[] };
 export type KeywordsSetting = AppSetting & { data: KeywordsData };

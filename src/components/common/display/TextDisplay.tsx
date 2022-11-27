@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { Typography } from '@mui/material';
 
+import { keyword } from '../../../config/appSettingTypes';
 import { TEXT_DISPLAY_FIELD_CY } from '../../../config/selectors';
 import {
   DEFAULT_MARGIN,
@@ -12,8 +13,8 @@ import Highlighted from './Highlighted';
 type Prop = {
   text: string;
   highlight: boolean;
-  openChatbot: () => void;
-  keywords: string[];
+  openChatbot: (word: keyword) => void;
+  keywords: keyword[];
   width?: string;
 };
 

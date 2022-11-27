@@ -1,6 +1,6 @@
 import { Context, PermissionLevel } from '@graasp/sdk';
 
-import { KeywordsData, TextResourceData } from './appSettingTypes';
+import { KeywordsData, TextResourceData, keyword } from './appSettingTypes';
 
 export const DEFAULT_TEXT_RESOURCE_SETTING: TextResourceData = {
   text: '',
@@ -13,6 +13,8 @@ export const DEFAULT_LESSON_TITLE: TextResourceData = {
 export const DEFAULT_KEYWORDS_LIST: KeywordsData = {
   keywords: [],
 };
+
+export const DEFAULT_KEYWORD: keyword = { word: '', def: '' };
 
 export const DEFAULT_CONTEXT = Context.BUILDER;
 export const DEFAULT_PERMISSION = PermissionLevel.Read;
