@@ -1,6 +1,6 @@
 # This workflow triggers a new workflow inside the graasp-deploy repository. It passes a json
-# with the repository name and the latest tag pushed from the caller repository.
-name: Push new tag to graasp-deploy repository
+# with the repository name and an existing tag from the caller repository.
+name: Push existing tag to graasp-deploy repository
 
 # Controls when the action will run
 on:
@@ -8,29 +8,31 @@ on:
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
-      release-type:
+      tag:
         # Description to be shown in the UI instead of 'stack'
-        description: 'Select a release type'
+        description: 'Select a tag (of the form vX.X.X)'
         # Default value if no value is explicitly provided
         # Input does not have to be provided for the workflow to run
-        type: choice
-        options:
-          - first
-          - patch
-          - minor
-          - major
-        default: patch
+        type: string
         required: true
 
 # This workflow is made up of one job that calls the reusable workflow in graasp-deploy
 jobs:
-  graasp-deploy-update-staging-version-workflow:
-    # todo: replace me
-    name: Text Analysis
-    # Replace 'main' with the hash of a commit, so it points to an specific version of the reusable workflow that is used
-    # Reference reusable workflow file. Using the commit SHA is the safest for stability and security
-    uses: graasp/graasp-deploy/.github/workflows/update-staging-version.yml@v1
-    with:
-      release-type: ${{ inputs.release-type }}
-    secrets:
-      token: ${{ secrets.REPO_ACCESS_TOKEN }}
+  push-existing-tag-to-graasp-deploy:
+    - name: Set tag
+      id: set-tag
+      run: |
+        LATEST_TAG=$(gh api /repo/${{ github.repository }}/releases/latest | jq .tag_name)
+        REPOSITORY=$(echo '${{ github.repository }}')
+        TAG=$(( ${{ inputs.tag }} ? ${{ inputs.tag }} : $LATEST_TAG ))
+        JSON=$(jq -c --null-input --arg repository "$REPOSITORY" --arg tag "$TAG" '{"repository": $repository, "tag": $tag}')
+        echo "json=$JSON" >> $GITHUB_OUTPUT
+
+    # Trigger an 'on: repository_dispatch' workflow to run in graasp-deploy repository
+    - name: Push tag to Graasp Deploy (Staging)
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ secrets.REPO_ACCESS_TOKEN }}
+        repository: graasp/graasp-deploy
+        event-type: update-staging-version
+        client-payload: ${{steps.set-tag.outputs.json}}
