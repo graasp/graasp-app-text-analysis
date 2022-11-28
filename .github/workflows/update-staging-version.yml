@@ -20,6 +20,7 @@ on:
 # This workflow is made up of one job that calls the reusable workflow in graasp-deploy
 jobs:
   push-existing-tag-to-graasp-deploy:
+    runs-on: ubuntu-latest
     steps:
       - name: Set tag
         id: set-tag
