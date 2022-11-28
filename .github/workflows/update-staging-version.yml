@@ -27,7 +27,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          LATEST_TAG=$(gh api /repos/${{ github.repository }}/releases/latest | jq .tag_name)
+          LATEST_TAG=$(gh api /repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
           REPOSITORY=$(echo '${{ github.repository }}')
           if [[ -n "${{ inputs.tag }}" ]]; then
             TAG="${{ inputs.tag }}"
