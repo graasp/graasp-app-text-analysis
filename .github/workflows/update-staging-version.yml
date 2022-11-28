@@ -29,10 +29,11 @@ jobs:
         run: |
           LATEST_TAG=$(gh api /repos/${{ github.repository }}/releases/latest | jq .tag_name)
           REPOSITORY=$(echo '${{ github.repository }}')
-          [[ -n "${{ inputs.tag }}" ]]
-          TAG="${{ inputs.tag }}"
-          [[ -z "${{ inputs.tag }}" ]]
-          TAG=$LATEST_TAG
+          if [[ -n "${{ inputs.tag }}" ]]; then
+            TAG="${{ inputs.tag }}"
+          elif [[ -z "${{ inputs.tag }}" ]]; then
+            TAG=$LATEST_TAG
+          fi
           JSON=$(jq -c --null-input --arg repository "$REPOSITORY" --arg tag "$TAG" '{"repository": $repository, "tag": $tag}')
           echo "json=$JSON" >> $GITHUB_OUTPUT
 
