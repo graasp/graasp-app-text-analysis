@@ -14,7 +14,8 @@ on:
         # Default value if no value is explicitly provided
         # Input does not have to be provided for the workflow to run
         type: string
-        required: true
+        default: ''
+        required: false
 
 # This workflow is made up of one job that calls the reusable workflow in graasp-deploy
 jobs:
