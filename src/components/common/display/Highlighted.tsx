@@ -42,31 +42,48 @@ const Highlighted: FC<Prop> = ({ text, words, highlight, openChatbot }) => {
   const expr = words.join('|');
   const parts = text.split(new RegExp(`(${expr})`, 'gi'));
   const wordsLowerCase = words.map((word) => word.toLocaleLowerCase());
+  const snippet = parts
+    .map((part) =>
+      wordsLowerCase.includes(part.toLocaleLowerCase()) ? `*${part}*` : part,
+    )
+    .join('');
+
+  // eslint-disable-next-line
+  const parseComponent = ({ children }: { children: any }) => {
+    const wordLowerCase = children[0].toLocaleLowerCase();
+    if (!wordsLowerCase.includes(wordLowerCase)) {
+      return <em>{wordLowerCase}</em>;
+    }
+    return (
+      <Button
+        data-cy={KEYWORD_BUTTON_CY}
+        sx={{
+          backgroundColor: randomColor({
+            seed: wordLowerCase,
+            luminosity: 'light',
+          }),
+          minWidth: '10px',
+          textTransform: 'none',
+          color: 'black',
+          fontWeight: 'inherit',
+          fontSize: 'inherit',
+          paddingY: '1px',
+        }}
+        onClick={openChatbot}
+      >
+        <span>{children[0]}</span>
+      </Button>
+    );
+  };
 
   return (
-    <span>
-      {parts.map((part, i) =>
-        wordsLowerCase.includes(part.toLocaleLowerCase()) ? (
-          <Button
-            data-cy={KEYWORD_BUTTON_CY}
-            sx={{
-              backgroundColor: randomColor({ seed: part.toLocaleLowerCase() }),
-              maxHeight: '23px',
-              minWidth: '10px',
-              textTransform: 'none',
-              color: 'black',
-              fontWeight: 'inherit',
-            }}
-            key={i}
-            onClick={openChatbot}
-          >
-            <StyledReactMarkdown key={i}>{part}</StyledReactMarkdown>
-          </Button>
-        ) : (
-          <span key={i}>{part}</span>
-        ),
-      )}
-    </span>
+    <StyledReactMarkdown
+      components={{
+        em: parseComponent,
+      }}
+    >
+      {snippet}
+    </StyledReactMarkdown>
   );
 };
 
