@@ -14,6 +14,12 @@ export const DEFAULT_KEYWORDS_LIST: KeywordsData = {
   keywords: [],
 };
 
+export const DEFAULT_INITIAL_PROMPT: TextResourceData = {
+  text: '',
+};
+
+export const DEFAULT_USE_CHATBOT_SETTING = { useBot: false };
+
 export const DEFAULT_KEYWORD: keyword = { word: '', def: '' };
 
 export const DEFAULT_CONTEXT = Context.BUILDER;

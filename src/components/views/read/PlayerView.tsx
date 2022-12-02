@@ -1,4 +1,4 @@
-import { FC, ReactElement, useState } from 'react';
+import { FC, ReactElement, useEffect, useState } from 'react';
 
 import { Box } from '@mui/material';
 
@@ -8,6 +8,9 @@ import {
   LESSON_TITLE_SETTING_KEY,
   TEXT_RESOURCE_SETTING_KEY,
   TextResourceData,
+  USE_CHATBOT_SETTING_KEY,
+  UseChatbotData,
+  UseChatbotSetting,
   keyword,
 } from '../../../config/appSettingTypes';
 import {
@@ -15,6 +18,7 @@ import {
   DEFAULT_KEYWORDS_LIST,
   DEFAULT_LESSON_TITLE,
   DEFAULT_TEXT_RESOURCE_SETTING,
+  DEFAULT_USE_CHATBOT_SETTING,
 } from '../../../config/appSettings';
 // import { DICTIONARY_API_BASE_URL } from '../../../config/constants';
 import { PLAYER_VIEW_CY } from '../../../config/selectors';
@@ -30,10 +34,20 @@ const PlayerView: FC = () => {
   // const [dictionary, setDictionary] = useState({});
   const [chatbot, setChatbot] = useState(false);
   const [focusWord, setFocusWord] = useState<keyword>(DEFAULT_KEYWORD);
+  const [useChatbot, setUseChatbot] = useState(false);
 
   const { keywords } = (appSettingArray.find(
     (s) => s.name === KEYWORDS_SETTING_KEY,
   )?.data || DEFAULT_KEYWORDS_LIST) as KeywordsData;
+
+  const useChatbotSetting = (appSettingArray.find(
+    (s) => s.name === USE_CHATBOT_SETTING_KEY,
+  )?.data || DEFAULT_USE_CHATBOT_SETTING) as UseChatbotData;
+
+  useEffect(() => {
+    setUseChatbot(useChatbotSetting.useBot);
+  }, [useChatbotSetting]);
+
   /* 
   const uniqueKeywords = keywords.reduce(
     (acc: keyword[], currentVal: keyword): keyword[] =>
@@ -100,6 +114,7 @@ const PlayerView: FC = () => {
           <ChatbotWindow
             closeChatbot={() => setChatbot(false)}
             focusWord={focusWord}
+            useChatbot={useChatbot}
           />
         </Box>
       );

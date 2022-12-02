@@ -1,10 +1,13 @@
 enum APP_DATA_TYPES {
-  MOCK_TYPE = 'mock_type',
+  STUDENT_COMMENT = 'Student',
+  BOT_COMMENT = 'Chatbot',
 }
 
 enum APP_DATA_VISIBILITY {
   MEMBER = 'member',
   ITEM = 'item',
 }
+
+export type MessageData = { message: string };
 
 export { APP_DATA_TYPES, APP_DATA_VISIBILITY };

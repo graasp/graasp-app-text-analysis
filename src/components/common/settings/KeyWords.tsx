@@ -9,6 +9,7 @@ import {
   keyword,
 } from '../../../config/appSettingTypes';
 import { DEFAULT_KEYWORDS_LIST } from '../../../config/appSettings';
+import { ENTER_KEY } from '../../../config/constants';
 import {
   DELETE_KEYWORD_BUTTON_CY,
   ENTER_KEYWORD_FIELD_CY,
@@ -18,8 +19,6 @@ import {
 import { DEFAULT_MARGIN, FULL_WIDTH } from '../../../config/stylingConstants';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 import SaveButton from './SaveButton';
-
-const ENTER_KEY = 'Enter';
 
 const KeyWords: FC = () => {
   const [word, setWord] = useState('');
