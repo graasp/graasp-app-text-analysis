@@ -1,8 +1,10 @@
 /* eslint-disable arrow-body-style */
+import { RecordOf } from 'immutable';
+
 import { FC, useEffect, useState } from 'react';
 
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import RedditIcon from '@mui/icons-material/Reddit';
+import { LocalContext, useLocalContext } from '@graasp/apps-query-client';
+
 import { Box, styled } from '@mui/material';
 
 import { APP_DATA_TYPES, MessageData } from '../../config/appDataTypes';
@@ -11,24 +13,22 @@ import {
   TextResourceData,
 } from '../../config/appSettingTypes';
 import { DEFAULT_INITIAL_PROMPT } from '../../config/appSettings';
-import { CHATBOT_RESPONSE_URL } from '../../config/constants';
-import {
-  GRAASP_VIOLET,
-  GRAY,
-  LIGHT_GRAY,
-  LIGHT_VIOLET,
-} from '../../config/stylingConstants';
+import { ANONYMOUS_USER, CHATBOT_RESPONSE_URL } from '../../config/constants';
+import { LIGHT_GRAY, LIGHT_VIOLET } from '../../config/stylingConstants';
 import { useAppDataContext } from '../context/AppDataContext';
 import { useAppSettingContext } from '../context/AppSettingContext';
+import { useMembersContext } from '../context/MembersContext';
+import ChatbotBox from './ChatbotBox';
 import InputBar from './InputBar';
+import UserBox from './UserBox';
 
 const StyledMessage = styled(Box)(({ theme }) => ({
   borderRadius: theme.spacing(1),
   width: '70%',
   margin: theme.spacing(1),
   padding: theme.spacing(1),
-  display: 'flex',
   flexWrap: 'wrap',
+  wordBreak: 'break-word',
 }));
 
 const StyledBotMessage = styled(StyledMessage)(() => ({
@@ -44,6 +44,11 @@ type Prop = { focusWord: string };
 const ChatBox: FC<Prop> = ({ focusWord }) => {
   const { postAppData, appDataArray } = useAppDataContext();
   const { appSettingArray } = useAppSettingContext();
+  const context: RecordOf<LocalContext> = useLocalContext();
+  const member = useMembersContext().find(
+    (m) => m.id === context.get('memberId'),
+  );
+  const memberName = member?.name || ANONYMOUS_USER;
 
   const initialPrompt = (
     (appSettingArray.find((s) => s.name === INITIAL_PROMPT_SETTING_KEY)?.data ||
@@ -51,25 +56,25 @@ const ChatBox: FC<Prop> = ({ focusWord }) => {
   ).text.replace('keyword', focusWord);
 
   const [userPrompt, setUserPrompt] = useState('');
-  const [completion, setCompletion] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const chatAppData = appDataArray.filter(
-    (data) =>
-      data.type === APP_DATA_TYPES.BOT_COMMENT ||
-      data.type === APP_DATA_TYPES.STUDENT_COMMENT,
-  );
+  const chatAppData = appDataArray.filter((data) => {
+    return (
+      (data.type === APP_DATA_TYPES.BOT_COMMENT ||
+        data.type === APP_DATA_TYPES.STUDENT_COMMENT) &&
+      (data.data as MessageData).keyword === focusWord
+    );
+  });
 
   useEffect(() => {
     const chatConcatMessages = chatAppData
-      .map((data) => `${data.type}:${(data.data as MessageData).message}`)
+      .map((data) => `${data.type}: ${(data.data as MessageData).message}`)
       .unshift(initialPrompt)
       .join('\n\n');
-    console.log(chatConcatMessages);
     setUserPrompt(chatConcatMessages);
   }, [appDataArray]);
 
-  const fetchApi = async (): Promise<any> => {
+  const fetchApi = async (): Promise<{ completion: string }> => {
     setLoading(true);
     const response = await fetch(CHATBOT_RESPONSE_URL, {
       method: 'POST',
@@ -84,13 +89,11 @@ const ChatBox: FC<Prop> = ({ focusWord }) => {
 
   const onSend = (): void => {
     fetchApi().then((json) => {
-      console.log(json);
-      setCompletion(json.completion);
       setLoading(false);
-    });
-    postAppData({
-      data: { message: completion },
-      type: APP_DATA_TYPES.BOT_COMMENT,
+      postAppData({
+        data: { message: json.completion, keyword: focusWord },
+        type: APP_DATA_TYPES.BOT_COMMENT,
+      });
     });
   };
 
@@ -100,46 +103,28 @@ const ChatBox: FC<Prop> = ({ focusWord }) => {
         const isUser = msg.type === APP_DATA_TYPES.STUDENT_COMMENT;
         if (isUser) {
           return (
-            <Box
-              key={msg.id}
-              display="flex"
-              flexDirection="row-reverse"
-              alignItems="center"
-            >
-              <AccountCircleIcon
-                sx={{
-                  marginRight: '5px',
-                  color: GRAY,
-                  fontSize: 50,
-                }}
-              />
+            <UserBox key={msg.id} userName={memberName}>
               <StyledUserMessage key={msg.id} alignSelf="flex-end">
                 {(msg.data as MessageData).message}
               </StyledUserMessage>
-            </Box>
+            </UserBox>
           );
         }
         return (
-          <Box
-            key={msg.id}
-            display="flex"
-            flexDirection="row"
-            alignItems="center"
-          >
-            <RedditIcon
-              sx={{
-                marginLeft: '5px',
-                color: GRAASP_VIOLET,
-                fontSize: 50,
-              }}
-            />
+          <ChatbotBox key={msg.id}>
             <StyledBotMessage key={msg.id} alignSelf="flex-start">
-              {loading ? '...' : (msg.data as MessageData).message}
+              {(msg.data as MessageData).message}
             </StyledBotMessage>
-          </Box>
+          </ChatbotBox>
         );
       })}
-      <InputBar onSend={onSend} />
+      {loading && (
+        <ChatbotBox key="loading">
+          <StyledBotMessage alignSelf="flex-start">...</StyledBotMessage>
+        </ChatbotBox>
+      )}
+
+      <InputBar onSend={onSend} focusWord={focusWord} />
     </Box>
   );
 };

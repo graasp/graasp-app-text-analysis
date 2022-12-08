@@ -2326,10 +2326,10 @@ __metadata:
   linkType: hard
 
 "@graasp/apps-query-client@github:graasp/graasp-apps-query-client":
-  version: 0.2.0
-  resolution: "@graasp/apps-query-client@https://github.com/graasp/graasp-apps-query-client.git#commit=393d61cca45d06be40f277b9877ca378277ef2b3"
+  version: 0.4.0
+  resolution: "@graasp/apps-query-client@https://github.com/graasp/graasp-apps-query-client.git#commit=75acf0de949d64267c259184ef03dee2ac0e60e8"
   dependencies:
-    "@graasp/utils": "github:graasp/graasp-utils"
+    "@graasp/sdk": "github:graasp/graasp-sdk"
     axios: 0.27.2
     http-status-codes: 2.2.0
     immutable: 4.1.0
@@ -2340,8 +2340,8 @@ __metadata:
     tsc: 2.0.4
     uuid: 8.3.2
   peerDependencies:
-    react: ^17.0.0
-  checksum: dad0d190ba817793d7b7cb69c91e96d51ea53f959dafdf22a78197bd38065aa96c2fe53d282726c372db52994365340a30b2fc39abe4c590c6ecd57ff33bdd03
+    react: ^17.0.0 || ^18.0.0
+  checksum: ba8c03219747afca237d29af2c1f38460ed05ef6eb4f280035325ccb73ed0a0cac0c04977a6669c631b99f4b54d7beb53d7718c4eddc47b80c3039e68cee2b78
   languageName: node
   linkType: hard
 
@@ -2359,23 +2359,6 @@ __metadata:
     slonik: 28.1.1
     uuid: 8.3.2
   checksum: 9af6a948678de50d9ae48792982e340d9aafd20e528185b4d34f8e54df7374573d011843741faabf5197cb8d73cf2fbadf033998937a313ceed61295f013dbc8
-  languageName: node
-  linkType: hard
-
-"@graasp/utils@github:graasp/graasp-utils":
-  version: 0.1.0
-  resolution: "@graasp/utils@https://github.com/graasp/graasp-utils.git#commit=4fa31e8d473b13bfa0bad3e10da9e7b9ca4f20d5"
-  dependencies:
-    "@fastify/secure-session": 5.2.0
-    aws-sdk: 2.1111.0
-    fastify: ^3.29.1
-    fluent-json-schema: 3.1.0
-    immutable: 4.1.0
-    js-cookie: 3.0.1
-    qs: 6.11.0
-    slonik: 28.1.1
-    uuid: 8.3.2
-  checksum: adb0be2eda0f90aa6ec526e0c51b6f8f415d736e23f6adfac4ad458bb0e50e3e098349a4d493d0b6b2b86571644858eb71f9810e535d3147290110f1a0f69f53
   languageName: node
   linkType: hard
 

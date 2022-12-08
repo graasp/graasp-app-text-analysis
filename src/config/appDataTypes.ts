@@ -8,6 +8,6 @@ enum APP_DATA_VISIBILITY {
   ITEM = 'item',
 }
 
-export type MessageData = { message: string };
+export type MessageData = { message: string; keyword: string };
 
 export { APP_DATA_TYPES, APP_DATA_VISIBILITY };

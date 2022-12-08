@@ -2,6 +2,7 @@ import { FC, ReactElement, useEffect, useState } from 'react';
 
 import { Box } from '@mui/material';
 
+import { APP_DATA_TYPES } from '../../../config/appDataTypes';
 import {
   KEYWORDS_SETTING_KEY,
   KeywordsData,
@@ -10,7 +11,6 @@ import {
   TextResourceData,
   USE_CHATBOT_SETTING_KEY,
   UseChatbotData,
-  UseChatbotSetting,
   keyword,
 } from '../../../config/appSettingTypes';
 import {
@@ -20,16 +20,19 @@ import {
   DEFAULT_TEXT_RESOURCE_SETTING,
   DEFAULT_USE_CHATBOT_SETTING,
 } from '../../../config/appSettings';
+import { FIRST_CHATBOT_MESSAGE } from '../../../config/constants';
 // import { DICTIONARY_API_BASE_URL } from '../../../config/constants';
 import { PLAYER_VIEW_CY } from '../../../config/selectors';
 import { FULL_WIDTH } from '../../../config/stylingConstants';
 import ChatbotWindow from '../../common/ChatbotWindow';
 import Banner from '../../common/display/Banner';
 import TextDisplay from '../../common/display/TextDisplay';
+import { useAppDataContext } from '../../context/AppDataContext';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 
 const PlayerView: FC = () => {
   const { appSettingArray } = useAppSettingContext();
+  const { appDataArray, postAppData } = useAppDataContext();
   const [summon, setSummon] = useState(false);
   // const [dictionary, setDictionary] = useState({});
   const [chatbot, setChatbot] = useState(false);
@@ -93,6 +96,21 @@ const PlayerView: FC = () => {
     DEFAULT_TEXT_RESOURCE_SETTING,
   ).text;
 
+  const openChatbot = (word: keyword): void => {
+    const keywordAppData = appDataArray.filter(
+      (data) => data.data.keyword === word.word,
+    );
+    console.log(keywordAppData);
+    if (keywordAppData.size === 0) {
+      postAppData({
+        data: { message: FIRST_CHATBOT_MESSAGE, keyword: word.word },
+        type: APP_DATA_TYPES.BOT_COMMENT,
+      });
+    }
+    setChatbot(true);
+    setFocusWord(word);
+  };
+
   const renderContent = (): ReactElement => {
     if (chatbot) {
       return (
@@ -106,8 +124,7 @@ const PlayerView: FC = () => {
             keywords={keywords}
             highlight={summon}
             openChatbot={(word: keyword) => {
-              setChatbot(true);
-              setFocusWord(word);
+              openChatbot(word);
             }}
             width={FULL_WIDTH}
           />
@@ -125,8 +142,7 @@ const PlayerView: FC = () => {
         keywords={keywords}
         highlight={summon}
         openChatbot={(word: keyword) => {
-          setChatbot(true);
-          setFocusWord(word);
+          openChatbot(word);
         }}
       />
     );

@@ -15,12 +15,13 @@ import { useAppDataContext } from '../context/AppDataContext';
 
 type Prop = {
   onSend: () => void;
+  focusWord: string;
 };
 
-const InputBar: FC<Prop> = ({ onSend }) => {
+const InputBar: FC<Prop> = ({ onSend, focusWord }) => {
   const [comment, setComment] = useState('');
 
-  const { postAppData } = useAppDataContext();
+  const { postAppDataAsync } = useAppDataContext();
 
   const onChange = ({ target }: { target: { value: string } }): void => {
     setComment(target.value);
@@ -28,11 +29,10 @@ const InputBar: FC<Prop> = ({ onSend }) => {
 
   const handleClickSend = (): void => {
     if (comment.trim() !== '') {
-      postAppData({
-        data: { message: comment },
+      postAppDataAsync({
+        data: { message: comment, keyword: focusWord },
         type: APP_DATA_TYPES.STUDENT_COMMENT,
-      });
-      onSend();
+      })?.then(() => onSend());
       setComment('');
     }
   };

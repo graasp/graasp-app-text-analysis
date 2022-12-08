@@ -7,7 +7,10 @@ import * as Sentry from '@sentry/react';
 import { BrowserTracing } from '@sentry/tracing';
 
 import Root from './components/Root';
-import { DICTIONARY_API_BASE_URL } from './config/constants';
+import {
+  CHATBOT_RESPONSE_URL,
+  DICTIONARY_API_BASE_URL,
+} from './config/constants';
 import { MOCK_API } from './config/env';
 import { generateSentryConfig } from './config/sentry';
 import buildDatabase, { mockContext, mockMembers } from './data/db';
@@ -26,7 +29,7 @@ Sentry.init({
 /* istanbul ignore next */
 if (MOCK_API) {
   mockApi({
-    externalUrls: [`${DICTIONARY_API_BASE_URL}**`],
+    externalUrls: [`${DICTIONARY_API_BASE_URL}**`, CHATBOT_RESPONSE_URL],
     appContext: window.Cypress ? window.appContext : mockContext,
     database: window.Cypress
       ? window.database
