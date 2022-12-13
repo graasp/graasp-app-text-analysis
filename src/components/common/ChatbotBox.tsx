@@ -9,7 +9,7 @@ type Prop = {
   key: string;
 };
 
-const UserBox: FC<PropsWithChildren<Prop>> = ({ key, children }) => (
+const ChatbotBox: FC<PropsWithChildren<Prop>> = ({ key, children }) => (
   <Box key={key} display="flex" flexDirection="row" alignItems="center">
     <SmartToyIcon
       sx={{
@@ -22,4 +22,4 @@ const UserBox: FC<PropsWithChildren<Prop>> = ({ key, children }) => (
   </Box>
 );
 
-export default UserBox;
+export default ChatbotBox;

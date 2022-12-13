@@ -4,6 +4,7 @@ import { Box } from '@mui/material';
 
 import { APP_DATA_TYPES } from '../../../config/appDataTypes';
 import {
+  INITIAL_CHATBOT_PROMPT_SETTING_KEY,
   KEYWORDS_SETTING_KEY,
   KeywordsData,
   LESSON_TITLE_SETTING_KEY,
@@ -36,8 +37,8 @@ const PlayerView: FC = () => {
   const [summon, setSummon] = useState(false);
   // const [dictionary, setDictionary] = useState({});
   const [chatbot, setChatbot] = useState(false);
-  const [focusWord, setFocusWord] = useState<keyword>(DEFAULT_KEYWORD);
   const [useChatbot, setUseChatbot] = useState(false);
+  const [focusWord, setFocusWord] = useState<keyword>(DEFAULT_KEYWORD);
 
   const { keywords } = (appSettingArray.find(
     (s) => s.name === KEYWORDS_SETTING_KEY,
@@ -97,19 +98,28 @@ const PlayerView: FC = () => {
   ).text;
 
   const openChatbot = (word: keyword): void => {
-    const keywordAppData = appDataArray.filter(
-      (data) => data.data.keyword === word.word,
-    );
-    console.log(keywordAppData);
-    if (keywordAppData.size === 0) {
-      postAppData({
-        data: { message: FIRST_CHATBOT_MESSAGE, keyword: word.word },
-        type: APP_DATA_TYPES.BOT_COMMENT,
-      });
-    }
     setChatbot(true);
     setFocusWord(word);
   };
+
+  useEffect(() => {
+    const initialChatbotPrompt = (
+      (appSettingArray.find(
+        (s) => s.name === INITIAL_CHATBOT_PROMPT_SETTING_KEY,
+      )?.data || FIRST_CHATBOT_MESSAGE) as TextResourceData
+    ).text.replace('{{keyword}}', focusWord.word);
+
+    const keywordAppData = appDataArray.filter(
+      (data) => data.data.keyword === focusWord.word,
+    );
+
+    if (keywordAppData.size === 0) {
+      postAppData({
+        data: { message: initialChatbotPrompt, keyword: focusWord.word },
+        type: APP_DATA_TYPES.BOT_COMMENT,
+      });
+    }
+  }, [focusWord]);
 
   const renderContent = (): ReactElement => {
     if (chatbot) {
@@ -132,6 +142,7 @@ const PlayerView: FC = () => {
             closeChatbot={() => setChatbot(false)}
             focusWord={focusWord}
             useChatbot={useChatbot}
+            isOpen={chatbot}
           />
         </Box>
       );

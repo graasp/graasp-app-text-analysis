@@ -16,6 +16,10 @@ export const SAVE_KEYWORDS_BUTTON_CY = 'save_keywords_button';
 export const INITIAL_PROMPT_INPUT_FIELD_CY = 'initial_prompt_input_field';
 export const INITIAL_PROMPT_BUTTON_CY = 'initial_prompt_button';
 
+export const INITIAL_CHATBOT_PROMPT_INPUT_FIELD_CY =
+  'initial_chatbot_prompt_input_field';
+export const INITIAL_CHATBOT_PROMPT_BUTTON_CY = 'initial_chatbot_prompt_button';
+
 export const TEXT_INPUT_FIELD_CY = 'text_input_field';
 export const TITLE_INPUT_FIELD_CY = 'title_input_field';
 export const SAVE_TITLE_BUTTON_CY = 'save_title_button';
