@@ -7,6 +7,13 @@ export const { REACT_APP_OPEN_AI_URL: CHATBOT_RESPONSE_URL = 'url not found' } =
 export const FIRST_CHATBOT_MESSAGE: TextResourceData = {
   text: 'You clicked on {{keyword}}, what do you want to know about it ?',
 };
+export const END_CONVERSATION =
+  'Sorry, you reach your maximal number of questions !';
+
+export const MAX_CONVERSATION_LENGTH = 20;
+
+export const STUDENT_PREFIX = 'Student';
+export const CHATBOT_PREFIX = 'Chatbot';
 
 export const SCROLL_SAFETY_MARGIN = 64;
 

@@ -9,39 +9,29 @@ import {
   OutlinedInput,
 } from '@mui/material';
 
-import { APP_DATA_TYPES } from '../../config/appDataTypes';
 import { ENTER_KEY } from '../../config/constants';
-import { useAppDataContext } from '../context/AppDataContext';
 
 type Prop = {
-  onSend: () => void;
-  focusWord: string;
+  onSend: (input: string) => void;
 };
 
-const InputBar: FC<Prop> = ({ onSend, focusWord }) => {
+const InputBar: FC<Prop> = ({ onSend }) => {
   const [comment, setComment] = useState('');
-
-  const { postAppDataAsync } = useAppDataContext();
 
   const onChange = ({ target }: { target: { value: string } }): void => {
     setComment(target.value);
   };
 
-  const handleClickSend = (): void => {
-    if (comment.trim() !== '') {
-      postAppDataAsync({
-        data: { message: comment, keyword: focusWord },
-        type: APP_DATA_TYPES.STUDENT_COMMENT,
-      })?.then(() => onSend());
-      setComment('');
-    }
+  const handleClickSend = (input: string): void => {
+    onSend(input);
+    setComment('');
   };
 
   const onEnterPress: KeyboardEventHandler<
     HTMLInputElement | HTMLTextAreaElement
   > = (event): void => {
     if (event.key === ENTER_KEY) {
-      handleClickSend();
+      handleClickSend(comment);
     }
   };
 
@@ -54,7 +44,11 @@ const InputBar: FC<Prop> = ({ onSend, focusWord }) => {
         onKeyDown={onEnterPress}
         endAdornment={
           <InputAdornment position="end">
-            <IconButton aria-label="send" onClick={handleClickSend} edge="end">
+            <IconButton
+              aria-label="send"
+              onClick={() => handleClickSend(comment)}
+              edge="end"
+            >
               <SendIcon />
             </IconButton>
           </InputAdornment>

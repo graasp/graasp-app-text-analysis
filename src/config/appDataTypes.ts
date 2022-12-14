@@ -1,6 +1,6 @@
 enum APP_DATA_TYPES {
-  STUDENT_COMMENT = 'Student',
-  BOT_COMMENT = 'Chatbot',
+  STUDENT_COMMENT = 'student-comment',
+  BOT_COMMENT = 'chatbot-comment',
 }
 
 enum APP_DATA_VISIBILITY {

@@ -5,12 +5,16 @@ import { Avatar, Box } from '@mui/material';
 import { GRAY } from '../../config/stylingConstants';
 
 type Prop = {
-  key: string;
   userName: string;
 };
 
-const UserBox: FC<PropsWithChildren<Prop>> = ({ key, userName, children }) => (
-  <Box key={key} display="flex" flexDirection="row-reverse" alignItems="center">
+const UserBox: FC<PropsWithChildren<Prop>> = ({ userName, children }) => (
+  <Box
+    display="flex"
+    flexDirection="row-reverse"
+    alignItems="center"
+    whiteSpace="pre-line"
+  >
     <Avatar
       sx={{
         marginRight: '5px',
