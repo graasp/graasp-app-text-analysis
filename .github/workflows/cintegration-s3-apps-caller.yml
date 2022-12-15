@@ -11,21 +11,25 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  REACT_APP_OPEN_AI_URL: ${{ secrets.REACT_APP_OPEN_AI_URL_DEV }}
+
 # This workflow is made up of one job that calls the reusable workflow in graasp-deploy
 jobs:
-  graasp-deploy-s3-apps-workflow:
-    # todo: replace me
-    name: Text Analysis
-    uses: graasp/graasp-deploy/.github/workflows/cintegration-s3-apps.yml@v1
-    with:
-      build-folder: 'build'
-      version: 'latest'
-    secrets:
-      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
-      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
-      aws-region: ${{ secrets.APPS_AWS_REGION }}
-      aws-s3-bucket-name: ${{ secrets.AWS_S3_BUCKET_NAME_APPS_DEV }}
-      cloudfront-distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_APPS_DEV }}
-      app-id: ${{ secrets.APP_ID }}
-      graasp-domain: ${{ secrets.REACT_APP_DOMAIN_DEV }}
-      sentry-dsn: ${{ secrets.SENTRY_DSN }}
+  deploy-app-to-dev:
+    name: Deploy app to Development
+    runs-on: ubuntu-latest
+    steps:
+      - name: Text Analysis App
+        uses: graasp/graasp-deploy/.github/actions/deploy-dev-s3-apps@7010f99aa851465a150c71f8ffcc549c8fcd3582
+        with:
+          build-folder: 'build'
+          version: 'latest'
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+          aws-region: ${{ secrets.APPS_AWS_REGION }}
+          aws-s3-bucket-name: ${{ secrets.AWS_S3_BUCKET_NAME_APPS_DEV }}
+          cloudfront-distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_APPS_DEV }}
+          app-id: ${{ secrets.APP_ID }}
+          graasp-domain: ${{ secrets.REACT_APP_DOMAIN_DEV }}
+          sentry-dsn: ${{ secrets.SENTRY_DSN }}
