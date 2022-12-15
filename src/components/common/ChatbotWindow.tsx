@@ -4,6 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Box, IconButton, Typography } from '@mui/material';
 
 import { keyword } from '../../config/appSettingTypes';
+import { CHAT_WINDOW_CY, DICTIONNARY_MODE_CY } from '../../config/selectors';
 import {
   DEFAULT_MARGIN,
   GRAASP_VIOLET,
@@ -27,13 +28,19 @@ const ChatbotWindow: FC<Prop> = ({
   const renderWindow = useChatbot ? (
     <ChatBox focusWord={focusWord.word} isOpen={isOpen} />
   ) : (
-    <Typography margin={DEFAULT_MARGIN} marginTop="0px" sx={{ flex: 2 }}>
+    <Typography
+      data-cy={DICTIONNARY_MODE_CY}
+      margin={DEFAULT_MARGIN}
+      marginTop="0px"
+      sx={{ flex: 2 }}
+    >
       {`${focusWord.word}: ${focusWord.def}`}
     </Typography>
   );
 
   return (
     <Box
+      data-cy={CHAT_WINDOW_CY}
       sx={{
         alignSelf: 'stretch',
         border: `2px solid ${GRAY}`,

@@ -21,6 +21,7 @@ import {
   SCROLL_SAFETY_MARGIN,
   STUDENT_PREFIX,
 } from '../../config/constants';
+import { CHATBOT_MODE_CY, messagesDataCy } from '../../config/selectors';
 import { LIGHT_GRAY, LIGHT_VIOLET } from '../../config/stylingConstants';
 import { useAppDataContext } from '../context/AppDataContext';
 import { useAppSettingContext } from '../context/AppSettingContext';
@@ -130,13 +131,17 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
 
   const renderedMesssages = chatAppData.map((msg) =>
     msg.type === APP_DATA_TYPES.STUDENT_COMMENT ? (
-      <UserBox key={msg.id} userName={memberName}>
+      <UserBox
+        data-cy={messagesDataCy(msg.id)}
+        key={msg.id}
+        userName={memberName}
+      >
         <StyledUserMessage key={msg.id} alignSelf="flex-end">
           {(msg.data as MessageData).message}
         </StyledUserMessage>
       </UserBox>
     ) : (
-      <ChatbotBox key={msg.id}>
+      <ChatbotBox data-cy={messagesDataCy(msg.id)} key={msg.id}>
         <StyledBotMessage key={msg.id} alignSelf="flex-start">
           {(msg.data as MessageData).message}
         </StyledBotMessage>
@@ -159,7 +164,7 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
   }, [ref, appDataArray, isOpen, focusWord]);
 
   return (
-    <Stack direction="column">
+    <Stack data-cy={CHATBOT_MODE_CY} direction="column">
       <Box
         ref={ref}
         display="flex"

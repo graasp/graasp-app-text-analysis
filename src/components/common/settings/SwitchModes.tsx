@@ -7,6 +7,7 @@ import {
   UseChatbotSetting,
 } from '../../../config/appSettingTypes';
 import { DEFAULT_USE_CHATBOT_SETTING } from '../../../config/appSettings';
+import { USE_CHATBOT_DATA_CY } from '../../../config/selectors';
 import { DEFAULT_MARGIN } from '../../../config/stylingConstants';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 
@@ -45,7 +46,13 @@ const SwitchModes: FC = () => {
 
   return (
     <FormControlLabel
-      control={<Switch checked={useChatbot} onChange={handleOnChange} />}
+      control={
+        <Switch
+          data-cy={USE_CHATBOT_DATA_CY}
+          checked={useChatbot}
+          onChange={handleOnChange}
+        />
+      }
       label="use chatbot"
       sx={{ marginLeft: DEFAULT_MARGIN }}
     />

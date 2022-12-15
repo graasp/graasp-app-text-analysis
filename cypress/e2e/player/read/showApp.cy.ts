@@ -3,10 +3,10 @@ import { Context, PermissionLevel } from '@graasp/sdk';
 import { DEFAULT_TEXT_RESOURCE_SETTING } from '../../../../src/config/appSettings';
 import {
   BANNER_CY,
-  KEYWORD_BUTTON_CY,
   PLAYER_VIEW_CY,
   SUMMON_BUTTON_CY,
   TEXT_DISPLAY_FIELD_CY,
+  buildAllKeywordsButtonDataCy,
   buildDataCy,
 } from '../../../../src/config/selectors';
 import {
@@ -83,6 +83,8 @@ describe('With App Setting', () => {
     cy.get(buildDataCy(SUMMON_BUTTON_CY)).click();
 
     // check that after summon, keywords are highlighted
-    cy.get(buildDataCy(KEYWORD_BUTTON_CY)).should('be.visible');
+    cy.get(buildAllKeywordsButtonDataCy).each((elem) =>
+      cy.wrap(elem).should('be.visible'),
+    );
   });
 });

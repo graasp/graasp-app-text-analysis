@@ -6,7 +6,7 @@ import { Button } from '@mui/material';
 
 import { keyword } from '../../../config/appSettingTypes';
 import { DEFAULT_KEYWORD } from '../../../config/appSettings';
-import { KEYWORD_BUTTON_CY } from '../../../config/selectors';
+import { keywordDataCy } from '../../../config/selectors';
 
 type Prop = {
   text: string;
@@ -32,7 +32,7 @@ const Highlighted: FC<Prop> = ({ text, words, highlight, openChatbot }) => {
       {parts.map((part, i) =>
         wordsLowerCase.includes(part.toLocaleLowerCase()) ? (
           <Button
-            data-cy={KEYWORD_BUTTON_CY}
+            data-cy={keywordDataCy(part.toLocaleLowerCase())}
             sx={{
               backgroundColor: randomColor({ seed: part.toLocaleLowerCase() }),
               maxHeight: '23px',
