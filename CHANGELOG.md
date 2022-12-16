@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.0](https://github.com/graasp/graasp-app-text-analysis/compare/v0.4.0...v0.5.0) (2022-12-16)
+
+
+### Features
+
+* add auto-resize ([b66f850](https://github.com/graasp/graasp-app-text-analysis/commit/b66f850f9444a2056cbc372f264d6468dc9bc7d1))
+* add chatbot interaction ([#22](https://github.com/graasp/graasp-app-text-analysis/issues/22)) ([22d0395](https://github.com/graasp/graasp-app-text-analysis/commit/22d0395fbc4c2eb2bd953ee35ade59afe933f31e))
+* display keyword's definition when user doesn't use chatbot ([22d0395](https://github.com/graasp/graasp-app-text-analysis/commit/22d0395fbc4c2eb2bd953ee35ade59afe933f31e))
+
+
+### Bug Fixes
+
+* use composite that allow custom env ([3e1907b](https://github.com/graasp/graasp-app-text-analysis/commit/3e1907bfe1b216123524444a71da943f1ebfd89b))
+
+
+### Documentation
+
+* improve README ([22d0395](https://github.com/graasp/graasp-app-text-analysis/commit/22d0395fbc4c2eb2bd953ee35ade59afe933f31e))
+
 ## [0.4.0](https://github.com/graasp/graasp-app-text-analysis/compare/v0.3.0...v0.4.0) (2022-12-01)
 
 ### Features
