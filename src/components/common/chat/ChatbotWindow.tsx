@@ -43,7 +43,6 @@ const ChatbotWindow: FC<Prop> = ({
     <Box
       data-cy={CHAT_WINDOW_CY}
       sx={{
-        alignSelf: 'stretch',
         border: `2px solid ${GRAY}`,
         borderRadius: DEFAULT_BORDER_RADIUS,
         margin: DEFAULT_MARGIN,

@@ -69,12 +69,16 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
       DEFAULT_INITIAL_PROMPT) as TextResourceData
   ).text.replace('{{keyword}}', focusWord);
 
-  const chatAppData = appDataArray.filter(
-    (data) =>
-      (data.type === APP_DATA_TYPES.BOT_COMMENT ||
-        data.type === APP_DATA_TYPES.STUDENT_COMMENT) &&
-      data.data.keyword === focusWord,
-  ) as List<ChatAppData>;
+  const chatAppData = appDataArray
+    .filter(
+      (data) =>
+        (data.type === APP_DATA_TYPES.BOT_COMMENT ||
+          data.type === APP_DATA_TYPES.STUDENT_COMMENT) &&
+        data.data.keyword === focusWord,
+    )
+    .sort((a, b) =>
+      Date.parse(a.createdAt) > Date.parse(b.createdAt) ? 1 : -1,
+    ) as List<ChatAppData>;
 
   const fetchApi = async (input: string): Promise<{ completion: string }> => {
     const chatConcatMessages = chatAppData
