@@ -1,5 +1,3 @@
-import isEqual from 'lodash.isequal';
-
 import { FC, KeyboardEventHandler, useEffect, useState } from 'react';
 
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -8,8 +6,10 @@ import { Box, IconButton, List, ListItem, TextField } from '@mui/material';
 import {
   KEYWORDS_SETTING_KEY,
   KeywordsData,
+  keyword,
 } from '../../../config/appSettingTypes';
 import { DEFAULT_KEYWORDS_LIST } from '../../../config/appSettings';
+import { ENTER_KEY } from '../../../config/constants';
 import {
   DELETE_KEYWORD_BUTTON_CY,
   ENTER_KEYWORD_FIELD_CY,
@@ -19,16 +19,14 @@ import {
 import {
   DEFAULT_MARGIN,
   FULL_WIDTH,
-  GREY,
+  ICON_MARGIN,
 } from '../../../config/stylingConstants';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 import SaveButton from './SaveButton';
 
-const ENTER_KEY = 'Enter';
-
 const KeyWords: FC = () => {
   const [word, setWord] = useState('');
-  const [keywordsList, setKeyWordsList] = useState<string[]>([]);
+  const [dictionary, setDictionary] = useState<keyword[]>([]);
   const { patchAppSetting, postAppSetting, appSettingArray } =
     useAppSettingContext();
 
@@ -36,82 +34,99 @@ const KeyWords: FC = () => {
     setWord(target.value);
   };
 
+  const isKeywordListEqual = (l1: keyword[], l2: keyword[]): boolean =>
+    l1.length === l2.length &&
+    l1.every((e1) => l2.some((e2) => e1.word === e2.word && e1.def === e2.def));
+
   const onEnterPress: KeyboardEventHandler<HTMLDivElement> = (event): void => {
     if (event.key === ENTER_KEY) {
       const element = event.target as HTMLInputElement;
-      const wordToLowerCase = element.value.toLocaleLowerCase();
-      if (wordToLowerCase !== '' && !keywordsList.includes(wordToLowerCase)) {
-        setKeyWordsList([...keywordsList, wordToLowerCase]);
+      const settings = element.value.split(':');
+      const wordToLowerCase = settings[0].toLocaleLowerCase();
+      const definition = settings[1] ?? 'no definition';
+      const newKeyword = { word: wordToLowerCase, def: definition };
+      if (
+        wordToLowerCase !== '' &&
+        !dictionary.some((k) => k.word === wordToLowerCase)
+      ) {
+        setDictionary([...dictionary, newKeyword]);
       }
       setWord('');
     }
   };
 
   const handleDelete = (id: string): void => {
-    setKeyWordsList(keywordsList.filter((keyword) => keyword !== id));
+    setDictionary(dictionary.filter((k) => k.word !== id));
   };
 
   const keywordsResourceSetting = appSettingArray.find(
     (s) => s.name === KEYWORDS_SETTING_KEY,
   );
 
-  const keywordsResourceData = (keywordsResourceSetting?.data ||
+  const { keywords } = (keywordsResourceSetting?.data ||
     DEFAULT_KEYWORDS_LIST) as KeywordsData;
 
   useEffect(() => {
-    setKeyWordsList(keywordsResourceData.keywords);
-  }, [keywordsResourceData]);
+    setDictionary(keywords);
+  }, [keywords]);
 
   const handleClickSave = (): void => {
     if (keywordsResourceSetting) {
       patchAppSetting({
-        data: { keywords: keywordsList },
+        data: { keywords: dictionary },
         id: keywordsResourceSetting.id,
       });
     } else {
       postAppSetting({
-        data: { keywords: keywordsList },
+        data: { keywords: dictionary },
         name: KEYWORDS_SETTING_KEY,
       });
     }
   };
 
-  const keyWordsItems = keywordsList.map((keyword) => (
+  const keyWordsItems = dictionary.map((k) => (
     <ListItem
       data-cy={KEYWORD_LIST_ITEM_CY}
-      key={keyword}
-      sx={{ bgcolor: GREY }}
-      secondaryAction={
-        <IconButton
-          data-cy={DELETE_KEYWORD_BUTTON_CY}
-          edge="end"
-          aria-label="delete"
-          onClick={() => handleDelete(keyword)}
-        >
-          <DeleteIcon />
-        </IconButton>
-      }
+      key={k.word}
+      sx={{ padding: '0px' }}
     >
-      {keyword}
+      <IconButton
+        data-cy={DELETE_KEYWORD_BUTTON_CY}
+        aria-label="delete"
+        sx={{ marginRight: ICON_MARGIN }}
+        onClick={() => handleDelete(k.word)}
+      >
+        <DeleteIcon />
+      </IconButton>
+      {`${k.word} : ${k.def}`}
     </ListItem>
   ));
 
   return (
-    <Box maxWidth={210} width={FULL_WIDTH} marginLeft={DEFAULT_MARGIN}>
-      <TextField
-        data-cy={ENTER_KEYWORD_FIELD_CY}
-        label="Enter keyword"
-        value={word}
-        onChange={onChange}
-        onKeyPress={onEnterPress}
-      />
+    <Box sx={{ margin: DEFAULT_MARGIN }}>
+      <Box
+        component="span"
+        justifyContent="space-around"
+        display="flex"
+        alignItems="center"
+      >
+        <TextField
+          data-cy={ENTER_KEYWORD_FIELD_CY}
+          label="Enter keyword: definition"
+          sx={{ width: FULL_WIDTH, marginRight: DEFAULT_MARGIN }}
+          value={word}
+          onChange={onChange}
+          onKeyPress={onEnterPress}
+        />
+        <SaveButton
+          buttonDataCy={SAVE_KEYWORDS_BUTTON_CY}
+          handleOnClick={handleClickSave}
+          disabled={isKeywordListEqual(dictionary, keywords)}
+          marginRight={DEFAULT_MARGIN}
+          minHeight="55px"
+        />
+      </Box>
       <List>{keyWordsItems}</List>
-      <SaveButton
-        buttonDataCy={SAVE_KEYWORDS_BUTTON_CY}
-        fullWidth
-        handleOnClick={handleClickSave}
-        disabled={isEqual(keywordsList, keywordsResourceData.keywords)}
-      />
     </Box>
   );
 };

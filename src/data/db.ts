@@ -2,7 +2,6 @@ import { v4 } from 'uuid';
 
 import type { Database, LocalContext, Member } from '@graasp/apps-query-client';
 
-import { APP_DATA_TYPES } from '../config/appDataTypes';
 import {
   LESSON_TITLE_SETTING_KEY,
   TEXT_RESOURCE_SETTING_KEY,
@@ -41,13 +40,13 @@ const buildDatabase = (
   members?: Member[],
 ): Database => ({
   appData: [
-    {
+    /* {
       id: v4(),
       data: {
-        content: '',
+        message: '',
       },
       memberId: mockMembers[1].id,
-      type: APP_DATA_TYPES.MOCK_TYPE,
+      type: APP_DATA_TYPES.STUDENT_COMMENT,
       itemId: appContext.itemId || '',
       creator: mockMembers[1].id,
       createdAt: new Date().toISOString(),
@@ -56,15 +55,15 @@ const buildDatabase = (
     {
       id: v4(),
       data: {
-        content: 'Another AppData',
+        message: 'Another AppData',
       },
       memberId: mockMembers[0].id,
-      type: APP_DATA_TYPES.MOCK_TYPE,
+      type: APP_DATA_TYPES.STUDENT_COMMENT,
       itemId: appContext.itemId || '',
       creator: mockMembers[1].id,
       createdAt: new Date(Date.now() - 1500).toISOString(),
       updatedAt: new Date(Date.now() - 1500).toISOString(),
-    },
+    }, */
   ],
   appActions: [],
   members: members ?? mockMembers,

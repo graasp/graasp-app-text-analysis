@@ -70,7 +70,7 @@ const SetText: FC<Prop> = ({
       />
       <SaveButton
         buttonDataCy={buttonDataCy}
-        handleOnClick={() => handleClickSaveText()}
+        handleOnClick={handleClickSaveText}
         marginRight={DEFAULT_MARGIN}
         minHeight="55px"
         disabled={

@@ -25,6 +25,7 @@ type DeleteAppDataType = {
 
 export type AppDataContextType = {
   postAppData: (payload: PostAppDataType) => void;
+  postAppDataAsync: (payload: PostAppDataType) => Promise<void> | null;
   patchAppData: (payload: PatchAppDataType) => void;
   deleteAppData: (payload: DeleteAppDataType) => void;
   appDataArray: List<AppData>;
@@ -32,6 +33,7 @@ export type AppDataContextType = {
 
 const defaultContextValue = {
   postAppData: () => null,
+  postAppDataAsync: () => null,
   patchAppData: () => null,
   deleteAppData: () => null,
   appDataArray: List<AppData>(),
@@ -42,8 +44,8 @@ const AppDataContext = createContext<AppDataContextType>(defaultContextValue);
 export const AppDataProvider: FC<PropsWithChildren> = ({ children }) => {
   const appData = hooks.useAppData();
 
-  const { mutate: postAppData } = useMutation<
-    unknown,
+  const { mutate: postAppData, mutateAsync: postAppDataAsync } = useMutation<
+    void,
     unknown,
     PostAppDataType
   >(MUTATION_KEYS.POST_APP_DATA);
@@ -63,11 +65,12 @@ export const AppDataProvider: FC<PropsWithChildren> = ({ children }) => {
       postAppData: (payload: PostAppDataType) => {
         postAppData(payload);
       },
+      postAppDataAsync: (payload: PostAppDataType) => postAppDataAsync(payload),
       patchAppData,
       deleteAppData,
       appDataArray: appData.data || List<AppData>(),
     }),
-    [appData.data, deleteAppData, patchAppData, postAppData],
+    [appData.data, deleteAppData, patchAppData, postAppData, postAppDataAsync],
   );
 
   if (appData.isLoading) {
