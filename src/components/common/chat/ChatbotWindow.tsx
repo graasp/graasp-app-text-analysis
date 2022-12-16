@@ -45,7 +45,7 @@ const ChatbotWindow: FC<Prop> = ({
       sx={{
         alignSelf: 'stretch',
         border: `2px solid ${GRAY}`,
-        borderRadius: { DEFAULT_BORDER_RADIUS },
+        borderRadius: DEFAULT_BORDER_RADIUS,
         margin: DEFAULT_MARGIN,
         marginLeft: '0px',
         flex: 1,

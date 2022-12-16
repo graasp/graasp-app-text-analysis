@@ -48,12 +48,17 @@ const Highlighted: FC<Prop> = ({ text, words, highlight, openChatbot }) => {
     words.find((w) => w.word === part) || DEFAULT_KEYWORD;
   const snippet = parts
     .map((part) =>
+      // todo: check that the there is no italic already otherwise we will change it to bold which we do not want
       wordsLowerCase.includes(part.toLocaleLowerCase()) ? `*${part}*` : part,
     )
     .join('');
 
   // eslint-disable-next-line
   const parseComponent = ({ children }: { children: any }) => {
+    // todo: handle this better
+    if (typeof children[0] !== 'string') {
+      return children[0];
+    }
     const wordLowerCase = children[0].toLocaleLowerCase();
     if (!wordsLowerCase.includes(wordLowerCase)) {
       return <em>{wordLowerCase}</em>;
