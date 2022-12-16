@@ -3,13 +3,14 @@ import { FC } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, IconButton, Typography } from '@mui/material';
 
-import { keyword } from '../../config/appSettingTypes';
-import { CHAT_WINDOW_CY, DICTIONNARY_MODE_CY } from '../../config/selectors';
+import { keyword } from '../../../config/appSettingTypes';
+import { CHAT_WINDOW_CY, DICTIONNARY_MODE_CY } from '../../../config/selectors';
 import {
+  DEFAULT_BORDER_RADIUS,
   DEFAULT_MARGIN,
   GRAASP_VIOLET,
   GRAY,
-} from '../../config/stylingConstants';
+} from '../../../config/stylingConstants';
 import ChatBox from './ChatBox';
 
 type Prop = {
@@ -44,7 +45,7 @@ const ChatbotWindow: FC<Prop> = ({
       sx={{
         alignSelf: 'stretch',
         border: `2px solid ${GRAY}`,
-        borderRadius: '10px',
+        borderRadius: { DEFAULT_BORDER_RADIUS },
         margin: DEFAULT_MARGIN,
         marginLeft: '0px',
         flex: 1,

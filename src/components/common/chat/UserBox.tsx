@@ -2,13 +2,13 @@ import { FC, PropsWithChildren } from 'react';
 
 import { Avatar, Box } from '@mui/material';
 
-import { GRAY } from '../../config/stylingConstants';
+import { GRAY, ICON_MARGIN } from '../../../config/stylingConstants';
 
 type Prop = {
-  userName: string;
+  initial: string;
 };
 
-const UserBox: FC<PropsWithChildren<Prop>> = ({ userName, children }) => (
+const UserBox: FC<PropsWithChildren<Prop>> = ({ initial, children }) => (
   <Box
     display="flex"
     flexDirection="row-reverse"
@@ -17,12 +17,12 @@ const UserBox: FC<PropsWithChildren<Prop>> = ({ userName, children }) => (
   >
     <Avatar
       sx={{
-        marginRight: '5px',
+        marginRight: ICON_MARGIN,
         backgroundColor: GRAY,
       }}
-      alt={userName.toLocaleUpperCase()}
-      src="/broken-image.jpg"
-    />
+    >
+      {initial}
+    </Avatar>
     {children}
   </Box>
 );

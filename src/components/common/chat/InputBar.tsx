@@ -9,7 +9,7 @@ import {
   OutlinedInput,
 } from '@mui/material';
 
-import { ENTER_KEY } from '../../config/constants';
+import { ENTER_KEY } from '../../../config/constants';
 
 type Prop = {
   onSend: (input: string) => void;

@@ -83,7 +83,7 @@ describe('With App Setting', () => {
     cy.get(buildDataCy(SUMMON_BUTTON_CY)).click();
 
     // check that after summon, keywords are highlighted
-    cy.get(buildAllKeywordsButtonDataCy).each((elem) =>
+    cy.get(buildAllKeywordsButtonDataCy()).each((elem) =>
       cy.wrap(elem).should('be.visible'),
     );
   });

@@ -22,10 +22,9 @@ import {
   DEFAULT_USE_CHATBOT_SETTING,
 } from '../../../config/appSettings';
 import { FIRST_CHATBOT_MESSAGE } from '../../../config/constants';
-// import { DICTIONARY_API_BASE_URL } from '../../../config/constants';
 import { PLAYER_VIEW_CY } from '../../../config/selectors';
 import { FULL_WIDTH } from '../../../config/stylingConstants';
-import ChatbotWindow from '../../common/ChatbotWindow';
+import ChatbotWindow from '../../common/chat/ChatbotWindow';
 import Banner from '../../common/display/Banner';
 import TextDisplay from '../../common/display/TextDisplay';
 import { useAppDataContext } from '../../context/AppDataContext';
@@ -34,8 +33,8 @@ import { useAppSettingContext } from '../../context/AppSettingContext';
 const PlayerView: FC = () => {
   const { appSettingArray } = useAppSettingContext();
   const { appDataArray, postAppData } = useAppDataContext();
+
   const [summon, setSummon] = useState(false);
-  // const [dictionary, setDictionary] = useState({});
   const [chatbot, setChatbot] = useState(false);
   const [useChatbot, setUseChatbot] = useState(false);
   const [focusWord, setFocusWord] = useState<keyword>(DEFAULT_KEYWORD);
@@ -52,37 +51,6 @@ const PlayerView: FC = () => {
     setUseChatbot(useChatbotSetting.useBot);
   }, [useChatbotSetting]);
 
-  /* 
-  const uniqueKeywords = keywords.reduce(
-    (acc: keyword[], currentVal: keyword): keyword[] =>
-      acc.some((k) => k.word === currentVal.word) ? acc : [...acc, currentVal],
-    [],
-  );
-  
-  const fetchKeywordDef = async (word: string): Promise<string> => {
-    const response = await fetch(`${DICTIONARY_API_BASE_URL}${word}`);
-    const json = await response.json();
-    return json[0].meanings[0].definitions.map(
-      ({ definition, example }: { definition: string; example: string }) => ({
-        definition,
-        example,
-      }),
-    );
-  };
-
-  useEffect(() => {
-    if (summon) {
-      uniqueKeywords.forEach((word) => {
-        fetchKeywordDef(word)
-          .then((def) => {
-            setDictionary((prevDict) => ({ ...prevDict, [word]: def }));
-          })
-          .catch(() => setDictionary({ ...dictionary, [word]: DEFAULT_DEF }));
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [summon, keywords]);
-*/
   const fetchSetting = (
     key: string,
     defaultSetting: TextResourceData,
@@ -119,6 +87,7 @@ const PlayerView: FC = () => {
         type: APP_DATA_TYPES.BOT_COMMENT,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focusWord]);
 
   const renderContent = (): ReactElement => {
@@ -133,9 +102,7 @@ const PlayerView: FC = () => {
             text={textResource}
             keywords={keywords}
             highlight={summon}
-            openChatbot={(word: keyword) => {
-              openChatbot(word);
-            }}
+            openChatbot={openChatbot}
             width={FULL_WIDTH}
           />
           <ChatbotWindow
@@ -152,9 +119,7 @@ const PlayerView: FC = () => {
         text={textResource}
         keywords={keywords}
         highlight={summon}
-        openChatbot={(word: keyword) => {
-          openChatbot(word);
-        }}
+        openChatbot={openChatbot}
       />
     );
   };

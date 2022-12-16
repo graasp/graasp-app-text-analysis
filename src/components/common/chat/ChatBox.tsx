@@ -1,5 +1,4 @@
-/* eslint-disable arrow-body-style */
-import { RecordOf } from 'immutable';
+import { List, RecordOf } from 'immutable';
 
 import { FC, useEffect, useRef, useState } from 'react';
 
@@ -7,25 +6,30 @@ import { LocalContext, useLocalContext } from '@graasp/apps-query-client';
 
 import { Alert, AlertTitle, Box, Stack, styled } from '@mui/material';
 
-import { APP_DATA_TYPES, MessageData } from '../../config/appDataTypes';
+import { APP_DATA_TYPES, ChatAppData } from '../../../config/appDataTypes';
 import {
   INITIAL_PROMPT_SETTING_KEY,
   TextResourceData,
-} from '../../config/appSettingTypes';
-import { DEFAULT_INITIAL_PROMPT } from '../../config/appSettings';
+} from '../../../config/appSettingTypes';
+import { DEFAULT_INITIAL_PROMPT } from '../../../config/appSettings';
 import {
   ANONYMOUS_USER,
   CHATBOT_PREFIX,
   CHATBOT_RESPONSE_URL,
   MAX_CONVERSATION_LENGTH,
+  MAX_CONVERSATION_LENGTH_ALERT,
   SCROLL_SAFETY_MARGIN,
   STUDENT_PREFIX,
-} from '../../config/constants';
-import { CHATBOT_MODE_CY, messagesDataCy } from '../../config/selectors';
-import { LIGHT_GRAY, LIGHT_VIOLET } from '../../config/stylingConstants';
-import { useAppDataContext } from '../context/AppDataContext';
-import { useAppSettingContext } from '../context/AppSettingContext';
-import { useMembersContext } from '../context/MembersContext';
+} from '../../../config/constants';
+import { CHATBOT_MODE_CY, messagesDataCy } from '../../../config/selectors';
+import {
+  DEFAULT_BORDER_RADIUS,
+  LIGHT_GRAY,
+  LIGHT_VIOLET,
+} from '../../../config/stylingConstants';
+import { useAppDataContext } from '../../context/AppDataContext';
+import { useAppSettingContext } from '../../context/AppSettingContext';
+import { useMembersContext } from '../../context/MembersContext';
 import ChatbotBox from './ChatbotBox';
 import InputBar from './InputBar';
 import UserBox from './UserBox';
@@ -57,6 +61,7 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
     (m) => m.id === context.get('memberId'),
   );
   const memberName = member?.name || ANONYMOUS_USER;
+  const initial = memberName.toLocaleUpperCase().trim()[0];
   const [loading, setLoading] = useState(false);
 
   const initialPrompt = (
@@ -64,13 +69,12 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
       DEFAULT_INITIAL_PROMPT) as TextResourceData
   ).text.replace('{{keyword}}', focusWord);
 
-  const chatAppData = appDataArray.filter((data) => {
-    return (
+  const chatAppData = appDataArray.filter(
+    (data) =>
       (data.type === APP_DATA_TYPES.BOT_COMMENT ||
         data.type === APP_DATA_TYPES.STUDENT_COMMENT) &&
-      (data.data as MessageData).keyword === focusWord
-    );
-  });
+      data.data.keyword === focusWord,
+  ) as List<ChatAppData>;
 
   const fetchApi = async (input: string): Promise<{ completion: string }> => {
     const chatConcatMessages = chatAppData
@@ -79,7 +83,7 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
           data.type === APP_DATA_TYPES.BOT_COMMENT
             ? CHATBOT_PREFIX
             : STUDENT_PREFIX;
-        return `${prefix}: ${(data.data as MessageData).message}`;
+        return `${prefix}: ${data.data.message}`;
       })
       .unshift(initialPrompt)
       .push(`${STUDENT_PREFIX}: ${input}`)
@@ -122,8 +126,7 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
     chatAppData.size > MAX_CONVERSATION_LENGTH ? (
       <Alert severity="info">
         <AlertTitle>Info</AlertTitle>
-        You have reached the maximum number of messages allowed in the
-        conversation
+        {MAX_CONVERSATION_LENGTH_ALERT}
       </Alert>
     ) : (
       <InputBar onSend={(input) => onSend(input)} />
@@ -131,19 +134,15 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
 
   const renderedMesssages = chatAppData.map((msg) =>
     msg.type === APP_DATA_TYPES.STUDENT_COMMENT ? (
-      <UserBox
-        data-cy={messagesDataCy(msg.id)}
-        key={msg.id}
-        userName={memberName}
-      >
+      <UserBox data-cy={messagesDataCy(msg.id)} key={msg.id} initial={initial}>
         <StyledUserMessage key={msg.id} alignSelf="flex-end">
-          {(msg.data as MessageData).message}
+          {msg.data.message}
         </StyledUserMessage>
       </UserBox>
     ) : (
       <ChatbotBox data-cy={messagesDataCy(msg.id)} key={msg.id}>
         <StyledBotMessage key={msg.id} alignSelf="flex-start">
-          {(msg.data as MessageData).message}
+          {msg.data.message}
         </StyledBotMessage>
       </ChatbotBox>
     ),
@@ -170,7 +169,7 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
         display="flex"
         flexDirection="column"
         height="500px"
-        borderRadius="10px"
+        borderRadius={DEFAULT_BORDER_RADIUS}
         sx={{ overflowY: 'scroll' }}
       >
         {renderedMesssages}

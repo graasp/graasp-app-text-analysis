@@ -2,7 +2,6 @@ import { v4 } from 'uuid';
 
 import type { Database, LocalContext, Member } from '@graasp/apps-query-client';
 
-import { APP_DATA_TYPES } from '../config/appDataTypes';
 import {
   LESSON_TITLE_SETTING_KEY,
   TEXT_RESOURCE_SETTING_KEY,

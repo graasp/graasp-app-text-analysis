@@ -11,6 +11,8 @@ export const END_CONVERSATION =
   'Sorry, you reach your maximal number of questions !';
 
 export const MAX_CONVERSATION_LENGTH = 20;
+export const MAX_CONVERSATION_LENGTH_ALERT =
+  'You have reached the maximum number of messages allowed in the conversation';
 
 export const STUDENT_PREFIX = 'Student';
 export const CHATBOT_PREFIX = 'Chatbot';

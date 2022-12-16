@@ -16,7 +16,11 @@ import {
   KEYWORD_LIST_ITEM_CY,
   SAVE_KEYWORDS_BUTTON_CY,
 } from '../../../config/selectors';
-import { DEFAULT_MARGIN, FULL_WIDTH } from '../../../config/stylingConstants';
+import {
+  DEFAULT_MARGIN,
+  FULL_WIDTH,
+  ICON_MARGIN,
+} from '../../../config/stylingConstants';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 import SaveButton from './SaveButton';
 
@@ -39,8 +43,7 @@ const KeyWords: FC = () => {
       const element = event.target as HTMLInputElement;
       const settings = element.value.split(':');
       const wordToLowerCase = settings[0].toLocaleLowerCase();
-      const definition =
-        settings[1] !== undefined ? settings[1] : 'no definition';
+      const definition = settings[1] ?? 'no definition';
       const newKeyword = { word: wordToLowerCase, def: definition };
       if (
         wordToLowerCase !== '' &&
@@ -90,7 +93,7 @@ const KeyWords: FC = () => {
       <IconButton
         data-cy={DELETE_KEYWORD_BUTTON_CY}
         aria-label="delete"
-        sx={{ marginRight: '5px' }}
+        sx={{ marginRight: ICON_MARGIN }}
         onClick={() => handleDelete(k.word)}
       >
         <DeleteIcon />
@@ -109,7 +112,7 @@ const KeyWords: FC = () => {
       >
         <TextField
           data-cy={ENTER_KEYWORD_FIELD_CY}
-          label="Enter keyword:definition"
+          label="Enter keyword: definition"
           sx={{ width: FULL_WIDTH, marginRight: DEFAULT_MARGIN }}
           value={word}
           onChange={onChange}
@@ -117,7 +120,7 @@ const KeyWords: FC = () => {
         />
         <SaveButton
           buttonDataCy={SAVE_KEYWORDS_BUTTON_CY}
-          handleOnClick={() => handleClickSave()}
+          handleOnClick={handleClickSave}
           disabled={isKeywordListEqual(dictionary, keywords)}
           marginRight={DEFAULT_MARGIN}
           minHeight="55px"

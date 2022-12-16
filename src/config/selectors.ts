@@ -41,9 +41,13 @@ export const buildDataCy = (selector: string): string =>
 export const buildTextFieldSelectorCy = (selector: string): string =>
   `${buildDataCy(selector)} input`;
 
+export const KEYWORD_BUTTON_SUFFIX = '-keyword_button';
+export const MESSAGE_PREFIX = 'message-';
+
 export const keywordDataCy = (keyword: string): string =>
-  `${keyword}-keyword_button`;
+  `${keyword}${KEYWORD_BUTTON_SUFFIX}`;
 
-export const messagesDataCy = (id: string): string => `messages-${id}`;
+export const messagesDataCy = (id: string): string => `${MESSAGE_PREFIX}${id}`;
 
-export const buildAllKeywordsButtonDataCy = `[data-cy$=-keyword_button]`;
+export const buildAllKeywordsButtonDataCy = (): string =>
+  `[data-cy$=${KEYWORD_BUTTON_SUFFIX}]`;

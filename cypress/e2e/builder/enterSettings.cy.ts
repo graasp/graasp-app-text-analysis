@@ -16,7 +16,13 @@ import {
   USE_CHATBOT_DATA_CY,
   buildDataCy,
 } from '../../../src/config/selectors';
-import { MOCK_APP_SETTINGS } from '../../fixtures/appSettings';
+import {
+  MOCK_APP_SETTINGS,
+  MOCK_INITIAL_CHATBOT_PROMPT_SETTING,
+  MOCK_INITIAL_PROMPT_SETTING,
+  MOCK_KEYWORDS_SETTING,
+  MOCK_TEXT_RESOURCE_SETTING,
+} from '../../fixtures/appSettings';
 
 describe('Enter Settings', () => {
   beforeEach(() => {
@@ -116,20 +122,28 @@ describe('Load Settings', () => {
   it('display existing mock text resource', () => {
     cy.get(buildDataCy(TEXT_INPUT_FIELD_CY)).should(
       'contain',
-      MOCK_APP_SETTINGS[0].data.text,
+      MOCK_APP_SETTINGS.find(
+        (appSetting) => appSetting === MOCK_TEXT_RESOURCE_SETTING,
+      ).data.text,
     );
 
     cy.get(buildDataCy(INITIAL_PROMPT_INPUT_FIELD_CY)).should(
       'contain',
-      MOCK_APP_SETTINGS[2].data.text,
+      MOCK_APP_SETTINGS.find(
+        (appSetting) => appSetting === MOCK_INITIAL_PROMPT_SETTING,
+      ).data.text,
     );
 
     cy.get(buildDataCy(INITIAL_CHATBOT_PROMPT_INPUT_FIELD_CY)).should(
       'contain',
-      MOCK_APP_SETTINGS[3].data.text,
+      MOCK_APP_SETTINGS.find(
+        (appSetting) => appSetting === MOCK_INITIAL_CHATBOT_PROMPT_SETTING,
+      ).data.text,
     );
 
-    const list = MOCK_APP_SETTINGS[1].data as KeywordsData;
+    const list = MOCK_APP_SETTINGS.find(
+      (appSetting) => appSetting === MOCK_KEYWORDS_SETTING,
+    ).data as KeywordsData;
 
     list.keywords.forEach((elem) => {
       cy.get(buildDataCy(KEYWORD_LIST_ITEM_CY)).should(

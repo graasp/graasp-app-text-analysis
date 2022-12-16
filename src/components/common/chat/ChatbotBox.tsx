@@ -3,7 +3,7 @@ import { FC, PropsWithChildren } from 'react';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import { Box } from '@mui/material';
 
-import { GRAASP_VIOLET } from '../../config/stylingConstants';
+import { GRAASP_VIOLET, ICON_MARGIN } from '../../../config/stylingConstants';
 
 const ChatbotBox: FC<PropsWithChildren> = ({ children }) => (
   <Box
@@ -14,7 +14,7 @@ const ChatbotBox: FC<PropsWithChildren> = ({ children }) => (
   >
     <SmartToyIcon
       sx={{
-        marginLeft: '5px',
+        marginLeft: ICON_MARGIN,
         color: GRAASP_VIOLET,
         fontSize: 40,
       }}
