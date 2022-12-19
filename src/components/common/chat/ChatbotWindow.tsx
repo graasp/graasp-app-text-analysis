@@ -35,7 +35,8 @@ const ChatbotWindow: FC<Prop> = ({
       marginTop="0px"
       sx={{ flex: 2 }}
     >
-      {`${focusWord.word}: ${focusWord.def}`}
+      <strong>{focusWord.word}: </strong>
+      {focusWord.def}
     </Typography>
   );
 
