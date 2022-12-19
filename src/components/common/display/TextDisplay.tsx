@@ -31,6 +31,7 @@ const TextDisplay: FC<Prop> = ({
     variant="body1"
     sx={{
       margin: DEFAULT_MARGIN,
+      marginBottom: 0,
       border: `2px solid ${GRAASP_VIOLET}`,
       borderRadius: DEFAULT_BORDER_RADIUS,
       padding: '25px',
