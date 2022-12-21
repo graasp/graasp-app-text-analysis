@@ -14,7 +14,7 @@ import Highlighted from './Highlighted';
 type Prop = {
   text: string;
   highlight: boolean;
-  openChatbot: (word: keyword) => void;
+  openChatbot: (word: keyword, ref?: HTMLButtonElement) => void;
   keywords: keyword[];
   width?: string;
 };

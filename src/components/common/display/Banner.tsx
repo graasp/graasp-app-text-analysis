@@ -11,10 +11,18 @@ import {
 type Prop = {
   title: string;
   onSummonClick: () => void;
-  buttonDisable: boolean;
+  showDisable: boolean;
+  onHideClick: () => void;
+  hideDisable: boolean;
 };
 
-const Banner: FC<Prop> = ({ title, onSummonClick, buttonDisable }) => (
+const Banner: FC<Prop> = ({
+  title,
+  onSummonClick,
+  showDisable,
+  onHideClick,
+  hideDisable,
+}) => (
   <Box
     data-cy={BANNER_CY}
     component="span"
@@ -32,16 +40,26 @@ const Banner: FC<Prop> = ({ title, onSummonClick, buttonDisable }) => (
     >
       {title}
     </Typography>
-    <Button
-      data-cy={SUMMON_BUTTON_CY}
-      variant="contained"
-      color="success"
-      sx={{ marginRight: DEFAULT_MARGIN }}
-      onClick={onSummonClick}
-      disabled={buttonDisable}
-    >
-      Show Keywords
-    </Button>
+    <Box display="flex" flex-direction="row-reverse">
+      <Button
+        variant="contained"
+        sx={{ marginRight: DEFAULT_MARGIN }}
+        onClick={onHideClick}
+        disabled={hideDisable}
+      >
+        Hide Keywords
+      </Button>
+      <Button
+        data-cy={SUMMON_BUTTON_CY}
+        variant="contained"
+        color="success"
+        sx={{ marginRight: DEFAULT_MARGIN }}
+        onClick={onSummonClick}
+        disabled={showDisable}
+      >
+        Show Keywords
+      </Button>
+    </Box>
   </Box>
 );
 

@@ -37,6 +37,9 @@ const PlayerView: FC = () => {
   const [summon, setSummon] = useState(false);
   const [chatbot, setChatbot] = useState(false);
   const [useChatbot, setUseChatbot] = useState(false);
+  const [keywordRef, setKeywordRef] = useState<HTMLButtonElement | undefined>(
+    undefined,
+  );
   const [focusWord, setFocusWord] = useState<keyword>(DEFAULT_KEYWORD);
 
   const { keywords } = (appSettingArray.find(
@@ -69,7 +72,8 @@ const PlayerView: FC = () => {
     DEFAULT_TEXT_RESOURCE_SETTING,
   ).text;
 
-  const openChatbot = (word: keyword): void => {
+  const openChatbot = (word: keyword, ref?: HTMLButtonElement): void => {
+    setKeywordRef(ref);
     setChatbot(true);
     setFocusWord(word);
   };
@@ -138,8 +142,14 @@ const PlayerView: FC = () => {
         onSummonClick={() => {
           setSummon(true);
         }}
-        buttonDisable={
+        showDisable={
           textResource === '' || keywords.length === 0 || summon === true
+        }
+        onHideClick={() => {
+          setSummon(false);
+        }}
+        hideDisable={
+          textResource === '' || keywords.length === 0 || summon === false
         }
       />
       {renderContent()}
