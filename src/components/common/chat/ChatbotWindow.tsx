@@ -1,7 +1,8 @@
 import { FC } from 'react';
 
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, IconButton, Typography } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Box, IconButton, Tooltip, Typography } from '@mui/material';
 
 import { keyword } from '../../../config/appSettingTypes';
 import { CHAT_WINDOW_CY, DICTIONNARY_MODE_CY } from '../../../config/selectors';
@@ -18,6 +19,7 @@ type Prop = {
   focusWord: keyword;
   useChatbot: boolean;
   isOpen: boolean;
+  onDelete: () => void;
 };
 
 const ChatbotWindow: FC<Prop> = ({
@@ -25,6 +27,7 @@ const ChatbotWindow: FC<Prop> = ({
   focusWord,
   useChatbot,
   isOpen,
+  onDelete,
 }) => {
   const renderWindow = useChatbot ? (
     <ChatBox focusWord={focusWord.word} isOpen={isOpen} />
@@ -40,6 +43,14 @@ const ChatbotWindow: FC<Prop> = ({
     </Typography>
   );
 
+  const renderDeleteButton = useChatbot ? (
+    <Tooltip title="Delete Conversation">
+      <IconButton size="small" color="error" onClick={onDelete}>
+        <DeleteIcon />
+      </IconButton>
+    </Tooltip>
+  ) : null;
+
   return (
     <Box
       data-cy={CHAT_WINDOW_CY}
@@ -52,6 +63,7 @@ const ChatbotWindow: FC<Prop> = ({
       }}
     >
       <Box display="flex" justifyContent="flex-end" alignItems="flex-start">
+        {renderDeleteButton}
         <IconButton
           size="small"
           sx={{ color: GRAASP_VIOLET }}

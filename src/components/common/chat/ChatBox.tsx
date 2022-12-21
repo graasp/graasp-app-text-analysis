@@ -1,6 +1,7 @@
 import { List, RecordOf } from 'immutable';
 
 import { FC, useEffect, useRef, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 import { LocalContext, useLocalContext } from '@graasp/apps-query-client';
 
@@ -51,6 +52,13 @@ const StyledUserMessage = styled(StyledMessage)(() => ({
   backgroundColor: LIGHT_GRAY,
 }));
 
+const StyledReactMarkdown = styled(ReactMarkdown)(({ theme }) => ({
+  fontFamily: theme.typography.fontFamily,
+  '& p': {
+    margin: '0px',
+  },
+}));
+
 type Prop = { focusWord: string; isOpen: boolean };
 
 const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
@@ -67,7 +75,7 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
   const initialPrompt = (
     (appSettingArray.find((s) => s.name === INITIAL_PROMPT_SETTING_KEY)?.data ||
       DEFAULT_INITIAL_PROMPT) as TextResourceData
-  ).text.replace('{{keyword}}', focusWord);
+  ).text.replaceAll('{{keyword}}', focusWord);
 
   const chatAppData = appDataArray
     .filter(
@@ -146,7 +154,7 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
     ) : (
       <ChatbotBox data-cy={messagesDataCy(msg.id)} key={msg.id}>
         <StyledBotMessage key={msg.id} alignSelf="flex-start">
-          {msg.data.message}
+          <StyledReactMarkdown>{msg.data.message}</StyledReactMarkdown>
         </StyledBotMessage>
       </ChatbotBox>
     ),

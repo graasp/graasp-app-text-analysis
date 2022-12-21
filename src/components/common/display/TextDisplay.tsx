@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Typography } from '@mui/material';
+import { Box } from '@mui/material';
 
 import { keyword } from '../../../config/appSettingTypes';
 import { TEXT_DISPLAY_FIELD_CY } from '../../../config/selectors';
@@ -26,9 +26,8 @@ const TextDisplay: FC<Prop> = ({
   openChatbot,
   width,
 }) => (
-  <Typography
+  <Box
     data-cy={TEXT_DISPLAY_FIELD_CY}
-    variant="body1"
     sx={{
       margin: DEFAULT_MARGIN,
       marginBottom: 0,
@@ -46,7 +45,7 @@ const TextDisplay: FC<Prop> = ({
       highlight={highlight}
       openChatbot={openChatbot}
     />
-  </Typography>
+  </Box>
 );
 
 export default TextDisplay;
