@@ -26,6 +26,7 @@ import { PLAYER_VIEW_CY } from '../../../config/selectors';
 import { FULL_WIDTH } from '../../../config/stylingConstants';
 import ChatbotWindow from '../../common/chat/ChatbotWindow';
 import Banner from '../../common/display/Banner';
+import { KeywordButtonRef } from '../../common/display/KeywordButton';
 import TextDisplay from '../../common/display/TextDisplay';
 import { useAppDataContext } from '../../context/AppDataContext';
 import { useAppSettingContext } from '../../context/AppSettingContext';
@@ -37,10 +38,9 @@ const PlayerView: FC = () => {
   const [summon, setSummon] = useState(false);
   const [chatbot, setChatbot] = useState(false);
   const [useChatbot, setUseChatbot] = useState(false);
-  const [keywordRef, setKeywordRef] = useState<HTMLButtonElement | undefined>(
-    undefined,
-  );
+  const [keywordRef, setKeywordRef] = useState<KeywordButtonRef>();
   const [focusWord, setFocusWord] = useState<keyword>(DEFAULT_KEYWORD);
+  const [offset, setOffset] = useState<number>(0);
 
   const { keywords } = (appSettingArray.find(
     (s) => s.name === KEYWORDS_SETTING_KEY,
@@ -72,10 +72,17 @@ const PlayerView: FC = () => {
     DEFAULT_TEXT_RESOURCE_SETTING,
   ).text;
 
-  const openChatbot = (word: keyword, ref?: HTMLButtonElement): void => {
-    setKeywordRef(ref);
-    setChatbot(true);
-    setFocusWord(word);
+  const openChatbot = (word: keyword, ref: KeywordButtonRef): void => {
+    if (ref) {
+      setKeywordRef(ref);
+      setChatbot(true);
+      setFocusWord(word);
+
+      // let the UI render with the change and later update the chatbot box position
+      setTimeout(() => {
+        setOffset(keywordRef?.current?.offsetTop || 0);
+      }, 1000);
+    }
   };
 
   useEffect(() => {
@@ -119,6 +126,7 @@ const PlayerView: FC = () => {
             useChatbot={useChatbot}
             isOpen={chatbot}
             onDelete={onDeleteClick}
+            offset={offset}
           />
         </Box>
       );

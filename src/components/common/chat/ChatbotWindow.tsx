@@ -20,6 +20,7 @@ type Prop = {
   useChatbot: boolean;
   isOpen: boolean;
   onDelete: () => void;
+  offset: number;
 };
 
 const ChatbotWindow: FC<Prop> = ({
@@ -28,6 +29,7 @@ const ChatbotWindow: FC<Prop> = ({
   useChatbot,
   isOpen,
   onDelete,
+  offset,
 }) => {
   const renderWindow = useChatbot ? (
     <ChatBox focusWord={focusWord.word} isOpen={isOpen} />
@@ -60,6 +62,7 @@ const ChatbotWindow: FC<Prop> = ({
         margin: DEFAULT_MARGIN,
         marginLeft: '0px',
         flex: 1,
+        marginTop: `${offset} px`,
       }}
     >
       <Box display="flex" justifyContent="flex-end" alignItems="flex-start">

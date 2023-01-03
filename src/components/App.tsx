@@ -36,12 +36,7 @@ const App: FC = () => {
 
       // eslint-disable-next-line no-fallthrough
       case Context.PLAYER:
-        return (
-          <>
-            <PlayerView />
-            <BuilderView />
-          </>
-        );
+        return <PlayerView />;
 
       // eslint-disable-next-line no-fallthrough
       default:

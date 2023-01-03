@@ -1,20 +1,19 @@
-import randomColor from 'randomcolor';
 import remarkBreaks from 'remark-breaks';
 
-import { FC, useRef } from 'react';
+import { FC, memo } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-import { Button, styled } from '@mui/material';
+import { styled } from '@mui/material';
 
 import { keyword } from '../../../config/appSettingTypes';
 import { DEFAULT_KEYWORD } from '../../../config/appSettings';
-import KeywordButton from './KeywordButton';
+import KeywordButton, { KeywordButtonRef } from './KeywordButton';
 
 type Prop = {
   text: string;
   words: keyword[];
   highlight: boolean;
-  openChatbot: (word: keyword, ref?: HTMLButtonElement) => void;
+  openChatbot: (word: keyword, ref: KeywordButtonRef) => void;
 };
 
 const StyledReactMarkdown = styled(ReactMarkdown)(({ theme }) => ({
@@ -87,4 +86,4 @@ const Highlighted: FC<Prop> = ({ text, words, highlight, openChatbot }) => {
   );
 };
 
-export default Highlighted;
+export default memo(Highlighted);
