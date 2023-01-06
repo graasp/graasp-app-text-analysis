@@ -1,6 +1,6 @@
 import remarkBreaks from 'remark-breaks';
 
-import { FC, memo } from 'react';
+import { FC } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 import { styled } from '@mui/material';
@@ -86,4 +86,4 @@ const Highlighted: FC<Prop> = ({ text, words, highlight, openChatbot }) => {
   );
 };
 
-export default memo(Highlighted);
+export default Highlighted;

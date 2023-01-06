@@ -1,6 +1,6 @@
 import randomColor from 'randomcolor';
 
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 
 import { Button } from '@mui/material';
 
@@ -18,29 +18,25 @@ type Prop = {
 const KeywordButton: FC<Prop> = ({ word, onClick }) => {
   const wordLowerCase = word.label.toLowerCase();
 
-  return useMemo(
-    () => (
-      <Button
-        data-cy={keywordDataCy(wordLowerCase)}
-        sx={{
-          backgroundColor: randomColor({
-            seed: wordLowerCase,
-            luminosity: 'light',
-          }),
-          minWidth: '10px',
-          textTransform: 'none',
-          color: 'black',
-          fontWeight: 'inherit',
-          fontSize: 'inherit',
-          paddingY: '1px',
-        }}
-        onClick={() => onClick(word.value)}
-      >
-        <span>{word.label}</span>
-      </Button>
-    ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [word],
+  return (
+    <Button
+      data-cy={keywordDataCy(wordLowerCase)}
+      sx={{
+        backgroundColor: randomColor({
+          seed: wordLowerCase,
+          luminosity: 'light',
+        }),
+        minWidth: '10px',
+        textTransform: 'none',
+        color: 'black',
+        fontWeight: 'inherit',
+        fontSize: 'inherit',
+        paddingY: '1px',
+      }}
+      onClick={() => onClick(word.value)}
+    >
+      <span>{word.label}</span>
+    </Button>
   );
 };
 
