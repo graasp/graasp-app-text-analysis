@@ -1,30 +1,26 @@
 import randomColor from 'randomcolor';
 
-import { FC, RefObject, useMemo, useRef } from 'react';
+import { FC, useMemo } from 'react';
 
 import { Button } from '@mui/material';
 
 import { keyword } from '../../../config/appSettingTypes';
 import { keywordDataCy } from '../../../config/selectors';
 
-export type KeywordButtonRef = RefObject<HTMLButtonElement | null>;
-
 type Prop = {
   word: {
     label: string;
     value: keyword;
   };
-  onClick: (word: keyword, ref: KeywordButtonRef) => void;
+  onClick: (word: keyword) => void;
 };
 
 const KeywordButton: FC<Prop> = ({ word, onClick }) => {
-  const buttonRef = useRef<HTMLButtonElement>(null);
   const wordLowerCase = word.label.toLowerCase();
 
   return useMemo(
     () => (
       <Button
-        ref={buttonRef}
         data-cy={keywordDataCy(wordLowerCase)}
         sx={{
           backgroundColor: randomColor({
@@ -38,7 +34,7 @@ const KeywordButton: FC<Prop> = ({ word, onClick }) => {
           fontSize: 'inherit',
           paddingY: '1px',
         }}
-        onClick={() => onClick(word.value, buttonRef)}
+        onClick={() => onClick(word.value)}
       >
         <span>{word.label}</span>
       </Button>

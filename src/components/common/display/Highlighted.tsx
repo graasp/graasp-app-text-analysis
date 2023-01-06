@@ -7,13 +7,13 @@ import { styled } from '@mui/material';
 
 import { keyword } from '../../../config/appSettingTypes';
 import { DEFAULT_KEYWORD } from '../../../config/appSettings';
-import KeywordButton, { KeywordButtonRef } from './KeywordButton';
+import KeywordButton from './KeywordButton';
 
 type Prop = {
   text: string;
   words: keyword[];
   highlight: boolean;
-  openChatbot: (word: keyword, ref: KeywordButtonRef) => void;
+  openChatbot: (word: keyword) => void;
 };
 
 const StyledReactMarkdown = styled(ReactMarkdown)(({ theme }) => ({

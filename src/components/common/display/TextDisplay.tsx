@@ -10,12 +10,11 @@ import {
   GRAASP_VIOLET,
 } from '../../../config/stylingConstants';
 import Highlighted from './Highlighted';
-import { KeywordButtonRef } from './KeywordButton';
 
 type Prop = {
   text: string;
   highlight: boolean;
-  openChatbot: (word: keyword, ref: KeywordButtonRef) => void;
+  openChatbot: (word: keyword) => void;
   keywords: keyword[];
   width?: string;
 };
