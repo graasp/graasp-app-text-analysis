@@ -2,6 +2,7 @@ type SentryConfigType = {
   dsn: string;
   environment: string;
   tracesSampleRate: number;
+  release: string;
 };
 
 export const generateSentryConfig = (): SentryConfigType => {
@@ -22,8 +23,9 @@ export const generateSentryConfig = (): SentryConfigType => {
   }
 
   return {
-    dsn: (!window.Cypress && process.env.SENTRY_DSN) || '',
+    dsn: (!window.Cypress && process.env.REACT_APP_SENTRY_DSN) || '',
     environment: SENTRY_ENVIRONMENT,
     tracesSampleRate: SENTRY_TRACE_SAMPLE_RATE,
+    release: process.env.REACT_APP_VERSION || '',
   };
 };

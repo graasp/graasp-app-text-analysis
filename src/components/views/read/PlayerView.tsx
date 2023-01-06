@@ -32,7 +32,7 @@ import { useAppSettingContext } from '../../context/AppSettingContext';
 
 const PlayerView: FC = () => {
   const { appSettingArray } = useAppSettingContext();
-  const { appDataArray, postAppData } = useAppDataContext();
+  const { appDataArray, postAppData, deleteAppData } = useAppDataContext();
 
   const [summon, setSummon] = useState(false);
   const [chatbot, setChatbot] = useState(false);
@@ -46,6 +46,10 @@ const PlayerView: FC = () => {
   const useChatbotSetting = (appSettingArray.find(
     (s) => s.name === USE_CHATBOT_SETTING_KEY,
   )?.data || DEFAULT_USE_CHATBOT_SETTING) as UseChatbotData;
+
+  const keywordAppData = appDataArray.filter(
+    (data) => data.data.keyword === focusWord.word,
+  );
 
   useEffect(() => {
     setUseChatbot(useChatbotSetting.useBot);
@@ -75,11 +79,7 @@ const PlayerView: FC = () => {
       (appSettingArray.find(
         (s) => s.name === INITIAL_CHATBOT_PROMPT_SETTING_KEY,
       )?.data || FIRST_CHATBOT_MESSAGE) as TextResourceData
-    ).text.replace('{{keyword}}', focusWord.word);
-
-    const keywordAppData = appDataArray.filter(
-      (data) => data.data.keyword === focusWord.word,
-    );
+    ).text.replaceAll('{{keyword}}', `**${focusWord.word}**`);
 
     if (keywordAppData.size === 0) {
       postAppData({
@@ -88,7 +88,11 @@ const PlayerView: FC = () => {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focusWord]);
+  }, [focusWord, keywordAppData]);
+
+  const onDeleteClick = (): void => {
+    keywordAppData?.map(({ id }) => deleteAppData({ id }));
+  };
 
   const renderContent = (): ReactElement => {
     if (chatbot) {
@@ -110,6 +114,7 @@ const PlayerView: FC = () => {
             focusWord={focusWord}
             useChatbot={useChatbot}
             isOpen={chatbot}
+            onDelete={onDeleteClick}
           />
         </Box>
       );
@@ -133,8 +138,14 @@ const PlayerView: FC = () => {
         onSummonClick={() => {
           setSummon(true);
         }}
-        buttonDisable={
+        showDisable={
           textResource === '' || keywords.length === 0 || summon === true
+        }
+        onHideClick={() => {
+          setSummon(false);
+        }}
+        hideDisable={
+          textResource === '' || keywords.length === 0 || summon === false
         }
       />
       {renderContent()}

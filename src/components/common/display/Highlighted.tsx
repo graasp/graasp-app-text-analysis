@@ -1,14 +1,13 @@
-import randomColor from 'randomcolor';
 import remarkBreaks from 'remark-breaks';
 
 import { FC } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-import { Button, styled } from '@mui/material';
+import { styled } from '@mui/material';
 
 import { keyword } from '../../../config/appSettingTypes';
 import { DEFAULT_KEYWORD } from '../../../config/appSettings';
-import { keywordDataCy } from '../../../config/selectors';
+import KeywordButton from './KeywordButton';
 
 type Prop = {
   text: string;
@@ -49,7 +48,7 @@ const Highlighted: FC<Prop> = ({ text, words, highlight, openChatbot }) => {
   const snippet = parts
     .map((part) =>
       // todo: check that the there is no italic already otherwise we will change it to bold which we do not want
-      wordsLowerCase.includes(part.toLocaleLowerCase()) ? `*${part}*` : part,
+      wordsLowerCase.includes(part.toLocaleLowerCase()) ? `\`${part}\`` : part,
     )
     .join('');
 
@@ -59,39 +58,27 @@ const Highlighted: FC<Prop> = ({ text, words, highlight, openChatbot }) => {
     if (typeof children[0] !== 'string') {
       return children[0];
     }
+
     const wordLowerCase = children[0].toLocaleLowerCase();
     if (!wordsLowerCase.includes(wordLowerCase)) {
-      return <em>{wordLowerCase}</em>;
+      return <code>{wordLowerCase}</code>;
     }
 
     return (
-      <Button
-        data-cy={keywordDataCy(children[0].toLocaleLowerCase())}
-        sx={{
-          backgroundColor: randomColor({
-            seed: wordLowerCase,
-            luminosity: 'light',
-          }),
-          minWidth: '10px',
-          textTransform: 'none',
-          color: 'black',
-          fontWeight: 'inherit',
-          fontSize: 'inherit',
-          paddingY: '1px',
+      <KeywordButton
+        word={{
+          label: children[0],
+          value: findKeyword(children[0].toLocaleLowerCase()),
         }}
-        onClick={() =>
-          openChatbot(findKeyword(children[0].toLocaleLowerCase()))
-        }
-      >
-        <span>{children[0]}</span>
-      </Button>
+        onClick={openChatbot}
+      />
     );
   };
 
   return (
     <StyledReactMarkdown
       components={{
-        em: parseComponent,
+        code: parseComponent,
       }}
     >
       {snippet}
