@@ -13,7 +13,7 @@ import {
 } from './config/constants';
 import { MOCK_API } from './config/env';
 import { generateSentryConfig } from './config/sentry';
-import buildDatabase, { mockContext, mockMembers } from './data/db';
+import buildDatabase, { mockContext } from './data/db';
 import './index.css';
 
 Sentry.init({
@@ -31,9 +31,7 @@ if (MOCK_API) {
   mockApi({
     externalUrls: [`${DICTIONARY_API_BASE_URL}**`, CHATBOT_RESPONSE_URL],
     appContext: window.Cypress ? window.appContext : mockContext,
-    database: window.Cypress
-      ? window.database
-      : buildDatabase(mockContext, mockMembers),
+    database: window.Cypress ? window.database : buildDatabase(mockContext),
   });
 }
 

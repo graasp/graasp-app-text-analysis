@@ -1,13 +1,16 @@
-import { List, RecordOf } from 'immutable';
+import { List } from 'immutable';
 
 import { FC, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-import { LocalContext, useLocalContext } from '@graasp/apps-query-client';
+import { useLocalContext } from '@graasp/apps-query-client';
 
 import { Alert, AlertTitle, Box, Stack, styled } from '@mui/material';
 
-import { APP_DATA_TYPES, ChatAppData } from '../../../config/appDataTypes';
+import {
+  APP_DATA_TYPES,
+  ChatAppDataRecord,
+} from '../../../config/appDataTypes';
 import {
   INITIAL_PROMPT_SETTING_KEY,
   TextResourceData,
@@ -64,7 +67,7 @@ type Prop = { focusWord: string; isOpen: boolean };
 const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
   const { postAppDataAsync, postAppData, appDataArray } = useAppDataContext();
   const { appSettingArray } = useAppSettingContext();
-  const context: RecordOf<LocalContext> = useLocalContext();
+  const context = useLocalContext();
   const member = useMembersContext().find(
     (m) => m.id === context.get('memberId'),
   );
@@ -85,8 +88,8 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
         data.data.keyword === focusWord,
     )
     .sort((a, b) =>
-      Date.parse(a.createdAt) > Date.parse(b.createdAt) ? 1 : -1,
-    ) as List<ChatAppData>;
+      a.createdAt > b.createdAt ? 1 : -1,
+    ) as List<ChatAppDataRecord>;
 
   const fetchApi = async (input: string): Promise<{ completion: string }> => {
     const chatConcatMessages = chatAppData

@@ -2,10 +2,11 @@ import { List } from 'immutable';
 
 import React, { FC, PropsWithChildren, createContext, useMemo } from 'react';
 
-import { AppData } from '@graasp/apps-query-client';
+import { AppData } from '@graasp/sdk';
+import { AppDataRecord } from '@graasp/sdk/frontend';
 
 import { APP_DATA_VISIBILITY } from '../../config/appDataTypes';
-import { MUTATION_KEYS, hooks, useMutation } from '../../config/queryClient';
+import { hooks, mutations } from '../../config/queryClient';
 import Loader from '../common/Loader';
 
 type PostAppDataType = {
@@ -25,10 +26,10 @@ type DeleteAppDataType = {
 
 export type AppDataContextType = {
   postAppData: (payload: PostAppDataType) => void;
-  postAppDataAsync: (payload: PostAppDataType) => Promise<void> | null;
+  postAppDataAsync: (payload: PostAppDataType) => Promise<AppData> | null;
   patchAppData: (payload: PatchAppDataType) => void;
   deleteAppData: (payload: DeleteAppDataType) => void;
-  appDataArray: List<AppData>;
+  appDataArray: List<AppDataRecord>;
 };
 
 const defaultContextValue = {
@@ -36,7 +37,7 @@ const defaultContextValue = {
   postAppDataAsync: () => null,
   patchAppData: () => null,
   deleteAppData: () => null,
-  appDataArray: List<AppData>(),
+  appDataArray: List<AppDataRecord>(),
 };
 
 const AppDataContext = createContext<AppDataContextType>(defaultContextValue);
@@ -44,22 +45,10 @@ const AppDataContext = createContext<AppDataContextType>(defaultContextValue);
 export const AppDataProvider: FC<PropsWithChildren> = ({ children }) => {
   const appData = hooks.useAppData();
 
-  const { mutate: postAppData, mutateAsync: postAppDataAsync } = useMutation<
-    void,
-    unknown,
-    PostAppDataType
-  >(MUTATION_KEYS.POST_APP_DATA);
-  const { mutate: patchAppData } = useMutation<
-    unknown,
-    unknown,
-    PatchAppDataType
-  >(MUTATION_KEYS.PATCH_APP_DATA);
-  const { mutate: deleteAppData } = useMutation<
-    unknown,
-    unknown,
-    DeleteAppDataType
-  >(MUTATION_KEYS.DELETE_APP_DATA);
-
+  const { mutate: postAppData, mutateAsync: postAppDataAsync } =
+    mutations.usePostAppData();
+  const { mutate: patchAppData } = mutations.usePatchAppData();
+  const { mutate: deleteAppData } = mutations.useDeleteAppData();
   const contextValue: AppDataContextType = useMemo(
     () => ({
       postAppData: (payload: PostAppDataType) => {
@@ -68,7 +57,7 @@ export const AppDataProvider: FC<PropsWithChildren> = ({ children }) => {
       postAppDataAsync: (payload: PostAppDataType) => postAppDataAsync(payload),
       patchAppData,
       deleteAppData,
-      appDataArray: appData.data || List<AppData>(),
+      appDataArray: appData.data || List<AppDataRecord>(),
     }),
     [appData.data, deleteAppData, patchAppData, postAppData, postAppDataAsync],
   );

@@ -1,8 +1,6 @@
-import { RecordOf } from 'immutable';
+import { FC, ReactElement, useEffect } from 'react';
 
-import React, { FC, ReactElement, useContext, useEffect } from 'react';
-
-import { Context as HOCContext, LocalContext } from '@graasp/apps-query-client';
+import { useLocalContext } from '@graasp/apps-query-client';
 import { Context } from '@graasp/sdk';
 
 import { DEFAULT_CONTEXT_LANGUAGE } from '../config/appSettings';
@@ -14,7 +12,7 @@ import BuilderView from './views/admin/BuilderView';
 import PlayerView from './views/read/PlayerView';
 
 const App: FC = () => {
-  const context: RecordOf<LocalContext> = useContext(HOCContext);
+  const context = useLocalContext();
 
   useEffect(() => {
     // handle a change of language
@@ -27,15 +25,15 @@ const App: FC = () => {
 
   const renderContent = (): ReactElement => {
     switch (context.get('context')) {
-      case Context.BUILDER:
+      case Context.Builder:
         return <BuilderView />;
 
       // eslint-disable-next-line no-fallthrough
-      case Context.ANALYTICS:
+      case Context.Analytics:
       // todo: add the view to show in the analyzer
 
       // eslint-disable-next-line no-fallthrough
-      case Context.PLAYER:
+      case Context.Player:
         return <PlayerView />;
 
       // eslint-disable-next-line no-fallthrough

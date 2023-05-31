@@ -1,11 +1,9 @@
 import { v4 as uuid } from 'uuid';
 
-import { AppData } from '@graasp/apps-query-client';
+import { AppData, AppDataVisibility } from '@graasp/sdk';
 
 import { APP_DATA_TYPES } from '../../src/config/appDataTypes';
-import { CURRENT_MEMBER } from './members';
-
-export const MOCK_SERVER_ITEM = { id: '1234567890' };
+import { CURRENT_MEMBER, MOCK_SERVER_ITEM } from '../../src/data/db';
 
 export const MOCK_SERVER_API_HOST = 'http://localhost:3636';
 
@@ -16,12 +14,13 @@ export const MOCK_APP_DATA: AppData[] = [
       message: 'Hello, what do you want to know about lorem?',
       keyword: 'lorem',
     },
-    memberId: CURRENT_MEMBER.id,
-    creator: CURRENT_MEMBER.id,
-    itemId: MOCK_SERVER_ITEM.id,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    member: CURRENT_MEMBER,
+    creator: CURRENT_MEMBER,
+    item: MOCK_SERVER_ITEM,
+    createdAt: new Date(),
+    updatedAt: new Date(),
     type: APP_DATA_TYPES.BOT_COMMENT,
+    visibility: AppDataVisibility.Member,
   },
   {
     id: uuid(),
@@ -29,12 +28,13 @@ export const MOCK_APP_DATA: AppData[] = [
       message: 'Give me its definition',
       keyword: 'lorem',
     },
-    memberId: CURRENT_MEMBER.id,
-    creator: CURRENT_MEMBER.id,
-    itemId: MOCK_SERVER_ITEM.id,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    member: CURRENT_MEMBER,
+    creator: CURRENT_MEMBER,
+    item: MOCK_SERVER_ITEM,
+    createdAt: new Date(),
+    updatedAt: new Date(),
     type: APP_DATA_TYPES.STUDENT_COMMENT,
+    visibility: AppDataVisibility.Member,
   },
   {
     id: uuid(),
@@ -42,12 +42,13 @@ export const MOCK_APP_DATA: AppData[] = [
       message: 'Lorem is blablabla. Do you want to know more about it ?',
       keyword: 'lorem',
     },
-    memberId: CURRENT_MEMBER.id,
-    creator: CURRENT_MEMBER.id,
-    itemId: MOCK_SERVER_ITEM.id,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    member: CURRENT_MEMBER,
+    creator: CURRENT_MEMBER,
+    item: MOCK_SERVER_ITEM,
+    createdAt: new Date(),
+    updatedAt: new Date(),
     type: APP_DATA_TYPES.BOT_COMMENT,
+    visibility: AppDataVisibility.Member,
   },
   {
     id: uuid(),
@@ -55,12 +56,13 @@ export const MOCK_APP_DATA: AppData[] = [
       message: 'No it is clear, but can you talk about something else?',
       keyword: 'lorem',
     },
-    memberId: CURRENT_MEMBER.id,
-    creator: CURRENT_MEMBER.id,
-    itemId: MOCK_SERVER_ITEM.id,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    member: CURRENT_MEMBER,
+    creator: CURRENT_MEMBER,
+    item: MOCK_SERVER_ITEM,
+    createdAt: new Date(),
+    updatedAt: new Date(),
     type: APP_DATA_TYPES.STUDENT_COMMENT,
+    visibility: AppDataVisibility.Member,
   },
   {
     id: uuid(),
@@ -68,11 +70,12 @@ export const MOCK_APP_DATA: AppData[] = [
       message: "Sorry I can't",
       keyword: 'lorem',
     },
-    memberId: CURRENT_MEMBER.id,
-    creator: CURRENT_MEMBER.id,
-    itemId: MOCK_SERVER_ITEM.id,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    member: CURRENT_MEMBER,
+    creator: CURRENT_MEMBER,
+    item: MOCK_SERVER_ITEM,
+    createdAt: new Date(),
+    updatedAt: new Date(),
     type: APP_DATA_TYPES.BOT_COMMENT,
+    visibility: AppDataVisibility.Member,
   },
 ];

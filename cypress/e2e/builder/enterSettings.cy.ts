@@ -32,7 +32,7 @@ describe('Enter Settings', () => {
         appSettings: [],
       },
       appContext: {
-        context: Context.BUILDER,
+        context: Context.Builder,
         permission: PermissionLevel.Admin,
       },
     });
@@ -112,7 +112,7 @@ describe('Load Settings', () => {
         appSettings: MOCK_APP_SETTINGS,
       },
       appContext: {
-        context: Context.BUILDER,
+        context: Context.Builder,
         permission: PermissionLevel.Admin,
       },
     });

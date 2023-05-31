@@ -1,6 +1,7 @@
 import { v4 } from 'uuid';
 
-import type { Database, LocalContext, Member } from '@graasp/apps-query-client';
+import type { Database, LocalContext } from '@graasp/apps-query-client';
+import { Item, Member, MemberType, PermissionLevel } from '@graasp/sdk';
 
 import {
   LESSON_TITLE_SETTING_KEY,
@@ -12,75 +13,60 @@ import {
 } from '../config/appSettings';
 import { REACT_APP_API_HOST } from '../config/env';
 
-export const mockContext: LocalContext = {
-  apiHost: REACT_APP_API_HOST,
-  permission: 'admin',
-  context: 'player',
-  itemId: '1234-1234-123456-8123-123456',
-  memberId: 'mock-member-id',
+export const MOCK_SERVER_ITEM = { id: '1234567890' } as Item;
+
+export const MEMBERS: { [key: string]: Member } = {
+  ANNA: {
+    id: '0f0a2774-a965-4b97-afb4-bccc3796e060',
+    name: 'anna',
+    type: MemberType.Individual,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    email: 'anna@email.com',
+    extra: {},
+  },
+  BOB: {
+    id: '1f0a2774-a965-4b97-afb4-bccc3796e060',
+    name: 'bob',
+    type: MemberType.Individual,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    email: 'bob@email.com',
+    extra: {},
+  },
 };
 
-export const mockMembers: Member[] = [
-  {
-    id: mockContext.memberId || '',
-    name: 'current-member',
-    email: 'current@graasp.org',
-    extra: {},
-  },
-  {
-    id: 'mock-member-id-2',
-    name: 'mock-member-2',
-    email: 'other-member@graasp.org',
-    extra: {},
-  },
-];
+export const CURRENT_MEMBER = MEMBERS.ANNA;
+
+export const mockContext: LocalContext = {
+  apiHost: REACT_APP_API_HOST,
+  permission: PermissionLevel.Admin,
+  context: 'player',
+  itemId: MOCK_SERVER_ITEM.id,
+  memberId: CURRENT_MEMBER.id,
+};
 
 const buildDatabase = (
   appContext: Partial<LocalContext>,
   members?: Member[],
 ): Database => ({
-  appData: [
-    /* {
-      id: v4(),
-      data: {
-        message: '',
-      },
-      memberId: mockMembers[1].id,
-      type: APP_DATA_TYPES.STUDENT_COMMENT,
-      itemId: appContext.itemId || '',
-      creator: mockMembers[1].id,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      id: v4(),
-      data: {
-        message: 'Another AppData',
-      },
-      memberId: mockMembers[0].id,
-      type: APP_DATA_TYPES.STUDENT_COMMENT,
-      itemId: appContext.itemId || '',
-      creator: mockMembers[1].id,
-      createdAt: new Date(Date.now() - 1500).toISOString(),
-      updatedAt: new Date(Date.now() - 1500).toISOString(),
-    }, */
-  ],
+  appData: [],
   appActions: [],
-  members: members ?? mockMembers,
+  members: members ?? Object.values(MEMBERS),
   appSettings: [
     {
       id: v4(),
       name: TEXT_RESOURCE_SETTING_KEY,
       data: {
         ...DEFAULT_TEXT_RESOURCE_SETTING,
-        text: '',
+        text: 'Here is my wonderful text',
         // todo: place here any setting you would like to overwrite
         // settingKey: value
       },
-      itemId: appContext.itemId || '',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      creator: mockMembers[0].id,
+      item: MOCK_SERVER_ITEM,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      creator: CURRENT_MEMBER,
     },
     {
       id: v4(),
@@ -91,12 +77,13 @@ const buildDatabase = (
         // todo: place here any setting you would like to overwrite
         // settingKey: value
       },
-      itemId: appContext.itemId || '',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      creator: mockMembers[0].id,
+      item: MOCK_SERVER_ITEM,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      creator: CURRENT_MEMBER,
     },
   ],
+  items: [MOCK_SERVER_ITEM],
 });
 
 export default buildDatabase;

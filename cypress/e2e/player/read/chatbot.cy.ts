@@ -17,7 +17,7 @@ describe('Empty App Data and chatbot prompt setting', () => {
         appSettings: MOCK_APP_SETTINGS_USING_CHATBOT,
       },
       appContext: {
-        context: Context.PLAYER,
+        context: Context.Player,
         permission: PermissionLevel.Read,
       },
     });
