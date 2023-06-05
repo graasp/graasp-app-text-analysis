@@ -24,6 +24,7 @@ import {
 import { FIRST_CHATBOT_MESSAGE } from '../../../config/constants';
 import { PLAYER_VIEW_CY } from '../../../config/selectors';
 import { FULL_WIDTH } from '../../../config/stylingConstants';
+import PublicAlert from '../../common/PublicAlert';
 import ChatbotWindow from '../../common/chat/ChatbotWindow';
 import Banner from '../../common/display/Banner';
 import TextDisplay from '../../common/display/TextDisplay';
@@ -131,6 +132,7 @@ const PlayerView: FC = () => {
 
   return (
     <div data-cy={PLAYER_VIEW_CY}>
+      <PublicAlert />
       <Banner
         title={
           fetchSetting(LESSON_TITLE_SETTING_KEY, DEFAULT_LESSON_TITLE).text
