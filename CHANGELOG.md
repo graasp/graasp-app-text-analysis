@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.3](https://github.com/graasp/graasp-app-text-analysis/compare/v0.5.2...v0.5.3) (2023-02-22)
+
+
+### Documentation
+
+* add juancarlosfarah as a contributor for code, ideas, and design ([#43](https://github.com/graasp/graasp-app-text-analysis/issues/43)) ([8ec205a](https://github.com/graasp/graasp-app-text-analysis/commit/8ec205a244b6bcbc7bbec1e430d8b543ff8d8767))
+* add spaenleh as a contributor for code, ideas, and design ([#42](https://github.com/graasp/graasp-app-text-analysis/issues/42)) ([c79b2c6](https://github.com/graasp/graasp-app-text-analysis/commit/c79b2c6f8d7587c53f2309cd62391452316182de))
+
 ## [0.5.2](https://github.com/graasp/graasp-app-text-analysis/compare/v0.5.1...v0.5.2) (2023-01-06)
 
 
