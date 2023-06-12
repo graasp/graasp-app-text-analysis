@@ -48,6 +48,7 @@
     "start:test": "env-cmd -f ./.env.test react-scripts -r @cypress/instrument-cra start",
     "start:ci": "react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts build",
+    "build:dev": "env-cmd -f ./.env.development react-scripts build",
     "test:cra": "react-scripts test",
     "eject": "react-scripts eject",
     "postinstall": "husky install",
