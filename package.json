@@ -22,7 +22,7 @@
     "@testing-library/cypress": "8.0.3",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "13.3.0",
-    "i18next": "21.8.11",
+    "i18next": "21.8.16",
     "immutable": "4.1.0",
     "lodash.isequal": "^4.5.0",
     "lodash.isobject": "3.0.2",
