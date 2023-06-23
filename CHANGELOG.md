@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/graasp/graasp-app-text-analysis/compare/v0.5.3...v1.0.0) (2023-06-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* apply changes for typeorm refactor ([#46](https://github.com/graasp/graasp-app-text-analysis/issues/46))
+
+### Features
+
+* apply changes for typeorm refactor ([#46](https://github.com/graasp/graasp-app-text-analysis/issues/46)) ([521ddd3](https://github.com/graasp/graasp-app-text-analysis/commit/521ddd369f45941c02f3057a0e47a70eefa2d5b9))
+
 ## [0.5.3](https://github.com/graasp/graasp-app-text-analysis/compare/v0.5.2...v0.5.3) (2023-02-22)
 
 
