@@ -1,7 +1,13 @@
 import { v4 } from 'uuid';
 
 import type { Database, LocalContext } from '@graasp/apps-query-client';
-import { Item, Member, MemberType, PermissionLevel } from '@graasp/sdk';
+import {
+  Context,
+  DiscriminatedItem,
+  Member,
+  MemberType,
+  PermissionLevel,
+} from '@graasp/sdk';
 
 import {
   LESSON_TITLE_SETTING_KEY,
@@ -13,7 +19,7 @@ import {
 } from '../config/appSettings';
 import { REACT_APP_API_HOST } from '../config/env';
 
-export const MOCK_SERVER_ITEM = { id: '1234567890' } as Item;
+export const MOCK_SERVER_ITEM = { id: '1234567890' } as DiscriminatedItem;
 
 export const MEMBERS: { [key: string]: Member } = {
   ANNA: {
@@ -41,7 +47,7 @@ export const CURRENT_MEMBER = MEMBERS.ANNA;
 export const mockContext: LocalContext = {
   apiHost: REACT_APP_API_HOST,
   permission: PermissionLevel.Admin,
-  context: 'player',
+  context: Context.Player,
   itemId: MOCK_SERVER_ITEM.id,
   memberId: CURRENT_MEMBER.id,
 };

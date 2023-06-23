@@ -49,7 +49,7 @@ export const AppSettingProvider: FC<PropsWithChildren> = ({ children }) => {
       postAppSetting,
       patchAppSetting,
       deleteAppSetting,
-      appSettingArray: appSetting.data || List(),
+      appSettingArray: appSetting.data || List<AppSettingRecord>(),
     }),
     [appSetting.data, deleteAppSetting, patchAppSetting, postAppSetting],
   );
