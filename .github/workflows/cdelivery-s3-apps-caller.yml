@@ -19,7 +19,7 @@ jobs:
       - name: Text Analysis App
         # Replace 'main' with the hash of a commit, so it points to an specific version of the reusable workflow that is used
         # Reference reusable workflow file. Using the commit SHA is the safest for stability and security
-        uses: graasp/graasp-deploy/.github/actions/deploy-stage-s3-apps@7184b0e664d2d9481167ae8788954dad99ab4ef6
+        uses: graasp/graasp-deploy/.github/actions/deploy-stage-s3-apps@37170fda9ae9f38fafb70441e152274f3cd0d197
         # Replace input build-folder or version if needed
         with:
           build-folder: 'build'

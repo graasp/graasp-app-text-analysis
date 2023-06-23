@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Text Analysis App
-        uses: graasp/graasp-deploy/.github/actions/deploy-dev-s3-apps@7010f99aa851465a150c71f8ffcc549c8fcd3582
+        uses: graasp/graasp-deploy/.github/actions/deploy-dev-s3-apps@37170fda9ae9f38fafb70441e152274f3cd0d197
         with:
           build-folder: 'build'
           version: 'latest'
