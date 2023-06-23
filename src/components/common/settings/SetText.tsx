@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 
 import { Box, TextField } from '@mui/material';
 
-import { TextResourceSetting } from '../../../config/appSettingTypes';
+import { TextResourceSettingRecord } from '../../../config/appSettingTypes';
 import { DEFAULT_TEXT_RESOURCE_SETTING } from '../../../config/appSettings';
 import { DEFAULT_MARGIN, FULL_WIDTH } from '../../../config/stylingConstants';
 import { useAppSettingContext } from '../../context/AppSettingContext';
@@ -33,7 +33,7 @@ const SetText: FC<Prop> = ({
 
   const textResourceSetting = appSettingArray.find(
     (s) => s.name === resourceKey,
-  ) as TextResourceSetting;
+  ) as TextResourceSettingRecord;
 
   useEffect(() => {
     const { text } = textResourceSetting?.data || DEFAULT_TEXT_RESOURCE_SETTING;

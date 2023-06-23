@@ -22,7 +22,7 @@ export const DEFAULT_USE_CHATBOT_SETTING = { useBot: false };
 
 export const DEFAULT_KEYWORD: keyword = { word: '', def: '' };
 
-export const DEFAULT_CONTEXT = Context.BUILDER;
+export const DEFAULT_CONTEXT = Context.Builder;
 export const DEFAULT_PERMISSION = PermissionLevel.Read;
 
 export const DEFAULT_CONTEXT_LANGUAGE = 'en';

@@ -1,35 +1,46 @@
 name: Deploy to development environment
 
-# Controls when the action will run.
+# Controls when the action will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
+  # Triggers the workflow on push events only for the main branch
   push:
     branches:
       - main
-      - master
 
-  # Allows you to run this workflow manually from the Actions tab
+  # Allows to run the workflow manually from the Actions tab
   workflow_dispatch:
 
-env:
-  REACT_APP_OPEN_AI_URL: ${{ secrets.REACT_APP_OPEN_AI_URL_DEV }}
-
-# This workflow is made up of one job that calls the reusable workflow in graasp-deploy
 jobs:
-  deploy-app-to-dev:
-    name: Deploy app to Development
+  deploy-app:
+    name: Deploy to dev
     runs-on: ubuntu-latest
+    environment: development
     steps:
-      - name: Text Analysis App
-        uses: graasp/graasp-deploy/.github/actions/deploy-dev-s3-apps@7010f99aa851465a150c71f8ffcc549c8fcd3582
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Yarn install and Cache dependencies
+        uses: graasp/graasp-deploy/.github/actions/yarn-install-and-cache@v1
+
+      - name: Yarn build
+        # Set environment variables required to perform the build. These are only available to this step
+        env:
+          REACT_APP_API_HOST: ${{ secrets.REACT_APP_API_HOST_DEV }}
+          REACT_APP_GRAASP_APP_KEY: ${{ secrets.APP_KEY }}
+          REACT_APP_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          REACT_APP_OPEN_AI_URL: ${{ secrets.REACT_APP_OPEN_AI_URL_DEV }}
+        run: yarn build
+        shell: bash
+
+      - name: Deploy
+        uses: graasp/graasp-deploy/.github/actions/deploy-s3-app@v1
+        # Replace input build-folder or version if needed
         with:
           build-folder: 'build'
+          graasp-app-id: ${{ secrets.APP_ID }}
           version: 'latest'
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
           aws-region: ${{ secrets.APPS_AWS_REGION }}
           aws-s3-bucket-name: ${{ secrets.AWS_S3_BUCKET_NAME_APPS_DEV }}
           cloudfront-distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_APPS_DEV }}
-          app-id: ${{ secrets.APP_ID }}
-          graasp-domain: ${{ secrets.REACT_APP_DOMAIN_DEV }}
-          sentry-dsn: ${{ secrets.SENTRY_DSN }}

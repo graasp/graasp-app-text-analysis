@@ -2,14 +2,14 @@ import { List } from 'immutable';
 
 import React, { FC, ReactElement, createContext, useMemo } from 'react';
 
-import { Member } from '@graasp/apps-query-client';
+import { MemberRecord } from '@graasp/sdk/frontend';
 
 import { hooks } from '../../config/queryClient';
 import Loader from '../common/Loader';
 
-export type MembersContextType = List<Member>;
+export type MembersContextType = List<MemberRecord>;
 
-const defaultContextValue = List<Member>();
+const defaultContextValue = List<MemberRecord>();
 const MembersContext = createContext<MembersContextType>(defaultContextValue);
 
 type Prop = {

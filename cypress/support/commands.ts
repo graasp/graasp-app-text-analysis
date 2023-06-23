@@ -1,8 +1,8 @@
 /// <reference types="../../src/interfaces/window" />
 import '@testing-library/cypress/add-commands';
 
-import { MOCK_SERVER_API_HOST, MOCK_SERVER_ITEM } from '../fixtures/appData';
-import { CURRENT_MEMBER, MEMBERS } from '../fixtures/members';
+import { CURRENT_MEMBER, MEMBERS, MOCK_SERVER_ITEM } from '../../src/data/db';
+import { MOCK_SERVER_API_HOST } from '../fixtures/appData';
 
 // ***********************************************
 // This example commands.js shows you how to
@@ -37,8 +37,10 @@ Cypress.Commands.add(
     Cypress.on('window:before:load', (win) => {
       // eslint-disable-next-line no-param-reassign
       win.database = {
-        currentMember,
-        currentItemId: MOCK_SERVER_ITEM.id,
+        appData: [],
+        appSettings: [],
+        appActions: [],
+        items: [MOCK_SERVER_ITEM],
         members: Object.values(MEMBERS),
         ...database,
       };

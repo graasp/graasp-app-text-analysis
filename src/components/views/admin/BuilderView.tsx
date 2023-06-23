@@ -19,6 +19,7 @@ import {
   TEXT_INPUT_FIELD_CY,
   TITLE_INPUT_FIELD_CY,
 } from '../../../config/selectors';
+import PublicAlert from '../../common/PublicAlert';
 import KeyWords from '../../common/settings/KeyWords';
 import SetText from '../../common/settings/SetText';
 import SwitchModes from '../../common/settings/SwitchModes';
@@ -27,6 +28,7 @@ import SwitchModes from '../../common/settings/SwitchModes';
 const BuilderView: FC = () => {
   return (
     <div data-cy={BUILDER_VIEW_CY}>
+      <PublicAlert />
       <Typography
         variant="h4"
         sx={{

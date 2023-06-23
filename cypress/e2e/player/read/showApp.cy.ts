@@ -22,7 +22,7 @@ describe('Empty App Settings', () => {
         appSettings: [],
       },
       appContext: {
-        context: Context.PLAYER,
+        context: Context.Player,
         permission: PermissionLevel.Read,
       },
     });
@@ -56,7 +56,7 @@ describe('With App Setting', () => {
         appSettings: MOCK_APP_SETTINGS,
       },
       appContext: {
-        context: Context.PLAYER,
+        context: Context.Player,
         permission: PermissionLevel.Read,
       },
     });

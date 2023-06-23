@@ -361,8 +361,8 @@ jobs:
         env:
           REACT_APP_API_HOST: http://localhost:3636
           REACT_APP_GRAASP_DOMAIN: localhost
-          REACT_APP_GRAASP_APP_ID: id-1234567890
-          REACT_APP_MOCK_API: true
+          REACT_APP_GRAASP_APP_KEY: id-1234567890
+          REACT_APP_ENABLE_MOCK_API: true
           NODE_ENV: test
         with:
           install: false
