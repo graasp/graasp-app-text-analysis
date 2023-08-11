@@ -4084,13 +4084,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:29.5.2":
+"@types/jest@npm:*":
   version: 29.5.2
   resolution: "@types/jest@npm:29.5.2"
   dependencies:
     expect: ^29.0.0
     pretty-format: ^29.0.0
   checksum: 7d205599ea3cccc262bad5cc173d3242d6bf8138c99458509230e4ecef07a52d6ddcde5a1dbd49ace655c0af51d2dbadef3748697292ea4d86da19d9e03e19c0
+  languageName: node
+  linkType: hard
+
+"@types/jest@npm:29.5.3":
+  version: 29.5.3
+  resolution: "@types/jest@npm:29.5.3"
+  dependencies:
+    expect: ^29.0.0
+    pretty-format: ^29.0.0
+  checksum: e36bb92e0b9e5ea7d6f8832baa42f087fc1697f6cd30ec309a07ea4c268e06ec460f1f0cfd2581daf5eff5763475190ec1ad8ac6520c49ccfe4f5c0a48bfa676
   languageName: node
   linkType: hard
 
@@ -4193,17 +4203,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:20.4.1":
-  version: 20.4.1
-  resolution: "@types/node@npm:20.4.1"
-  checksum: 22cbcc792f2eb636fe4188778ed0f32658ab872aa7fcb9847b3fa289a42b14b9f5e30c6faec50ef3c7adbc6c2a246926e5858136bb8b10c035a3fcaa6afbeed2
+"@types/node@npm:20.4.10":
+  version: 20.4.10
+  resolution: "@types/node@npm:20.4.10"
+  checksum: 02a1ca415d9cc91144c4250383aa0ef1e48241bd36067ed7d1b239d8bacc2a11139dd90e223e11ac289345eeae624cc5dcf73359e684bd2e5a6c31bdfbab4811
   languageName: node
   linkType: hard
 
-"@types/node@npm:^14.14.31":
-  version: 14.18.48
-  resolution: "@types/node@npm:14.18.48"
-  checksum: bc410153cd12b5f5218c2c2a5ab4a65e8dc99ebffe98261a30e9d4beb8f9a0e4ee48c41b850f8cb80da6ed1024e42bba8dee1592869aa5b1826ddb7c29ad6899
+"@types/node@npm:^16.18.39":
+  version: 16.18.40
+  resolution: "@types/node@npm:16.18.40"
+  checksum: a683930491b4fd7cb2dc7684e32bbeedc4a83fb1949a7b15ea724fbfaa9988cec59091f169a3f1090cb91992caba8c1a7d50315b2c67c6e2579a3788bb09eec4
   languageName: node
   linkType: hard
 
@@ -4272,7 +4282,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:18.2.4, @types/react-dom@npm:^18.0.0":
+"@types/react-dom@npm:18.2.7":
+  version: 18.2.7
+  resolution: "@types/react-dom@npm:18.2.7"
+  dependencies:
+    "@types/react": "*"
+  checksum: e02ea908289a7ad26053308248d2b87f6aeafd73d0e2de2a3d435947bcea0422599016ffd1c3e38ff36c42f5e1c87c7417f05b0a157e48649e4a02f21727d54f
+  languageName: node
+  linkType: hard
+
+"@types/react-dom@npm:^18.0.0":
   version: 18.2.4
   resolution: "@types/react-dom@npm:18.2.4"
   dependencies:
@@ -4299,7 +4318,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:18.2.8":
+"@types/react@npm:*":
   version: 18.2.8
   resolution: "@types/react@npm:18.2.8"
   dependencies:
@@ -4307,6 +4326,17 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: 351fe2450d30bff2ceb6aa84788e948317555e5ea22cb44f6778e08c977aab1878a0119bd94bc3d1bec5f5af4a75ffaa2ce111df5cd9d4ce26bfd719e4d971c2
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:18.2.20":
+  version: 18.2.20
+  resolution: "@types/react@npm:18.2.20"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: 30f699c60e5e4bfef273ce64d320651cdd60f5c6a08361c6c7eca8cebcccda1ac953d2ee57c9f321b5ae87f8a62c72b6d35ca42df0e261d337849952daab2141
   languageName: node
   linkType: hard
 
@@ -4431,10 +4461,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:9.0.1":
-  version: 9.0.1
-  resolution: "@types/uuid@npm:9.0.1"
-  checksum: c472b8a77cbeded4bc529220b8611afa39bd64677f507838f8083d8aac8033b1f88cb9ddaa2f8589e0dcd2317291d0f6e1379f82d5ceebd6f74f3b4825288e00
+"@types/uuid@npm:9.0.2":
+  version: 9.0.2
+  resolution: "@types/uuid@npm:9.0.2"
+  checksum: 1754bcf3444e1e3aeadd6e774fc328eb53bc956665e2e8fb6ec127aa8e1f43d9a224c3d22a9a6233dca8dd81a12dc7fed4d84b8876dd5ec82d40f574f7ff8b68
   languageName: node
   linkType: hard
 
@@ -7335,12 +7365,12 @@ __metadata:
   linkType: hard
 
 "cypress@npm:^12.13.0":
-  version: 12.17.1
-  resolution: "cypress@npm:12.17.1"
+  version: 12.17.3
+  resolution: "cypress@npm:12.17.3"
   dependencies:
     "@cypress/request": ^2.88.11
     "@cypress/xvfb": ^1.2.4
-    "@types/node": ^14.14.31
+    "@types/node": ^16.18.39
     "@types/sinonjs__fake-timers": 8.1.1
     "@types/sizzle": ^2.3.2
     arch: ^2.2.0
@@ -7382,7 +7412,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 1f042e3e5931498bdf826cba09060939349e677fca8654c9695760acbec5a424cb69d3445ace57cf80deb496d770ffe571ef791dff72af24e7f560ee43986ee4
+  checksum: 1da3922cac45c35ee282116fe2af2278e92cc08bd2d8586e0f2346cbe5c9f62129cec567bc9274c585e8c2e887341fa4e5c8623cfaa41dba87331cfb5a023721
   languageName: node
   linkType: hard
 
@@ -10030,15 +10060,15 @@ __metadata:
     "@testing-library/react": 14.0.0
     "@trivago/prettier-plugin-sort-imports": 4.1.1
     "@types/i18n": 0.13.6
-    "@types/jest": 29.5.2
+    "@types/jest": 29.5.3
     "@types/lodash.isequal": ^4.5.6
     "@types/lodash.isobject": 3.0.7
     "@types/lodash.isstring": 4.0.7
-    "@types/node": 20.4.1
+    "@types/node": 20.4.10
     "@types/randomcolor": 0.5.7
-    "@types/react": 18.2.8
-    "@types/react-dom": 18.2.4
-    "@types/uuid": 9.0.1
+    "@types/react": 18.2.20
+    "@types/react-dom": 18.2.7
+    "@types/uuid": 9.0.2
     "@typescript-eslint/eslint-plugin": 5.30.0
     "@typescript-eslint/parser": 5.30.0
     concurrently: 8.2.0
