@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.1](https://github.com/graasp/graasp-app-text-analysis/compare/v1.0.0...v1.0.1) (2023-08-14)
+
+
+### Bug Fixes
+
+* **deps:** update mui (non-major) ([#62](https://github.com/graasp/graasp-app-text-analysis/issues/62)) ([ddd988f](https://github.com/graasp/graasp-app-text-analysis/commit/ddd988ffa2ada792dd84a9971d62da84f1e69bd0))
+
 ## [1.0.0](https://github.com/graasp/graasp-app-text-analysis/compare/v0.5.3...v1.0.0) (2023-06-23)
 
 
