@@ -1,5 +1,3 @@
-import { List } from 'immutable';
-
 import { FC, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
@@ -7,10 +5,7 @@ import { useLocalContext } from '@graasp/apps-query-client';
 
 import { Alert, AlertTitle, Box, Stack, styled } from '@mui/material';
 
-import {
-  APP_DATA_TYPES,
-  ChatAppDataRecord,
-} from '../../../config/appDataTypes';
+import { APP_DATA_TYPES, ChatAppData } from '../../../config/appDataTypes';
 import {
   INITIAL_PROMPT_SETTING_KEY,
   TextResourceData,
@@ -68,9 +63,7 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
   const { postAppDataAsync, postAppData, appDataArray } = useAppDataContext();
   const { appSettingArray } = useAppSettingContext();
   const context = useLocalContext();
-  const member = useMembersContext().find(
-    (m) => m.id === context.get('memberId'),
-  );
+  const member = useMembersContext().find((m) => m.id === context.memberId);
   const memberName = member?.name || ANONYMOUS_USER;
   const initial = memberName.toLocaleUpperCase().trim()[0];
   const [loading, setLoading] = useState(false);
@@ -87,25 +80,23 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
           data.type === APP_DATA_TYPES.STUDENT_COMMENT) &&
         data.data.keyword === focusWord,
     )
-    .sort((a, b) =>
-      a.createdAt > b.createdAt ? 1 : -1,
-    ) as List<ChatAppDataRecord>;
+    .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1)) as ChatAppData[];
 
   const fetchApi = async (input: string): Promise<{ completion: string }> => {
-    const chatConcatMessages = chatAppData
-      .map((data) => {
+    const chatConcatMessages = [
+      initialPrompt,
+      ...chatAppData.map((data) => {
         const prefix =
           data.type === APP_DATA_TYPES.BOT_COMMENT
             ? CHATBOT_PREFIX
             : STUDENT_PREFIX;
         return `${prefix}: ${data.data.message}`;
-      })
-      .unshift(initialPrompt)
-      .push(`${STUDENT_PREFIX}: ${input}`)
-      .join('\n\n')
-      .concat('\n\n');
+      }),
+      `${STUDENT_PREFIX}: ${input}`,
+    ].join('\n\n\n\n');
 
     setLoading(true);
+
     const response = await fetch(CHATBOT_RESPONSE_URL, {
       method: 'POST',
       body: JSON.stringify({ prompt: chatConcatMessages }),
@@ -138,7 +129,7 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
   };
 
   const renderBar =
-    chatAppData.size > MAX_CONVERSATION_LENGTH ? (
+    chatAppData.length > MAX_CONVERSATION_LENGTH ? (
       <Alert severity="info">
         <AlertTitle>Info</AlertTitle>
         {MAX_CONVERSATION_LENGTH_ALERT}

@@ -4,7 +4,7 @@ import { FormControlLabel, Switch } from '@mui/material';
 
 import {
   USE_CHATBOT_SETTING_KEY,
-  UseChatbotSettingRecord,
+  UseChatbotSetting,
 } from '../../../config/appSettingTypes';
 import { DEFAULT_USE_CHATBOT_SETTING } from '../../../config/appSettings';
 import { USE_CHATBOT_DATA_CY } from '../../../config/selectors';
@@ -18,7 +18,7 @@ const SwitchModes: FC = () => {
 
   const useChatbotSetting = appSettingArray.find(
     (s) => s.name === USE_CHATBOT_SETTING_KEY,
-  ) as UseChatbotSettingRecord;
+  ) as UseChatbotSetting;
 
   useEffect(() => {
     const { useBot } = useChatbotSetting?.data || DEFAULT_USE_CHATBOT_SETTING;
