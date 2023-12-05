@@ -28,7 +28,6 @@ jobs:
           REACT_APP_API_HOST: ${{ secrets.REACT_APP_API_HOST_DEV }}
           REACT_APP_GRAASP_APP_KEY: ${{ secrets.APP_KEY }}
           REACT_APP_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          REACT_APP_OPEN_AI_URL: ${{ secrets.REACT_APP_OPEN_AI_URL_DEV }}
         run: yarn build
         shell: bash
 

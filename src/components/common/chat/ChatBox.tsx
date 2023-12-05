@@ -13,19 +13,20 @@ import {
 import { DEFAULT_INITIAL_PROMPT } from '../../../config/appSettings';
 import {
   ANONYMOUS_USER,
-  CHATBOT_PREFIX,
-  CHATBOT_RESPONSE_URL,
   MAX_CONVERSATION_LENGTH,
   MAX_CONVERSATION_LENGTH_ALERT,
   SCROLL_SAFETY_MARGIN,
-  STUDENT_PREFIX,
 } from '../../../config/constants';
+import { CHAT_BOT_ERROR_MESSAGE } from '../../../config/messages';
+import { mutations } from '../../../config/queryClient';
 import { CHATBOT_MODE_CY, messagesDataCy } from '../../../config/selectors';
 import {
   DEFAULT_BORDER_RADIUS,
   LIGHT_GRAY,
   LIGHT_VIOLET,
 } from '../../../config/stylingConstants';
+import { ThreadMessage } from '../../../interfaces/chatbot';
+import { buildPrompt } from '../../../utils/chatbot';
 import { useAppDataContext } from '../../context/AppDataContext';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 import { useMembersContext } from '../../context/MembersContext';
@@ -67,6 +68,7 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
   const memberName = member?.name || ANONYMOUS_USER;
   const initial = memberName.toLocaleUpperCase().trim()[0];
   const [loading, setLoading] = useState(false);
+  const { mutateAsync: postChatBot } = mutations.usePostChatBot();
 
   const initialPrompt = (
     (appSettingArray.find((s) => s.name === INITIAL_PROMPT_SETTING_KEY)?.data ||
@@ -82,49 +84,40 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
     )
     .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1)) as ChatAppData[];
 
-  const fetchApi = async (input: string): Promise<{ completion: string }> => {
-    const chatConcatMessages = [
-      initialPrompt,
-      ...chatAppData.map((data) => {
-        const prefix =
-          data.type === APP_DATA_TYPES.BOT_COMMENT
-            ? CHATBOT_PREFIX
-            : STUDENT_PREFIX;
-        return `${prefix}: ${data.data.message}`;
-      }),
-      `${STUDENT_PREFIX}: ${input}`,
-    ].join('\n\n\n\n');
-
-    setLoading(true);
-
-    const response = await fetch(CHATBOT_RESPONSE_URL, {
-      method: 'POST',
-      body: JSON.stringify({ prompt: chatConcatMessages }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    });
-    const json = await response.json();
-    return json;
-  };
-
   const onSend = (input: string): void => {
     if (input.trim() !== '') {
       postAppDataAsync({
         data: { message: input, keyword: focusWord },
         type: APP_DATA_TYPES.STUDENT_COMMENT,
-      })
-        ?.then(() => fetchApi(input))
-        .then((json) => {
-          setLoading(false);
-          postAppData({
-            data: {
-              message: json.completion.replace(`${CHATBOT_PREFIX}:`, '').trim(),
-              keyword: focusWord,
-            },
-            type: APP_DATA_TYPES.BOT_COMMENT,
+      })?.then(() => {
+        const thread: ThreadMessage[] = chatAppData.map((data) => ({
+          type: data.type as
+            | APP_DATA_TYPES.BOT_COMMENT
+            | APP_DATA_TYPES.STUDENT_COMMENT,
+          data: { content: data.data.message },
+        }));
+
+        const prompt = buildPrompt(initialPrompt, thread, input);
+
+        setLoading(true);
+
+        const appData = {
+          message: CHAT_BOT_ERROR_MESSAGE,
+          keyword: focusWord,
+        };
+
+        postChatBot(prompt)
+          .then((chatBotRes) => {
+            appData.message = chatBotRes.completion;
+          })
+          .finally(() => {
+            setLoading(false);
+            postAppData({
+              data: appData,
+              type: APP_DATA_TYPES.BOT_COMMENT,
+            });
           });
-        });
+      });
     }
   };
 

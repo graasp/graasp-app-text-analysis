@@ -2,8 +2,6 @@ import { TextResourceData } from './appSettingTypes';
 
 export const ANONYMOUS_USER = 'Anonymous';
 export const ENTER_KEY = 'Enter';
-export const { REACT_APP_OPEN_AI_URL: CHATBOT_RESPONSE_URL = 'url not found' } =
-  process.env;
 export const FIRST_CHATBOT_MESSAGE: TextResourceData = {
   text: 'You clicked on {{keyword}}, what do you want to know about it ?',
 };
@@ -13,9 +11,6 @@ export const END_CONVERSATION =
 export const MAX_CONVERSATION_LENGTH = 20;
 export const MAX_CONVERSATION_LENGTH_ALERT =
   'You have reached the maximum number of messages allowed in the conversation';
-
-export const STUDENT_PREFIX = 'Student';
-export const CHATBOT_PREFIX = 'Chatbot';
 
 export const SCROLL_SAFETY_MARGIN = 64;
 
