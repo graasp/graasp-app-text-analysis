@@ -27,18 +27,27 @@ const SetText: FC<Prop> = ({
   const { patchAppSetting, postAppSetting, appSettingArray } =
     useAppSettingContext();
 
+  // This state is used to avoid to erase changes if another setting is saved.
+  // This is due because the useQuery get all settings. So when a SetText update the setting
+  // using mutations, all the settings are fetched again, causing the erase the current unsaved state.
+  const [isClean, setIsClean] = useState(true);
+
   const onChange = ({ target }: { target: { value: string } }): void => {
     setResourceText(target.value);
+    setIsClean(false);
   };
 
-  const textResourceSetting = appSettingArray.find(
+  const textResourceSetting = appSettingArray?.find(
     (s) => s.name === resourceKey,
   ) as TextResourceSetting;
 
   useEffect(() => {
-    const { text } = textResourceSetting?.data || DEFAULT_TEXT_RESOURCE_SETTING;
-    setResourceText(text);
-  }, [textResourceSetting]);
+    if (isClean) {
+      const { text } =
+        textResourceSetting?.data || DEFAULT_TEXT_RESOURCE_SETTING;
+      setResourceText(text);
+    }
+  }, [isClean, textResourceSetting]);
 
   const handleClickSaveText = (): void => {
     if (textResourceSetting) {
@@ -49,6 +58,8 @@ const SetText: FC<Prop> = ({
     } else {
       postAppSetting({ data: { text: resourceText }, name: resourceKey });
     }
+
+    setIsClean(true);
   };
 
   return (
