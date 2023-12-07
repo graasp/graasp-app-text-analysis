@@ -11,7 +11,11 @@ import { USE_CHATBOT_DATA_CY } from '../../../config/selectors';
 import { DEFAULT_MARGIN } from '../../../config/stylingConstants';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 
-const SwitchModes: FC = () => {
+type Prop = {
+  onChange?: (useChatbot: boolean) => void;
+};
+
+const SwitchModes: FC<Prop> = ({ onChange }) => {
   const [useChatbot, setUseChatbot] = useState(false);
   const { patchAppSetting, postAppSetting, appSettingArray } =
     useAppSettingContext();
@@ -23,7 +27,11 @@ const SwitchModes: FC = () => {
   useEffect(() => {
     const { useBot } = useChatbotSetting?.data || DEFAULT_USE_CHATBOT_SETTING;
     setUseChatbot(useBot);
-  }, [useChatbotSetting]);
+
+    if (onChange) {
+      onChange(useBot);
+    }
+  }, [onChange, useChatbotSetting]);
 
   const handleOnChange = ({
     target,

@@ -1,6 +1,6 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import {
   INITIAL_CHATBOT_PROMPT_SETTING_KEY,
@@ -26,6 +26,12 @@ import SwitchModes from '../../common/settings/SwitchModes';
 
 // eslint-disable-next-line arrow-body-style
 const BuilderView: FC = () => {
+  const [displayChatbot, setDisplayChatbot] = useState(false);
+
+  const updateDisplayChatbot = (display: boolean): void => {
+    setDisplayChatbot(display);
+  };
+
   return (
     <div data-cy={BUILDER_VIEW_CY}>
       <PublicAlert />
@@ -38,7 +44,6 @@ const BuilderView: FC = () => {
       >
         Prepare Your Lesson
       </Typography>
-      <SwitchModes />
       <SetText
         textDataCy={TITLE_INPUT_FIELD_CY}
         buttonDataCy={SAVE_TITLE_BUTTON_CY}
@@ -49,21 +54,28 @@ const BuilderView: FC = () => {
         textDataCy={TEXT_INPUT_FIELD_CY}
         buttonDataCy={SAVE_TEXT_BUTTON_CY}
         resourceKey={TEXT_RESOURCE_SETTING_KEY}
+        multiline
+        minRows={2}
         textFieldLabel="Enter the text students will see"
       />
-      <SetText
-        textDataCy={INITIAL_PROMPT_INPUT_FIELD_CY}
-        buttonDataCy={INITIAL_PROMPT_BUTTON_CY}
-        resourceKey={INITIAL_PROMPT_SETTING_KEY}
-        textFieldLabel="Enter the intial prompt describing the conversation (as a template for {{keyword}})"
-      />
-      <SetText
-        textDataCy={INITIAL_CHATBOT_PROMPT_INPUT_FIELD_CY}
-        buttonDataCy={INITIAL_CHATBOT_PROMPT_BUTTON_CY}
-        resourceKey={INITIAL_CHATBOT_PROMPT_SETTING_KEY}
-        textFieldLabel="Enter the chatbot's first line (as a template for {{keyword}})"
-      />
-      <KeyWords />
+      <SwitchModes onChange={updateDisplayChatbot} />
+      <Box display={displayChatbot ? 'block' : 'none'}>
+        <SetText
+          textDataCy={INITIAL_PROMPT_INPUT_FIELD_CY}
+          buttonDataCy={INITIAL_PROMPT_BUTTON_CY}
+          resourceKey={INITIAL_PROMPT_SETTING_KEY}
+          multiline
+          textFieldLabel="Enter the intial prompt describing the conversation (as a template for {{keyword}})"
+        />
+        <SetText
+          textDataCy={INITIAL_CHATBOT_PROMPT_INPUT_FIELD_CY}
+          buttonDataCy={INITIAL_CHATBOT_PROMPT_BUTTON_CY}
+          resourceKey={INITIAL_CHATBOT_PROMPT_SETTING_KEY}
+          multiline
+          textFieldLabel="Enter the chatbot's first line (as a template for {{keyword}})"
+        />
+        <KeyWords />
+      </Box>
     </div>
   );
 };

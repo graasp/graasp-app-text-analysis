@@ -13,6 +13,9 @@ type Prop = {
   textFieldLabel: string;
   textDataCy: string;
   buttonDataCy: string;
+
+  multiline?: boolean;
+  minRows?: number;
 };
 
 const SetText: FC<Prop> = ({
@@ -20,6 +23,8 @@ const SetText: FC<Prop> = ({
   textFieldLabel,
   textDataCy,
   buttonDataCy,
+  multiline = false,
+  minRows = 1,
 }) => {
   const [resourceText, setResourceText] = useState(
     DEFAULT_TEXT_RESOURCE_SETTING.text,
@@ -77,12 +82,13 @@ const SetText: FC<Prop> = ({
     >
       <TextField
         data-cy={textDataCy}
-        multiline
+        multiline={multiline}
         label={textFieldLabel}
         variant="outlined"
         onChange={onChange}
         sx={{ width: FULL_WIDTH, marginRight: DEFAULT_MARGIN }}
         value={resourceText}
+        minRows={minRows}
       />
       <SaveButton
         buttonDataCy={buttonDataCy}
