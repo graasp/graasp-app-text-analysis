@@ -1,9 +1,6 @@
-import { List } from 'immutable';
-
 import React, { FC, PropsWithChildren, createContext, useMemo } from 'react';
 
 import { AppData } from '@graasp/sdk';
-import { AppDataRecord } from '@graasp/sdk/frontend';
 
 import { APP_DATA_VISIBILITY } from '../../config/appDataTypes';
 import { hooks, mutations } from '../../config/queryClient';
@@ -29,7 +26,7 @@ export type AppDataContextType = {
   postAppDataAsync: (payload: PostAppDataType) => Promise<AppData> | null;
   patchAppData: (payload: PatchAppDataType) => void;
   deleteAppData: (payload: DeleteAppDataType) => void;
-  appDataArray: List<AppDataRecord>;
+  appDataArray: AppData[];
 };
 
 const defaultContextValue = {
@@ -37,7 +34,7 @@ const defaultContextValue = {
   postAppDataAsync: () => null,
   patchAppData: () => null,
   deleteAppData: () => null,
-  appDataArray: List<AppDataRecord>(),
+  appDataArray: [],
 };
 
 const AppDataContext = createContext<AppDataContextType>(defaultContextValue);
@@ -57,7 +54,7 @@ export const AppDataProvider: FC<PropsWithChildren> = ({ children }) => {
       postAppDataAsync: (payload: PostAppDataType) => postAppDataAsync(payload),
       patchAppData,
       deleteAppData,
-      appDataArray: appData.data || List<AppDataRecord>(),
+      appDataArray: appData.data || [],
     }),
     [appData.data, deleteAppData, patchAppData, postAppData, postAppDataAsync],
   );

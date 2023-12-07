@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import { mockApi } from '@graasp/apps-query-client';
+import { MockSolution, mockApi } from '@graasp/apps-query-client';
 
 import * as Sentry from '@sentry/react';
-import { BrowserTracing } from '@sentry/tracing';
 
 import Root from './components/Root';
 import {
@@ -17,7 +16,7 @@ import buildDatabase, { mockContext } from './data/db';
 import './index.css';
 
 Sentry.init({
-  integrations: [new BrowserTracing()],
+  integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
 
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
@@ -28,11 +27,14 @@ Sentry.init({
 // setup mocked api for cypress or standalone app
 /* istanbul ignore next */
 if (MOCK_API) {
-  mockApi({
-    externalUrls: [`${DICTIONARY_API_BASE_URL}**`, CHATBOT_RESPONSE_URL],
-    appContext: window.Cypress ? window.appContext : mockContext,
-    database: window.Cypress ? window.database : buildDatabase(mockContext),
-  });
+  mockApi(
+    {
+      externalUrls: [`${DICTIONARY_API_BASE_URL}**`, CHATBOT_RESPONSE_URL],
+      appContext: window.Cypress ? window.appContext : mockContext,
+      database: window.Cypress ? window.database : buildDatabase(mockContext),
+    },
+    window.Cypress ? MockSolution.MirageJS : MockSolution.ServiceWorker,
+  );
 }
 
 const root = ReactDOM.createRoot(

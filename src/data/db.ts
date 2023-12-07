@@ -2,9 +2,9 @@ import { v4 } from 'uuid';
 
 import type { Database, LocalContext } from '@graasp/apps-query-client';
 import {
+  CompleteMember,
   Context,
   DiscriminatedItem,
-  Member,
   MemberType,
   PermissionLevel,
 } from '@graasp/sdk';
@@ -21,13 +21,13 @@ import { REACT_APP_API_HOST } from '../config/env';
 
 export const MOCK_SERVER_ITEM = { id: '1234567890' } as DiscriminatedItem;
 
-export const MEMBERS: { [key: string]: Member } = {
+export const MEMBERS: { [key: string]: CompleteMember } = {
   ANNA: {
     id: '0f0a2774-a965-4b97-afb4-bccc3796e060',
     name: 'anna',
     type: MemberType.Individual,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     email: 'anna@email.com',
     extra: {},
   },
@@ -35,8 +35,8 @@ export const MEMBERS: { [key: string]: Member } = {
     id: '1f0a2774-a965-4b97-afb4-bccc3796e060',
     name: 'bob',
     type: MemberType.Individual,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
     email: 'bob@email.com',
     extra: {},
   },
@@ -52,9 +52,11 @@ export const mockContext: LocalContext = {
   memberId: CURRENT_MEMBER.id,
 };
 
+export const mockMembers = Object.values(MEMBERS);
+
 const buildDatabase = (
   appContext: Partial<LocalContext>,
-  members?: Member[],
+  members?: CompleteMember[],
 ): Database => ({
   appData: [],
   appActions: [],
@@ -70,8 +72,8 @@ const buildDatabase = (
         // settingKey: value
       },
       item: MOCK_SERVER_ITEM,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
       creator: CURRENT_MEMBER,
     },
     {
@@ -84,8 +86,8 @@ const buildDatabase = (
         // settingKey: value
       },
       item: MOCK_SERVER_ITEM,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
       creator: CURRENT_MEMBER,
     },
   ],

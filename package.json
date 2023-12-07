@@ -12,9 +12,9 @@
   "dependencies": {
     "@emotion/react": "11.11.0",
     "@emotion/styled": "11.11.0",
-    "@graasp/apps-query-client": "2.0.0-rc.1",
-    "@graasp/sdk": "1.0.0-rc1",
-    "@graasp/ui": "3.0.0-rc1",
+    "@graasp/apps-query-client": "3.2.1",
+    "@graasp/sdk": "3.3.0",
+    "@graasp/ui": "4.1.1",
     "@mui/icons-material": "5.11.16",
     "@mui/lab": "5.0.0-alpha.136",
     "@mui/material": "5.13.7",
@@ -26,7 +26,6 @@
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
     "i18next": "22.5.0",
-    "immutable": "4.3.0",
     "lodash.isequal": "^4.5.0",
     "lodash.isobject": "3.0.2",
     "lodash.isstring": "4.0.1",
@@ -129,5 +128,8 @@
       "src/**/*.d.ts"
     ]
   },
-  "packageManager": "yarn@3.2.4"
+  "packageManager": "yarn@4.0.2",
+  "msw": {
+    "workerDirectory": "public"
+  }
 }

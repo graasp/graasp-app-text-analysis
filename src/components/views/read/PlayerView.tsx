@@ -82,7 +82,7 @@ const PlayerView: FC = () => {
       )?.data || FIRST_CHATBOT_MESSAGE) as TextResourceData
     ).text.replaceAll('{{keyword}}', `**${focusWord.word}**`);
 
-    if (keywordAppData.size === 0) {
+    if (keywordAppData.length === 0) {
       postAppData({
         data: { message: initialChatbotPrompt, keyword: focusWord.word },
         type: APP_DATA_TYPES.BOT_COMMENT,

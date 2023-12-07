@@ -1,8 +1,6 @@
-import { List } from 'immutable';
-
 import React, { FC, PropsWithChildren, createContext, useMemo } from 'react';
 
-import { AppSettingRecord } from '@graasp/sdk/frontend';
+import { AppSetting } from '@graasp/sdk';
 
 import { hooks, mutations } from '../../config/queryClient';
 import Loader from '../common/Loader';
@@ -25,14 +23,14 @@ export type AppSettingContextType = {
   postAppSetting: (payload: PostAppSettingType) => void;
   patchAppSetting: (payload: PatchAppSettingType) => void;
   deleteAppSetting: (payload: DeleteAppSettingType) => void;
-  appSettingArray: List<AppSettingRecord>;
+  appSettingArray: AppSetting[];
 };
 
 const defaultContextValue = {
   postAppSetting: () => null,
   patchAppSetting: () => null,
   deleteAppSetting: () => null,
-  appSettingArray: List<AppSettingRecord>(),
+  appSettingArray: [],
 };
 
 const AppSettingContext =
@@ -49,7 +47,7 @@ export const AppSettingProvider: FC<PropsWithChildren> = ({ children }) => {
       postAppSetting,
       patchAppSetting,
       deleteAppSetting,
-      appSettingArray: appSetting.data || List<AppSettingRecord>(),
+      appSettingArray: appSetting.data || [],
     }),
     [appSetting.data, deleteAppSetting, patchAppSetting, postAppSetting],
   );
