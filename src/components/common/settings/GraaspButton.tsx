@@ -11,15 +11,17 @@ type Prop = {
   fullWidth?: boolean;
   marginRight?: string;
   minHeight?: string;
+  text: string;
 };
 
-const SaveButton: FC<Prop> = ({
+const GraaspButton: FC<Prop> = ({
   buttonDataCy,
   handleOnClick,
   disabled,
   fullWidth = false,
   marginRight,
   minHeight,
+  text,
 }) => (
   <Button
     data-cy={buttonDataCy}
@@ -33,8 +35,8 @@ const SaveButton: FC<Prop> = ({
     onClick={handleOnClick}
     disabled={disabled}
   >
-    Save
+    {text}
   </Button>
 );
 
-export default SaveButton;
+export default GraaspButton;

@@ -1,4 +1,4 @@
-import { FC, KeyboardEventHandler, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, IconButton, List, ListItem, TextField } from '@mui/material';
@@ -9,9 +9,10 @@ import {
   keyword,
 } from '../../../config/appSettingTypes';
 import { DEFAULT_KEYWORDS_LIST } from '../../../config/appSettings';
-import { ENTER_KEY } from '../../../config/constants';
 import {
+  ADD_KEYWORD_BUTTON_CY,
   DELETE_KEYWORD_BUTTON_CY,
+  ENTER_DEFINITION_FIELD_CY,
   ENTER_KEYWORD_FIELD_CY,
   KEYWORD_LIST_ITEM_CY,
   SAVE_KEYWORDS_BUTTON_CY,
@@ -22,37 +23,52 @@ import {
   ICON_MARGIN,
 } from '../../../config/stylingConstants';
 import { useAppSettingContext } from '../../context/AppSettingContext';
-import SaveButton from './SaveButton';
+import GraaspButton from './GraaspButton';
+
+type KeywordDefinition = {
+  keyword: string;
+  definition: string;
+};
 
 const KeyWords: FC = () => {
-  const [word, setWord] = useState('');
+  const defaultKeywordDef = { keyword: '', definition: '' };
+
+  const [keywordDef, setKeywordDef] =
+    useState<KeywordDefinition>(defaultKeywordDef);
+
   const [dictionary, setDictionary] = useState<keyword[]>([]);
   const { patchAppSetting, postAppSetting, appSettingArray } =
     useAppSettingContext();
 
-  const onChange = ({ target }: { target: { value: string } }): void => {
-    setWord(target.value);
+  const updateKeywordDefinition = (
+    key: keyof KeywordDefinition,
+    target: { value: string },
+  ): void => {
+    setKeywordDef({
+      ...keywordDef,
+      [key]: target.value,
+    });
   };
 
   const isKeywordListEqual = (l1: keyword[], l2: keyword[]): boolean =>
     l1.length === l2.length &&
     l1.every((e1) => l2.some((e2) => e1.word === e2.word && e1.def === e2.def));
 
-  const onEnterPress: KeyboardEventHandler<HTMLDivElement> = (event): void => {
-    if (event.key === ENTER_KEY) {
-      const element = event.target as HTMLInputElement;
-      const settings = element.value.split(':');
-      const wordToLowerCase = settings[0].toLocaleLowerCase();
-      const definition = settings[1] ?? 'no definition';
-      const newKeyword = { word: wordToLowerCase, def: definition };
-      if (
-        wordToLowerCase !== '' &&
-        !dictionary.some((k) => k.word === wordToLowerCase)
-      ) {
-        setDictionary([...dictionary, newKeyword]);
-      }
-      setWord('');
+  const isDefinitionSet = keywordDef.definition && keywordDef.definition !== '';
+
+  const handleClickAdd = (): void => {
+    const wordToLowerCase = keywordDef.keyword.toLocaleLowerCase();
+    const definition = isDefinitionSet
+      ? keywordDef.definition
+      : 'no definition';
+    const newKeyword = { word: wordToLowerCase, def: definition };
+    if (
+      wordToLowerCase !== '' &&
+      !dictionary.some((k) => k.word === wordToLowerCase)
+    ) {
+      setDictionary([...dictionary, newKeyword]);
     }
+    setKeywordDef(defaultKeywordDef);
   };
 
   const handleDelete = (id: string): void => {
@@ -112,18 +128,33 @@ const KeyWords: FC = () => {
       >
         <TextField
           data-cy={ENTER_KEYWORD_FIELD_CY}
-          label="Enter keyword: definition"
+          label="Enter the keyword"
           sx={{ width: FULL_WIDTH, marginRight: DEFAULT_MARGIN }}
-          value={word}
-          onChange={onChange}
-          onKeyPress={onEnterPress}
+          value={keywordDef.keyword}
+          onChange={(e) => updateKeywordDefinition('keyword', e.target)}
         />
-        <SaveButton
+        <TextField
+          data-cy={ENTER_DEFINITION_FIELD_CY}
+          label="Enter the keyword's definition"
+          sx={{ width: FULL_WIDTH, marginRight: DEFAULT_MARGIN }}
+          value={keywordDef.definition}
+          onChange={(e) => updateKeywordDefinition('definition', e.target)}
+        />
+        <GraaspButton
+          buttonDataCy={ADD_KEYWORD_BUTTON_CY}
+          handleOnClick={handleClickAdd}
+          disabled={!keywordDef.keyword}
+          marginRight={DEFAULT_MARGIN}
+          minHeight="55px"
+          text="Add"
+        />
+        <GraaspButton
           buttonDataCy={SAVE_KEYWORDS_BUTTON_CY}
           handleOnClick={handleClickSave}
           disabled={isKeywordListEqual(dictionary, keywords)}
           marginRight={DEFAULT_MARGIN}
           minHeight="55px"
+          text="Save"
         />
       </Box>
       <List>{keyWordsItems}</List>

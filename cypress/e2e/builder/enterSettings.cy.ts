@@ -2,8 +2,12 @@ import { Context, PermissionLevel } from '@graasp/sdk';
 
 import { KeywordsData } from '../../../src/config/appSettingTypes';
 import {
+  ADD_KEYWORD_BUTTON_CY,
   BUILDER_VIEW_CY,
+  CHATBOT_CONTAINER_CY,
+  CHATBOT_MODE_CY,
   DELETE_KEYWORD_BUTTON_CY,
+  ENTER_DEFINITION_FIELD_CY,
   ENTER_KEYWORD_FIELD_CY,
   INITIAL_CHATBOT_PROMPT_INPUT_FIELD_CY,
   INITIAL_PROMPT_INPUT_FIELD_CY,
@@ -47,16 +51,17 @@ describe('Enter Settings', () => {
     cy.get(buildDataCy(TITLE_INPUT_FIELD_CY))
       .should('be.visible')
       .type('Title');
-
     cy.get(buildDataCy(SAVE_TITLE_BUTTON_CY)).click();
-
     cy.get(buildDataCy(SAVE_TITLE_BUTTON_CY)).should('be.disabled');
 
-    cy.get(buildDataCy(TITLE_INPUT_FIELD_CY)).type(
-      '{backspace}{backspace}{backspace}',
-    );
-
+    cy.get(buildDataCy(TITLE_INPUT_FIELD_CY)).type('New Title');
     cy.get(buildDataCy(SAVE_TITLE_BUTTON_CY)).should('not.be.disabled');
+    cy.get(buildDataCy(SAVE_TITLE_BUTTON_CY)).click();
+    cy.get(buildDataCy(SAVE_TITLE_BUTTON_CY)).should('be.disabled');
+
+    // test that multiline is disabled, because it is rendered inline in player
+    cy.get(buildDataCy(TITLE_INPUT_FIELD_CY)).type('{enter}');
+    cy.get(buildDataCy(SAVE_TITLE_BUTTON_CY)).should('be.disabled');
   });
 
   it('set text', () => {
@@ -71,7 +76,7 @@ describe('Enter Settings', () => {
     cy.get(buildDataCy(SAVE_TEXT_BUTTON_CY)).should('be.disabled');
 
     cy.get(buildDataCy(TEXT_INPUT_FIELD_CY)).type(
-      '{backspace}{backspace}{backspace}{backspace}{backspace}',
+      'Quis ea quod necessitatibus sit voluptas culpa ut laborum quia ad nobis numquam.',
     );
 
     cy.get(buildDataCy(SAVE_TEXT_BUTTON_CY)).should('not.be.disabled');
@@ -82,9 +87,17 @@ describe('Enter Settings', () => {
       .should('be.visible')
       .type('Lorem');
 
+    cy.get(buildDataCy(ENTER_DEFINITION_FIELD_CY))
+      .should('be.visible')
+      .type('Latin');
+
     cy.get(buildDataCy(KEYWORD_LIST_ITEM_CY)).should('not.exist');
 
-    cy.get(buildDataCy(ENTER_KEYWORD_FIELD_CY)).type('{enter}');
+    cy.get(buildDataCy(ADD_KEYWORD_BUTTON_CY))
+      .should('be.visible')
+      .should('not.be.disabled')
+      .click()
+      .should('be.disabled');
     cy.get(buildDataCy(KEYWORD_LIST_ITEM_CY)).should('exist');
 
     cy.get(buildDataCy(SAVE_KEYWORDS_BUTTON_CY))
@@ -99,8 +112,9 @@ describe('Enter Settings', () => {
     cy.get(buildDataCy(SAVE_KEYWORDS_BUTTON_CY)).should('not.be.disabled');
   });
 
-  it.only('does not use chatbot (by default)', () => {
+  it('does not use chatbot (by default)', () => {
     cy.get(buildDataCy(USE_CHATBOT_DATA_CY)).should('not.be.checked');
+    cy.get(buildDataCy(CHATBOT_CONTAINER_CY)).should('not.be.visible');
   });
 });
 

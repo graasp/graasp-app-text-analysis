@@ -6,7 +6,7 @@ import { TextResourceSetting } from '../../../config/appSettingTypes';
 import { DEFAULT_TEXT_RESOURCE_SETTING } from '../../../config/appSettings';
 import { DEFAULT_MARGIN, FULL_WIDTH } from '../../../config/stylingConstants';
 import { useAppSettingContext } from '../../context/AppSettingContext';
-import SaveButton from './SaveButton';
+import GraaspButton from './GraaspButton';
 
 type Prop = {
   resourceKey: string;
@@ -90,7 +90,7 @@ const SetText: FC<Prop> = ({
         value={resourceText}
         minRows={minRows}
       />
-      <SaveButton
+      <GraaspButton
         buttonDataCy={buttonDataCy}
         handleOnClick={handleClickSaveText}
         marginRight={DEFAULT_MARGIN}
@@ -99,6 +99,7 @@ const SetText: FC<Prop> = ({
           (textResourceSetting?.data || DEFAULT_TEXT_RESOURCE_SETTING).text ===
           resourceText
         }
+        text="Save"
       />
     </Box>
   );

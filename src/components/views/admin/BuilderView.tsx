@@ -10,6 +10,7 @@ import {
 } from '../../../config/appSettingTypes';
 import {
   BUILDER_VIEW_CY,
+  CHATBOT_CONTAINER_CY,
   INITIAL_CHATBOT_PROMPT_BUTTON_CY,
   INITIAL_CHATBOT_PROMPT_INPUT_FIELD_CY,
   INITIAL_PROMPT_BUTTON_CY,
@@ -58,8 +59,20 @@ const BuilderView: FC = () => {
         minRows={2}
         textFieldLabel="Enter the text students will see"
       />
+      <Typography
+        variant="h5"
+        sx={{
+          color: '#5050d2',
+          marginLeft: '25px',
+        }}
+      >
+        Chatbot settings
+      </Typography>
       <SwitchModes onChange={updateDisplayChatbot} />
-      <Box display={displayChatbot ? 'block' : 'none'}>
+      <Box
+        display={displayChatbot ? 'block' : 'none'}
+        data-cy={CHATBOT_CONTAINER_CY}
+      >
         <SetText
           textDataCy={INITIAL_PROMPT_INPUT_FIELD_CY}
           buttonDataCy={INITIAL_PROMPT_BUTTON_CY}
@@ -74,8 +87,17 @@ const BuilderView: FC = () => {
           multiline
           textFieldLabel="Enter the chatbot's first line (as a template for {{keyword}})"
         />
-        <KeyWords />
       </Box>
+      <Typography
+        variant="h5"
+        sx={{
+          color: '#5050d2',
+          margin: '25px',
+        }}
+      >
+        Keywords settings
+      </Typography>
+      <KeyWords />
     </div>
   );
 };
