@@ -141,7 +141,7 @@ const KeyWords: FC<Prop> = ({ textStudents, chatbotEnabled }) => {
     setDictionary(dictionary.filter((k) => k.word !== id));
   };
 
-  const keyWordsItems = dictionary.map((k, idx) => (
+  const keyWordsItems = dictionary.map((k) => (
     <ListItem
       data-cy={KEYWORD_LIST_ITEM_CY}
       key={k.word}
