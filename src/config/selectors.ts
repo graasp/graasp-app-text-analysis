@@ -13,7 +13,6 @@ export const ENTER_KEYWORD_FIELD_CY = 'enter_keyword_field';
 export const ENTER_DEFINITION_FIELD_CY = 'enter_definition_field';
 export const ADD_KEYWORD_BUTTON_CY = 'add_keyword_button';
 export const DELETE_KEYWORD_BUTTON_CY = 'delete_keyword_button';
-export const SAVE_KEYWORDS_BUTTON_CY = 'save_keywords_button';
 
 export const CHATBOT_CONTAINER_CY = 'chatbot_container';
 export const INITIAL_PROMPT_INPUT_FIELD_CY = 'initial_prompt_input_field';

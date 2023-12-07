@@ -1,7 +1,20 @@
 import { FC, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Box, IconButton, List, ListItem, TextField } from '@mui/material';
+import WarningIcon from '@mui/icons-material/Warning';
+import {
+  Box,
+  IconButton,
+  List,
+  ListItem,
+  TextField,
+  Tooltip,
+  TooltipProps,
+  Typography,
+  styled,
+  tooltipClasses,
+} from '@mui/material';
 
 import {
   KEYWORDS_SETTING_KEY,
@@ -9,13 +22,13 @@ import {
   keyword,
 } from '../../../config/appSettingTypes';
 import { DEFAULT_KEYWORDS_LIST } from '../../../config/appSettings';
+import { keywordAlreadyExistsWarningMessage } from '../../../config/messages';
 import {
   ADD_KEYWORD_BUTTON_CY,
   DELETE_KEYWORD_BUTTON_CY,
   ENTER_DEFINITION_FIELD_CY,
   ENTER_KEYWORD_FIELD_CY,
   KEYWORD_LIST_ITEM_CY,
-  SAVE_KEYWORDS_BUTTON_CY,
 } from '../../../config/selectors';
 import {
   DEFAULT_MARGIN,
@@ -30,7 +43,24 @@ type KeywordDefinition = {
   definition: string;
 };
 
-const KeyWords: FC = () => {
+type Prop = {
+  textStudents: string;
+  chatbotEnabled: boolean;
+};
+
+const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}));
+
+const KeyWords: FC<Prop> = ({ textStudents, chatbotEnabled }) => {
   const defaultKeywordDef = { keyword: '', definition: '' };
 
   const [keywordDef, setKeywordDef] =
@@ -50,30 +80,14 @@ const KeyWords: FC = () => {
     });
   };
 
-  const isKeywordListEqual = (l1: keyword[], l2: keyword[]): boolean =>
-    l1.length === l2.length &&
-    l1.every((e1) => l2.some((e2) => e1.word === e2.word && e1.def === e2.def));
-
   const isDefinitionSet = keywordDef.definition && keywordDef.definition !== '';
 
-  const handleClickAdd = (): void => {
-    const wordToLowerCase = keywordDef.keyword.toLocaleLowerCase();
-    const definition = isDefinitionSet
-      ? keywordDef.definition
-      : 'no definition';
-    const newKeyword = { word: wordToLowerCase, def: definition };
-    if (
-      wordToLowerCase !== '' &&
-      !dictionary.some((k) => k.word === wordToLowerCase)
-    ) {
-      setDictionary([...dictionary, newKeyword]);
-    }
-    setKeywordDef(defaultKeywordDef);
-  };
-
-  const handleDelete = (id: string): void => {
-    setDictionary(dictionary.filter((k) => k.word !== id));
-  };
+  // contains the keywords that are not in the text
+  const keywordsNotInText = new Map(
+    dictionary
+      .filter(({ word }) => !textStudents.includes(word.toLowerCase()))
+      .map(({ word }) => [word, true]),
+  );
 
   const keywordsResourceSetting = appSettingArray.find(
     (s) => s.name === KEYWORDS_SETTING_KEY,
@@ -86,21 +100,48 @@ const KeyWords: FC = () => {
     setDictionary(keywords);
   }, [keywords]);
 
-  const handleClickSave = (): void => {
+  const saveKeywords = (newDictionary: keyword[]): void => {
     if (keywordsResourceSetting) {
       patchAppSetting({
-        data: { keywords: dictionary },
+        data: { keywords: newDictionary },
         id: keywordsResourceSetting.id,
       });
     } else {
       postAppSetting({
-        data: { keywords: dictionary },
+        data: { keywords: newDictionary },
         name: KEYWORDS_SETTING_KEY,
       });
     }
   };
 
-  const keyWordsItems = dictionary.map((k) => (
+  const handleClickAdd = (): void => {
+    const wordToLowerCase = keywordDef.keyword.toLocaleLowerCase();
+    const definition = isDefinitionSet
+      ? keywordDef.definition
+      : 'no definition';
+    const newKeyword = { word: wordToLowerCase, def: definition };
+
+    if (dictionary.some((k) => k.word === wordToLowerCase)) {
+      toast.warning(keywordAlreadyExistsWarningMessage(wordToLowerCase));
+      return;
+    }
+
+    if (wordToLowerCase !== '') {
+      // use new array to apply modifications because setState is not immediate
+      const newDictionary = [...dictionary, newKeyword];
+      saveKeywords(newDictionary);
+      setDictionary(newDictionary);
+    }
+    setKeywordDef(defaultKeywordDef);
+  };
+
+  const handleDelete = (id: string): void => {
+    const newDictionary = dictionary.filter((k) => k.word !== id);
+    saveKeywords(newDictionary);
+    setDictionary(dictionary.filter((k) => k.word !== id));
+  };
+
+  const keyWordsItems = dictionary.map((k, idx) => (
     <ListItem
       data-cy={KEYWORD_LIST_ITEM_CY}
       key={k.word}
@@ -115,6 +156,22 @@ const KeyWords: FC = () => {
         <DeleteIcon />
       </IconButton>
       {`${k.word} : ${k.def}`}
+      {keywordsNotInText.get(k.word) && (
+        <HtmlTooltip
+          title={
+            <>
+              <Typography color="inherit">Keyword not in the text</Typography>
+              The keyword <b>{k.word}</b> is not in the saved version of the{' '}
+              <em>text students</em>.
+              <br />
+              <br />
+              The keyword will <u>not be displayed</u> in the player.
+            </>
+          }
+        >
+          <WarningIcon sx={{ marginLeft: '5px', color: '#FFCC00' }} />
+        </HtmlTooltip>
+      )}
     </ListItem>
   ));
 
@@ -133,13 +190,23 @@ const KeyWords: FC = () => {
           value={keywordDef.keyword}
           onChange={(e) => updateKeywordDefinition('keyword', e.target)}
         />
-        <TextField
-          data-cy={ENTER_DEFINITION_FIELD_CY}
-          label="Enter the keyword's definition"
-          sx={{ width: FULL_WIDTH, marginRight: DEFAULT_MARGIN }}
-          value={keywordDef.definition}
-          onChange={(e) => updateKeywordDefinition('definition', e.target)}
-        />
+        <Tooltip
+          disableHoverListener={!chatbotEnabled}
+          disableFocusListener={!chatbotEnabled}
+          disableInteractive={!chatbotEnabled}
+          disableTouchListener={!chatbotEnabled}
+          title="The definition is disabled when the chatbot is enabled"
+          followCursor
+        >
+          <TextField
+            data-cy={ENTER_DEFINITION_FIELD_CY}
+            label="Enter the keyword's definition"
+            sx={{ width: FULL_WIDTH, marginRight: DEFAULT_MARGIN }}
+            value={keywordDef.definition}
+            onChange={(e) => updateKeywordDefinition('definition', e.target)}
+            disabled={chatbotEnabled}
+          />
+        </Tooltip>
         <GraaspButton
           buttonDataCy={ADD_KEYWORD_BUTTON_CY}
           handleOnClick={handleClickAdd}
@@ -147,14 +214,6 @@ const KeyWords: FC = () => {
           marginRight={DEFAULT_MARGIN}
           minHeight="55px"
           text="Add"
-        />
-        <GraaspButton
-          buttonDataCy={SAVE_KEYWORDS_BUTTON_CY}
-          handleOnClick={handleClickSave}
-          disabled={isKeywordListEqual(dictionary, keywords)}
-          marginRight={DEFAULT_MARGIN}
-          minHeight="55px"
-          text="Save"
         />
       </Box>
       <List>{keyWordsItems}</List>

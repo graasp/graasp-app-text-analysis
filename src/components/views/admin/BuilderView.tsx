@@ -27,10 +27,15 @@ import SwitchModes from '../../common/settings/SwitchModes';
 
 // eslint-disable-next-line arrow-body-style
 const BuilderView: FC = () => {
-  const [displayChatbot, setDisplayChatbot] = useState(false);
+  const [chatbotEnabled, setChatbotEnabled] = useState(false);
+  const [textStudents, setTextStudents] = useState('');
 
-  const updateDisplayChatbot = (display: boolean): void => {
-    setDisplayChatbot(display);
+  const updateEnableChatbot = (enable: boolean): void => {
+    setChatbotEnabled(enable);
+  };
+
+  const handleTextChange = (text: string): void => {
+    setTextStudents(text.toLowerCase());
   };
 
   return (
@@ -58,6 +63,7 @@ const BuilderView: FC = () => {
         multiline
         minRows={2}
         textFieldLabel="Enter the text students will see"
+        onTextChange={handleTextChange}
       />
       <Typography
         variant="h5"
@@ -68,26 +74,31 @@ const BuilderView: FC = () => {
       >
         Chatbot settings
       </Typography>
-      <SwitchModes onChange={updateDisplayChatbot} />
-      <Box
-        display={displayChatbot ? 'block' : 'none'}
-        data-cy={CHATBOT_CONTAINER_CY}
-      >
-        <SetText
-          textDataCy={INITIAL_PROMPT_INPUT_FIELD_CY}
-          buttonDataCy={INITIAL_PROMPT_BUTTON_CY}
-          resourceKey={INITIAL_PROMPT_SETTING_KEY}
-          multiline
-          textFieldLabel="Enter the intial prompt describing the conversation (as a template for {{keyword}})"
-        />
-        <SetText
-          textDataCy={INITIAL_CHATBOT_PROMPT_INPUT_FIELD_CY}
-          buttonDataCy={INITIAL_CHATBOT_PROMPT_BUTTON_CY}
-          resourceKey={INITIAL_CHATBOT_PROMPT_SETTING_KEY}
-          multiline
-          textFieldLabel="Enter the chatbot's first line (as a template for {{keyword}})"
-        />
+      <Box marginLeft="30px" marginRight="35px">
+        <p>
+          If enabled, it will be possible to ask questions about the keywords
+          directly in the chat. Otherwise, the definitions will be displayed.
+        </p>
       </Box>
+      <SwitchModes onChange={updateEnableChatbot} />
+      {chatbotEnabled && (
+        <Box data-cy={CHATBOT_CONTAINER_CY}>
+          <SetText
+            textDataCy={INITIAL_PROMPT_INPUT_FIELD_CY}
+            buttonDataCy={INITIAL_PROMPT_BUTTON_CY}
+            resourceKey={INITIAL_PROMPT_SETTING_KEY}
+            multiline
+            textFieldLabel="Enter the intial prompt describing the conversation (as a template for {{keyword}})"
+          />
+          <SetText
+            textDataCy={INITIAL_CHATBOT_PROMPT_INPUT_FIELD_CY}
+            buttonDataCy={INITIAL_CHATBOT_PROMPT_BUTTON_CY}
+            resourceKey={INITIAL_CHATBOT_PROMPT_SETTING_KEY}
+            multiline
+            textFieldLabel="Enter the chatbot's first line (as a template for {{keyword}})"
+          />
+        </Box>
+      )}
       <Typography
         variant="h5"
         sx={{
@@ -97,7 +108,7 @@ const BuilderView: FC = () => {
       >
         Keywords settings
       </Typography>
-      <KeyWords />
+      <KeyWords textStudents={textStudents} chatbotEnabled={chatbotEnabled} />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 
 import { Box, TextField } from '@mui/material';
 
@@ -16,6 +16,7 @@ type Prop = {
 
   multiline?: boolean;
   minRows?: number;
+  onTextChange?: (text: string) => void;
 };
 
 const SetText: FC<Prop> = ({
@@ -25,6 +26,7 @@ const SetText: FC<Prop> = ({
   buttonDataCy,
   multiline = false,
   minRows = 1,
+  onTextChange,
 }) => {
   const [resourceText, setResourceText] = useState(
     DEFAULT_TEXT_RESOURCE_SETTING.text,
@@ -46,13 +48,23 @@ const SetText: FC<Prop> = ({
     (s) => s.name === resourceKey,
   ) as TextResourceSetting;
 
+  const notifyTextChanges = useCallback(
+    (text: string): void => {
+      if (onTextChange) {
+        onTextChange(text);
+      }
+    },
+    [onTextChange],
+  );
+
   useEffect(() => {
     if (isClean) {
       const { text } =
         textResourceSetting?.data || DEFAULT_TEXT_RESOURCE_SETTING;
       setResourceText(text);
+      notifyTextChanges(text);
     }
-  }, [isClean, textResourceSetting]);
+  }, [isClean, notifyTextChanges, textResourceSetting]);
 
   const handleClickSaveText = (): void => {
     if (textResourceSetting) {
@@ -70,6 +82,7 @@ const SetText: FC<Prop> = ({
     }
 
     setIsClean(true);
+    notifyTextChanges(resourceText);
   };
 
   return (

@@ -61,7 +61,7 @@ const SwitchModes: FC<Prop> = ({ onChange }) => {
           onChange={handleOnChange}
         />
       }
-      label="use chatbot"
+      label="enable the chatbot"
       sx={{ marginLeft: DEFAULT_MARGIN }}
     />
   );
