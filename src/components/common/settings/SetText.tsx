@@ -24,7 +24,7 @@ const SetText: FC<Prop> = ({
   const [resourceText, setResourceText] = useState(
     DEFAULT_TEXT_RESOURCE_SETTING.text,
   );
-  const { patchAppSetting, postAppSetting, appSettingArray } =
+  const { patchAppSetting, postAppSetting, deleteAppSetting, appSettingArray } =
     useAppSettingContext();
 
   // This state is used to avoid to erase changes if another setting is saved.
@@ -51,10 +51,15 @@ const SetText: FC<Prop> = ({
 
   const handleClickSaveText = (): void => {
     if (textResourceSetting) {
-      patchAppSetting({
+      const payloadAppSetting = {
         data: { text: resourceText },
         id: textResourceSetting.id,
-      });
+      };
+      if (resourceText) {
+        patchAppSetting(payloadAppSetting);
+      } else {
+        deleteAppSetting(payloadAppSetting);
+      }
     } else {
       postAppSetting({ data: { text: resourceText }, name: resourceKey });
     }
