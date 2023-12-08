@@ -2440,9 +2440,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graasp/apps-query-client@github:graasp/graasp-apps-query-client#218-migrate-chabot-prompt-utils-from-apps":
-  version: 3.2.1
-  resolution: "@graasp/apps-query-client@https://github.com/graasp/graasp-apps-query-client.git#commit=a33847d29ee5549420659a834cc1e430107ef731"
+"@graasp/apps-query-client@npm:3.3.0":
+  version: 3.3.0
+  resolution: "@graasp/apps-query-client@npm:3.3.0"
   dependencies:
     "@emotion/react": "npm:11.11.1"
     "@emotion/styled": "npm:11.11.0"
@@ -2460,7 +2460,7 @@ __metadata:
     "@tanstack/react-query-devtools": ^4.28.0
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: 70cf1d94910f47ddc1c1712423f7b27dd2e15b84e65cc2f3f559d1b48ff8026961e3978b02cceaff83b455b6bf362951f766d8cb407ac348dd3c6ffc9c93bb3a
+  checksum: e5680bb446a51faa3b51d8bf2475b7a0246970cda1aa5dead33c329252202f3bedfa401bf199f086e472f91c8fc70e6797a41c75962956b76b6890839600e9cb
   languageName: node
   linkType: hard
 
@@ -10186,7 +10186,7 @@ __metadata:
     "@cypress/instrument-cra": "npm:1.4.0"
     "@emotion/react": "npm:11.11.0"
     "@emotion/styled": "npm:11.11.0"
-    "@graasp/apps-query-client": "github:graasp/graasp-apps-query-client#218-migrate-chabot-prompt-utils-from-apps"
+    "@graasp/apps-query-client": "npm:3.3.0"
     "@graasp/sdk": "npm:3.3.0"
     "@graasp/ui": "npm:4.1.1"
     "@mui/icons-material": "npm:5.11.16"
