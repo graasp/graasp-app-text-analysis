@@ -104,7 +104,7 @@ describe('Enter Settings', () => {
 
   it('does not use chatbot (by default)', () => {
     cy.get(buildDataCy(USE_CHATBOT_DATA_CY)).should('not.be.checked');
-    cy.get(buildDataCy(CHATBOT_CONTAINER_CY)).should('not.be.visible');
+    cy.get(buildDataCy(CHATBOT_CONTAINER_CY)).should('not.exist');
   });
 });
 
