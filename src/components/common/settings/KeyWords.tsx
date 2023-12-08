@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import DeleteIcon from '@mui/icons-material/Delete';
 import WarningIcon from '@mui/icons-material/Warning';
 import {
+  Alert,
   Box,
   IconButton,
   List,
@@ -161,11 +162,11 @@ const KeyWords: FC<Prop> = ({ textStudents, chatbotEnabled }) => {
           title={
             <>
               <Typography color="inherit">Keyword not in the text</Typography>
-              The keyword <b>{k.word}</b> is not in the saved version of the{' '}
-              <em>text students</em>.
+              The keyword &quot;{k.word}&quot; is not in the saved version of
+              the text students.
               <br />
               <br />
-              The keyword will <u>not be displayed</u> in the player.
+              The keyword will not be displayed in the player.
             </>
           }
         >
@@ -177,11 +178,20 @@ const KeyWords: FC<Prop> = ({ textStudents, chatbotEnabled }) => {
 
   return (
     <Box sx={{ margin: DEFAULT_MARGIN }}>
+      {chatbotEnabled && (
+        <Alert severity="info" sx={{ mb: 4 }}>
+          When the chatbot is enabled, all the definitions of keywords are
+          ignored. This is because the chatbot is displayed instead of the
+          definition.
+        </Alert>
+      )}
       <Box
         component="span"
-        justifyContent="space-around"
+        justifyContent="space-between"
         display="flex"
-        alignItems="center"
+        alignItems={{ xs: 'flex-start', sm: 'center' }}
+        flexDirection={{ xs: 'column', sm: 'row' }}
+        rowGap={2}
       >
         <TextField
           data-cy={ENTER_KEYWORD_FIELD_CY}
@@ -190,31 +200,23 @@ const KeyWords: FC<Prop> = ({ textStudents, chatbotEnabled }) => {
           value={keywordDef.keyword}
           onChange={(e) => updateKeywordDefinition('keyword', e.target)}
         />
-        <Tooltip
-          disableHoverListener={!chatbotEnabled}
-          disableFocusListener={!chatbotEnabled}
-          disableInteractive={!chatbotEnabled}
-          disableTouchListener={!chatbotEnabled}
-          title="The definition is disabled when the chatbot is enabled"
-          followCursor
-        >
-          <TextField
-            data-cy={ENTER_DEFINITION_FIELD_CY}
-            label="Enter the keyword's definition"
-            sx={{ width: FULL_WIDTH, marginRight: DEFAULT_MARGIN }}
-            value={keywordDef.definition}
-            onChange={(e) => updateKeywordDefinition('definition', e.target)}
-            disabled={chatbotEnabled}
-          />
-        </Tooltip>
-        <GraaspButton
-          buttonDataCy={ADD_KEYWORD_BUTTON_CY}
-          handleOnClick={handleClickAdd}
-          disabled={!keywordDef.keyword}
-          marginRight={DEFAULT_MARGIN}
-          minHeight="55px"
-          text="Add"
+        <TextField
+          data-cy={ENTER_DEFINITION_FIELD_CY}
+          label="Enter the keyword's definition"
+          sx={{ width: FULL_WIDTH, marginRight: DEFAULT_MARGIN }}
+          value={keywordDef.definition}
+          onChange={(e) => updateKeywordDefinition('definition', e.target)}
         />
+        <Box alignSelf={{ xs: 'flex-end', sm: 'auto' }}>
+          <GraaspButton
+            buttonDataCy={ADD_KEYWORD_BUTTON_CY}
+            handleOnClick={handleClickAdd}
+            disabled={!keywordDef.keyword}
+            sx={{ xs: { margin: '0px' }, sm: { margin: DEFAULT_MARGIN } }}
+            minHeight="55px"
+            text="Add"
+          />
+        </Box>
       </Box>
       <List>{keyWordsItems}</List>
     </Box>

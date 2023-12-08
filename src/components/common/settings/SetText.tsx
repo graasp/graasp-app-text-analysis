@@ -90,7 +90,7 @@ const SetText: FC<Prop> = ({
       component="span"
       justifyContent="space-around"
       display="flex"
-      alignItems="center"
+      alignItems="flex-end"
       sx={{ margin: DEFAULT_MARGIN }}
     >
       <TextField
@@ -106,7 +106,7 @@ const SetText: FC<Prop> = ({
       <GraaspButton
         buttonDataCy={buttonDataCy}
         handleOnClick={handleClickSaveText}
-        marginRight={DEFAULT_MARGIN}
+        sx={{ xs: { margin: '0px' }, sm: { margin: DEFAULT_MARGIN } }}
         minHeight="55px"
         disabled={
           (textResourceSetting?.data || DEFAULT_TEXT_RESOURCE_SETTING).text ===
