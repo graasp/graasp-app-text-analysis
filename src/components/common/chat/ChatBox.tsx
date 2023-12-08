@@ -1,7 +1,11 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-import { useLocalContext } from '@graasp/apps-query-client';
+import {
+  ChatbotThreadMessage,
+  buildPrompt,
+  useLocalContext,
+} from '@graasp/apps-query-client';
 
 import { Alert, AlertTitle, Box, Stack, styled } from '@mui/material';
 
@@ -25,8 +29,6 @@ import {
   LIGHT_GRAY,
   LIGHT_VIOLET,
 } from '../../../config/stylingConstants';
-import { ThreadMessage } from '../../../interfaces/chatbot';
-import { buildPrompt } from '../../../utils/chatbot';
 import { useAppDataContext } from '../../context/AppDataContext';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 import { useMembersContext } from '../../context/MembersContext';
@@ -90,11 +92,10 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
         data: { message: input, keyword: focusWord },
         type: APP_DATA_TYPES.STUDENT_COMMENT,
       })?.then(() => {
-        const thread: ThreadMessage[] = chatAppData.map((data) => ({
-          type: data.type as
-            | APP_DATA_TYPES.BOT_COMMENT
-            | APP_DATA_TYPES.STUDENT_COMMENT,
-          data: { content: data.data.message },
+        const thread: ChatbotThreadMessage[] = chatAppData.map((data) => ({
+          botDataType: APP_DATA_TYPES.BOT_COMMENT,
+          msgType: data.type,
+          data: data.data.message,
         }));
 
         const prompt = buildPrompt(initialPrompt, thread, input);
