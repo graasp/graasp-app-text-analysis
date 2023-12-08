@@ -8,6 +8,7 @@ import i18n from '../config/i18n';
 import { AppDataProvider } from './context/AppDataContext';
 import { AppSettingProvider } from './context/AppSettingContext';
 import { MembersProvider } from './context/MembersContext';
+import { ObserverProvider } from './context/ObserverContext';
 import BuilderView from './views/admin/BuilderView';
 import PlayerView from './views/read/PlayerView';
 
@@ -26,7 +27,11 @@ const App: FC = () => {
   const renderContent = (): ReactElement => {
     switch (context.context) {
       case Context.Builder:
-        return <BuilderView />;
+        return (
+          <ObserverProvider>
+            <BuilderView />
+          </ObserverProvider>
+        );
 
       // eslint-disable-next-line no-fallthrough
       case Context.Analytics:

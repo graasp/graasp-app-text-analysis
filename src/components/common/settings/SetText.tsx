@@ -6,13 +6,12 @@ import { TextResourceSetting } from '../../../config/appSettingTypes';
 import { DEFAULT_TEXT_RESOURCE_SETTING } from '../../../config/appSettings';
 import { DEFAULT_MARGIN, FULL_WIDTH } from '../../../config/stylingConstants';
 import { useAppSettingContext } from '../../context/AppSettingContext';
-import GraaspButton from './GraaspButton';
+import { useObserver } from '../../context/ObserverContext';
 
 type Prop = {
   resourceKey: string;
   textFieldLabel: string;
   textDataCy: string;
-  buttonDataCy: string;
 
   multiline?: boolean;
   minRows?: number;
@@ -23,11 +22,12 @@ const SetText: FC<Prop> = ({
   resourceKey,
   textFieldLabel,
   textDataCy,
-  buttonDataCy,
   multiline = false,
   minRows = 1,
   onTextChange,
 }) => {
+  const { subscribe, unsubscribe } = useObserver();
+
   const [resourceText, setResourceText] = useState(
     DEFAULT_TEXT_RESOURCE_SETTING.text,
   );
@@ -80,10 +80,38 @@ const SetText: FC<Prop> = ({
     } else {
       postAppSetting({ data: { text: resourceText }, name: resourceKey });
     }
-
-    setIsClean(true);
-    notifyTextChanges(resourceText);
   };
+
+  useEffect(() => {
+    const handleParentButtonClick = (): void => {
+      if (textResourceSetting) {
+        patchAppSetting({
+          data: { text: resourceText },
+          id: textResourceSetting.id,
+        });
+      } else {
+        postAppSetting({ data: { text: resourceText }, name: resourceKey });
+      }
+
+      setIsClean(true);
+      notifyTextChanges(resourceText);
+    };
+
+    subscribe(handleParentButtonClick);
+
+    return () => {
+      unsubscribe(handleParentButtonClick);
+    };
+  }, [
+    notifyTextChanges,
+    patchAppSetting,
+    postAppSetting,
+    resourceKey,
+    resourceText,
+    subscribe,
+    textResourceSetting,
+    unsubscribe,
+  ]);
 
   return (
     <Box
@@ -102,17 +130,6 @@ const SetText: FC<Prop> = ({
         sx={{ width: FULL_WIDTH, marginRight: DEFAULT_MARGIN }}
         value={resourceText}
         minRows={minRows}
-      />
-      <GraaspButton
-        buttonDataCy={buttonDataCy}
-        handleOnClick={handleClickSaveText}
-        sx={{ xs: { margin: '0px' }, sm: { margin: DEFAULT_MARGIN } }}
-        minHeight="55px"
-        disabled={
-          (textResourceSetting?.data || DEFAULT_TEXT_RESOURCE_SETTING).text ===
-          resourceText
-        }
-        text="Save"
       />
     </Box>
   );

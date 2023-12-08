@@ -37,6 +37,8 @@ export const CHAT_WINDOW_CY = 'chat_window';
 export const DICTIONNARY_MODE_CY = 'dictionnary_mode';
 export const CHATBOT_MODE_CY = 'chatbot_mode_cy';
 
+export const SETTINGS_SAVE_BUTTON_CY = 'settings_save_button';
+
 export const buildDataCy = (selector: string): string =>
   `[data-cy=${selector}]`;
 

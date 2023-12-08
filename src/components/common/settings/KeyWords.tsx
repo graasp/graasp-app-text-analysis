@@ -37,6 +37,7 @@ import {
   ICON_MARGIN,
 } from '../../../config/stylingConstants';
 import { useAppSettingContext } from '../../context/AppSettingContext';
+import { useObserver } from '../../context/ObserverContext';
 import GraaspButton from './GraaspButton';
 
 type KeywordDefinition = {
@@ -62,6 +63,8 @@ const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
 }));
 
 const KeyWords: FC<Prop> = ({ textStudents, chatbotEnabled }) => {
+  const { subscribe, unsubscribe } = useObserver();
+
   const defaultKeywordDef = { keyword: '', definition: '' };
 
   const [keywordDef, setKeywordDef] =
@@ -101,20 +104,6 @@ const KeyWords: FC<Prop> = ({ textStudents, chatbotEnabled }) => {
     setDictionary(keywords);
   }, [keywords]);
 
-  const saveKeywords = (newDictionary: keyword[]): void => {
-    if (keywordsResourceSetting) {
-      patchAppSetting({
-        data: { keywords: newDictionary },
-        id: keywordsResourceSetting.id,
-      });
-    } else {
-      postAppSetting({
-        data: { keywords: newDictionary },
-        name: KEYWORDS_SETTING_KEY,
-      });
-    }
-  };
-
   const handleClickAdd = (): void => {
     const wordToLowerCase = keywordDef.keyword.toLocaleLowerCase();
     const definition = isDefinitionSet
@@ -128,19 +117,43 @@ const KeyWords: FC<Prop> = ({ textStudents, chatbotEnabled }) => {
     }
 
     if (wordToLowerCase !== '') {
-      // use new array to apply modifications because setState is not immediate
-      const newDictionary = [...dictionary, newKeyword];
-      saveKeywords(newDictionary);
-      setDictionary(newDictionary);
+      setDictionary([...dictionary, newKeyword]);
     }
     setKeywordDef(defaultKeywordDef);
   };
 
   const handleDelete = (id: string): void => {
-    const newDictionary = dictionary.filter((k) => k.word !== id);
-    saveKeywords(newDictionary);
     setDictionary(dictionary.filter((k) => k.word !== id));
   };
+
+  useEffect(() => {
+    const handleParentButtonClick = (): void => {
+      if (keywordsResourceSetting) {
+        patchAppSetting({
+          data: { keywords: dictionary },
+          id: keywordsResourceSetting.id,
+        });
+      } else {
+        postAppSetting({
+          data: { keywords: dictionary },
+          name: KEYWORDS_SETTING_KEY,
+        });
+      }
+    };
+
+    subscribe(handleParentButtonClick);
+
+    return () => {
+      unsubscribe(handleParentButtonClick);
+    };
+  }, [
+    dictionary,
+    keywordsResourceSetting,
+    patchAppSetting,
+    postAppSetting,
+    subscribe,
+    unsubscribe,
+  ]);
 
   const keyWordsItems = dictionary.map((k) => (
     <ListItem
