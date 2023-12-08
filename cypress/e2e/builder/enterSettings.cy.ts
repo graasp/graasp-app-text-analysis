@@ -20,6 +20,7 @@ import {
 } from '../../../src/config/selectors';
 import {
   MOCK_APP_SETTINGS,
+  MOCK_APP_SETTINGS_USING_CHATBOT,
   MOCK_INITIAL_CHATBOT_PROMPT_SETTING,
   MOCK_INITIAL_PROMPT_SETTING,
   MOCK_KEYWORDS_SETTING,
@@ -113,7 +114,7 @@ describe('Load Settings', () => {
     cy.setUpApi({
       database: {
         appData: [],
-        appSettings: MOCK_APP_SETTINGS,
+        appSettings: MOCK_APP_SETTINGS_USING_CHATBOT,
       },
       appContext: {
         context: Context.Builder,

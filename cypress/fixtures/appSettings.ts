@@ -28,8 +28,8 @@ export const MOCK_TEXT_RESOURCE_SETTING: AppSetting = {
   data: { text: MOCK_TEXT_RESOURCE },
   item: MOCK_SERVER_ITEM,
   creator: CURRENT_MEMBER,
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
 };
 
 export const MOCK_KEYWORDS_SETTING: AppSetting = {
@@ -38,8 +38,8 @@ export const MOCK_KEYWORDS_SETTING: AppSetting = {
   data: { keywords: MOCK_KEYWORDS },
   item: MOCK_SERVER_ITEM,
   creator: CURRENT_MEMBER,
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
 };
 
 export const MOCK_INITIAL_PROMPT_SETTING: AppSetting = {
@@ -50,8 +50,8 @@ export const MOCK_INITIAL_PROMPT_SETTING: AppSetting = {
   },
   item: MOCK_SERVER_ITEM,
   creator: CURRENT_MEMBER,
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
 };
 
 export const MOCK_INITIAL_CHATBOT_PROMPT_SETTING: AppSetting = {
@@ -62,8 +62,8 @@ export const MOCK_INITIAL_CHATBOT_PROMPT_SETTING: AppSetting = {
   },
   item: MOCK_SERVER_ITEM,
   creator: CURRENT_MEMBER,
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
 };
 
 export const MOCK_USE_CHATBOT_SETTING: AppSetting = {
@@ -74,8 +74,8 @@ export const MOCK_USE_CHATBOT_SETTING: AppSetting = {
   },
   item: MOCK_SERVER_ITEM,
   creator: CURRENT_MEMBER,
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
 };
 
 export const MOCK_APP_SETTINGS = [
