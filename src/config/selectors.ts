@@ -16,18 +16,14 @@ export const DELETE_KEYWORD_BUTTON_CY = 'delete_keyword_button';
 
 export const CHATBOT_CONTAINER_CY = 'chatbot_container';
 export const INITIAL_PROMPT_INPUT_FIELD_CY = 'initial_prompt_input_field';
-export const INITIAL_PROMPT_BUTTON_CY = 'initial_prompt_button';
 
 export const INITIAL_CHATBOT_PROMPT_INPUT_FIELD_CY =
   'initial_chatbot_prompt_input_field';
-export const INITIAL_CHATBOT_PROMPT_BUTTON_CY = 'initial_chatbot_prompt_button';
 
 export const USE_CHATBOT_DATA_CY = 'use_chatbot_data_cy';
 
 export const TEXT_INPUT_FIELD_CY = 'text_input_field';
 export const TITLE_INPUT_FIELD_CY = 'title_input_field';
-export const SAVE_TITLE_BUTTON_CY = 'save_title_button';
-export const SAVE_TEXT_BUTTON_CY = 'save_text_button';
 
 export const SUMMON_BUTTON_CY = 'summon_button';
 export const BANNER_CY = 'banner';

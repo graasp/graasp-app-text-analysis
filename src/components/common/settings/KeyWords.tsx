@@ -48,6 +48,7 @@ type KeywordDefinition = {
 type Prop = {
   textStudents: string;
   chatbotEnabled: boolean;
+  onChanges?: (hasChanged: boolean) => void;
 };
 
 const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -62,7 +63,7 @@ const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }));
 
-const KeyWords: FC<Prop> = ({ textStudents, chatbotEnabled }) => {
+const KeyWords: FC<Prop> = ({ textStudents, chatbotEnabled, onChanges }) => {
   const { subscribe, unsubscribe } = useObserver();
 
   const defaultKeywordDef = { keyword: '', definition: '' };
@@ -97,12 +98,22 @@ const KeyWords: FC<Prop> = ({ textStudents, chatbotEnabled }) => {
     (s) => s.name === KEYWORDS_SETTING_KEY,
   );
 
+  const isKeywordListEqual = (l1: keyword[], l2: keyword[]): boolean =>
+    l1.length === l2.length &&
+    l1.every((e1) => l2.some((e2) => e1.word === e2.word && e1.def === e2.def));
+
   const { keywords } = (keywordsResourceSetting?.data ||
     DEFAULT_KEYWORDS_LIST) as KeywordsData;
 
   useEffect(() => {
     setDictionary(keywords);
   }, [keywords]);
+
+  const handleOnChanges = (newDictionary: keyword[]): void => {
+    if (onChanges) {
+      onChanges(!isKeywordListEqual(newDictionary, keywords));
+    }
+  };
 
   const handleClickAdd = (): void => {
     const wordToLowerCase = keywordDef.keyword.toLocaleLowerCase();
@@ -117,13 +128,17 @@ const KeyWords: FC<Prop> = ({ textStudents, chatbotEnabled }) => {
     }
 
     if (wordToLowerCase !== '') {
-      setDictionary([...dictionary, newKeyword]);
+      const newDictionary = [...dictionary, newKeyword];
+      handleOnChanges(newDictionary);
+      setDictionary(newDictionary);
     }
     setKeywordDef(defaultKeywordDef);
   };
 
   const handleDelete = (id: string): void => {
-    setDictionary(dictionary.filter((k) => k.word !== id));
+    const newDictionary = dictionary.filter((k) => k.word !== id);
+    handleOnChanges(newDictionary);
+    setDictionary(newDictionary);
   };
 
   useEffect(() => {

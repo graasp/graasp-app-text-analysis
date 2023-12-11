@@ -11,8 +11,7 @@ import {
   INITIAL_CHATBOT_PROMPT_INPUT_FIELD_CY,
   INITIAL_PROMPT_INPUT_FIELD_CY,
   KEYWORD_LIST_ITEM_CY,
-  SAVE_TEXT_BUTTON_CY,
-  SAVE_TITLE_BUTTON_CY,
+  SETTINGS_SAVE_BUTTON_CY,
   TEXT_INPUT_FIELD_CY,
   TITLE_INPUT_FIELD_CY,
   USE_CHATBOT_DATA_CY,
@@ -50,17 +49,17 @@ describe('Enter Settings', () => {
     cy.get(buildDataCy(TITLE_INPUT_FIELD_CY))
       .should('be.visible')
       .type('Title');
-    cy.get(buildDataCy(SAVE_TITLE_BUTTON_CY)).click();
-    cy.get(buildDataCy(SAVE_TITLE_BUTTON_CY)).should('be.disabled');
+    cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).click();
+    cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).should('be.disabled');
 
     cy.get(buildDataCy(TITLE_INPUT_FIELD_CY)).type('New Title');
-    cy.get(buildDataCy(SAVE_TITLE_BUTTON_CY)).should('not.be.disabled');
-    cy.get(buildDataCy(SAVE_TITLE_BUTTON_CY)).click();
-    cy.get(buildDataCy(SAVE_TITLE_BUTTON_CY)).should('be.disabled');
+    cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).should('not.be.disabled');
+    cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).click();
+    cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).should('be.disabled');
 
     // test that multiline is disabled, because it is rendered inline in player
     cy.get(buildDataCy(TITLE_INPUT_FIELD_CY)).type('{enter}');
-    cy.get(buildDataCy(SAVE_TITLE_BUTTON_CY)).should('be.disabled');
+    cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).should('be.disabled');
   });
 
   it('set text', () => {
@@ -70,15 +69,15 @@ describe('Enter Settings', () => {
         'Lorem ipsum dolor sit amet. Ut optio laborum qui ducimus rerum eum illum possimus non quidem facere.',
       );
 
-    cy.get(buildDataCy(SAVE_TEXT_BUTTON_CY)).click();
+    cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).click();
 
-    cy.get(buildDataCy(SAVE_TEXT_BUTTON_CY)).should('be.disabled');
+    cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).should('be.disabled');
 
     cy.get(buildDataCy(TEXT_INPUT_FIELD_CY)).type(
       'Quis ea quod necessitatibus sit voluptas culpa ut laborum quia ad nobis numquam.',
     );
 
-    cy.get(buildDataCy(SAVE_TEXT_BUTTON_CY)).should('not.be.disabled');
+    cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).should('not.be.disabled');
   });
 
   it('set keywords', () => {

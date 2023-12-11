@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { Box, TextField } from '@mui/material';
 
@@ -15,7 +15,7 @@ type Prop = {
 
   multiline?: boolean;
   minRows?: number;
-  onTextChange?: (text: string) => void;
+  onTextChange?: (text: string, hasChanged: boolean) => void;
 };
 
 const SetText: FC<Prop> = ({
@@ -48,53 +48,42 @@ const SetText: FC<Prop> = ({
     (s) => s.name === resourceKey,
   ) as TextResourceSetting;
 
-  const notifyTextChanges = useCallback(
-    (text: string): void => {
-      if (onTextChange) {
-        onTextChange(text);
-      }
-    },
-    [onTextChange],
-  );
-
   useEffect(() => {
     if (isClean) {
       const { text } =
         textResourceSetting?.data || DEFAULT_TEXT_RESOURCE_SETTING;
       setResourceText(text);
-      notifyTextChanges(text);
     }
-  }, [isClean, notifyTextChanges, textResourceSetting]);
+  }, [isClean, textResourceSetting]);
 
-  const handleClickSaveText = (): void => {
-    if (textResourceSetting) {
-      const payloadAppSetting = {
-        data: { text: resourceText },
-        id: textResourceSetting.id,
-      };
-      if (resourceText) {
-        patchAppSetting(payloadAppSetting);
-      } else {
-        deleteAppSetting(payloadAppSetting);
-      }
-    } else {
-      postAppSetting({ data: { text: resourceText }, name: resourceKey });
+  useEffect(() => {
+    if (onTextChange) {
+      const hasChanged =
+        (textResourceSetting?.data || DEFAULT_TEXT_RESOURCE_SETTING).text !==
+        resourceText;
+      onTextChange(resourceText, hasChanged);
     }
-  };
+    // Here, we want to listen on resourceText changes only.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resourceText]);
 
   useEffect(() => {
     const handleParentButtonClick = (): void => {
       if (textResourceSetting) {
-        patchAppSetting({
+        const payloadAppSetting = {
           data: { text: resourceText },
           id: textResourceSetting.id,
-        });
+        };
+        if (resourceText) {
+          patchAppSetting(payloadAppSetting);
+        } else {
+          deleteAppSetting(payloadAppSetting);
+        }
       } else {
         postAppSetting({ data: { text: resourceText }, name: resourceKey });
       }
 
       setIsClean(true);
-      notifyTextChanges(resourceText);
     };
 
     subscribe(handleParentButtonClick);
@@ -103,7 +92,7 @@ const SetText: FC<Prop> = ({
       unsubscribe(handleParentButtonClick);
     };
   }, [
-    notifyTextChanges,
+    deleteAppSetting,
     patchAppSetting,
     postAppSetting,
     resourceKey,
