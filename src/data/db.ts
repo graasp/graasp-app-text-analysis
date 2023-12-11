@@ -54,10 +54,7 @@ export const mockContext: LocalContext = {
 
 export const mockMembers = Object.values(MEMBERS);
 
-const buildDatabase = (
-  appContext: Partial<LocalContext>,
-  members?: CompleteMember[],
-): Database => ({
+const buildDatabase = (members: CompleteMember[]): Database => ({
   appData: [],
   appActions: [],
   members: members ?? Object.values(MEMBERS),

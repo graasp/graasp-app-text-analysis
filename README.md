@@ -8,13 +8,14 @@
   REACT_APP_ENABLE_MOCK_API=true
   REACT_APP_GRAASP_DOMAIN=localhost
   REACT_APP_API_HOST=<request address for the backend>
-  REACT_APP_OPEN_AI_URL=<url to make request>
 ```
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/graasp/graasp-app-text-analysis?color=green&style=flat-square)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Contributors ✨

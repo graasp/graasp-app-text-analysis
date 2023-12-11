@@ -6,13 +6,10 @@ import { MockSolution, mockApi } from '@graasp/apps-query-client';
 import * as Sentry from '@sentry/react';
 
 import Root from './components/Root';
-import {
-  CHATBOT_RESPONSE_URL,
-  DICTIONARY_API_BASE_URL,
-} from './config/constants';
+import { DICTIONARY_API_BASE_URL } from './config/constants';
 import { MOCK_API } from './config/env';
 import { generateSentryConfig } from './config/sentry';
-import buildDatabase, { mockContext } from './data/db';
+import buildDatabase, { mockContext, mockMembers } from './data/db';
 import './index.css';
 
 Sentry.init({
@@ -29,9 +26,9 @@ Sentry.init({
 if (MOCK_API) {
   mockApi(
     {
-      externalUrls: [`${DICTIONARY_API_BASE_URL}**`, CHATBOT_RESPONSE_URL],
+      externalUrls: [`${DICTIONARY_API_BASE_URL}**`],
       appContext: window.Cypress ? window.appContext : mockContext,
-      database: window.Cypress ? window.database : buildDatabase(mockContext),
+      database: window.Cypress ? window.database : buildDatabase(mockMembers),
     },
     window.Cypress ? MockSolution.MirageJS : MockSolution.ServiceWorker,
   );

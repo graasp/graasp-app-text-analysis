@@ -33,6 +33,8 @@ jobs:
           REACT_APP_GRAASP_APP_KEY: id-1234567890
           REACT_APP_ENABLE_MOCK_API: true
         with:
+          wait-on: http://localhost:3000
+          wait-on-timeout: 180
           install: false
           build: yarn build
           config: baseUrl=http://localhost:3000
