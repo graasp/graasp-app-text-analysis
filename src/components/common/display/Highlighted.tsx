@@ -5,15 +5,15 @@ import ReactMarkdown from 'react-markdown';
 
 import { styled } from '@mui/material';
 
-import { keyword } from '../../../config/appSettingTypes';
+import { Keyword } from '../../../config/appSettingTypes';
 import { DEFAULT_KEYWORD } from '../../../config/appSettings';
 import KeywordButton from './KeywordButton';
 
 type Prop = {
   text: string;
-  words: keyword[];
+  words: Keyword[];
   highlight: boolean;
-  openChatbot: (word: keyword) => void;
+  openChatbot: (word: Keyword) => void;
 };
 
 const StyledReactMarkdown = styled(ReactMarkdown)(({ theme }) => ({
@@ -43,7 +43,7 @@ const Highlighted: FC<Prop> = ({ text, words, highlight, openChatbot }) => {
   const wordsLowerCase = words.map((word) => word.word.toLocaleLowerCase());
   const expr = wordsLowerCase.join('|');
   const parts = text.split(new RegExp(`(${expr})`, 'gi'));
-  const findKeyword = (part: string): keyword =>
+  const findKeyword = (part: string): Keyword =>
     words.find((w) => w.word === part) || DEFAULT_KEYWORD;
   const snippet = parts
     .map((part) =>

@@ -7,4 +7,4 @@ export const CHAT_BOT_ERROR_MESSAGE =
   'Sorry, an error occurred with the chatbot.';
 export const keywordAlreadyExistsWarningMessage = (keyword: string): string =>
   `The keyword "${keyword}" already exists.
-   To add the new definition, remove the old keyword.`;
+   To update its definition, delete it and enter it again with the new definition.`;

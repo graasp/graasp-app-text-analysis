@@ -11,7 +11,7 @@ type Prop = {
 
   multiline?: boolean;
   minRows?: number;
-  onTextChange?: (text: string) => void;
+  onChange: (text: string) => void;
 };
 
 const SetText: FC<Prop> = ({
@@ -20,13 +20,10 @@ const SetText: FC<Prop> = ({
   textDataCy,
   multiline = false,
   minRows = 1,
-  onTextChange,
+  onChange,
 }) => {
-  const onChange = ({ target }: { target: { value: string } }): void => {
-    if (onTextChange) {
-      onTextChange(target.value);
-    }
-  };
+  const handleChange = ({ target }: { target: { value: string } }): void =>
+    onChange(target.value);
 
   return (
     <Box
@@ -41,7 +38,7 @@ const SetText: FC<Prop> = ({
         multiline={multiline}
         label={textFieldLabel}
         variant="outlined"
-        onChange={onChange}
+        onChange={handleChange}
         sx={{ width: FULL_WIDTH, marginRight: DEFAULT_MARGIN }}
         value={value}
         minRows={minRows}

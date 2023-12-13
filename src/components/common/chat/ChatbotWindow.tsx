@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, IconButton, Tooltip, Typography } from '@mui/material';
 
-import { keyword } from '../../../config/appSettingTypes';
+import { Keyword } from '../../../config/appSettingTypes';
 import { CHAT_WINDOW_CY, DICTIONNARY_MODE_CY } from '../../../config/selectors';
 import {
   DEFAULT_BORDER_RADIUS,
@@ -16,7 +16,7 @@ import ChatBox from './ChatBox';
 
 type Prop = {
   closeChatbot: () => void;
-  focusWord: keyword;
+  focusWord: Keyword;
   useChatbot: boolean;
   isOpen: boolean;
   onDelete: () => void;

@@ -6,10 +6,10 @@ import { APP_DATA_TYPES } from '../../../config/appDataTypes';
 import {
   INITIAL_CHATBOT_PROMPT_SETTING_KEY,
   KEYWORDS_SETTING_KEY,
+  Keyword,
   LESSON_TITLE_SETTING_KEY,
   TEXT_RESOURCE_SETTING_KEY,
   USE_CHATBOT_SETTING_KEY,
-  keyword,
 } from '../../../config/appSettingTypes';
 import {
   DEFAULT_KEYWORD,
@@ -36,7 +36,7 @@ const PlayerView: FC = () => {
   const [summon, setSummon] = useState(false);
   const [chatbot, setChatbot] = useState(false);
   const [useChatbot, setUseChatbot] = useState(false);
-  const [focusWord, setFocusWord] = useState<keyword>(DEFAULT_KEYWORD);
+  const [focusWord, setFocusWord] = useState<Keyword>(DEFAULT_KEYWORD);
 
   const { keywords } = getDataAppSetting(
     appSettingArray,
@@ -67,7 +67,7 @@ const PlayerView: FC = () => {
     DEFAULT_TEXT_RESOURCE_SETTING,
   ).text;
 
-  const openChatbot = (word: keyword): void => {
+  const openChatbot = (word: Keyword): void => {
     setChatbot(true);
     setFocusWord(word);
   };

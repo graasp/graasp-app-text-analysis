@@ -6,10 +6,10 @@ import {
   INITIAL_CHATBOT_PROMPT_SETTING_KEY,
   INITIAL_PROMPT_SETTING_KEY,
   KEYWORDS_SETTING_KEY,
+  Keyword,
   LESSON_TITLE_SETTING_KEY,
   TEXT_RESOURCE_SETTING_KEY,
   USE_CHATBOT_SETTING_KEY,
-  keyword,
 } from '../../../config/appSettingTypes';
 import {
   DEFAULT_TEXT_RESOURCE_SETTING,
@@ -57,7 +57,7 @@ const BuilderView: FC = () => {
         dataKey: 'text',
       },
       [KEYWORDS_SETTING_KEY]: {
-        defaultValue: [] as keyword[],
+        defaultValue: [] as Keyword[],
         dataKey: 'keywords',
       },
     }),
@@ -132,7 +132,7 @@ const BuilderView: FC = () => {
     });
   };
 
-  const hasChanged = Object.entries(settings)
+  const isChanged = Object.entries(settings)
     .map(([key, value]) => {
       const settingKey = key as SettingKey;
       const { dataKey } = defaultSettings[settingKey];
@@ -141,8 +141,8 @@ const BuilderView: FC = () => {
       ];
 
       if (dataKey === 'keywords') {
-        const k1 = value as keyword[];
-        const k2 = (appSettingDataValue ?? []) as keyword[];
+        const k1 = value as Keyword[];
+        const k2 = (appSettingDataValue ?? []) as Keyword[];
 
         const isKeywordListEqual: boolean =
           k1.length === k2.length &&
@@ -176,9 +176,7 @@ const BuilderView: FC = () => {
         textDataCy={TITLE_INPUT_FIELD_CY}
         value={settings[LESSON_TITLE_SETTING_KEY]}
         textFieldLabel="Enter the lesson title"
-        onTextChange={(text) =>
-          updateSettingState(LESSON_TITLE_SETTING_KEY, text)
-        }
+        onChange={(text) => updateSettingState(LESSON_TITLE_SETTING_KEY, text)}
       />
       <SetText
         textDataCy={TEXT_INPUT_FIELD_CY}
@@ -186,9 +184,7 @@ const BuilderView: FC = () => {
         multiline
         minRows={2}
         textFieldLabel="Enter the text students will see"
-        onTextChange={(text) =>
-          updateSettingState(TEXT_RESOURCE_SETTING_KEY, text)
-        }
+        onChange={(text) => updateSettingState(TEXT_RESOURCE_SETTING_KEY, text)}
       />
       <Typography
         variant="h5"
@@ -218,7 +214,7 @@ const BuilderView: FC = () => {
             value={settings[INITIAL_PROMPT_SETTING_KEY]}
             multiline
             textFieldLabel="Enter the intial prompt describing the conversation (as a template for {{keyword}})"
-            onTextChange={(text) =>
+            onChange={(text) =>
               updateSettingState(INITIAL_PROMPT_SETTING_KEY, text)
             }
           />
@@ -227,7 +223,7 @@ const BuilderView: FC = () => {
             value={settings[INITIAL_CHATBOT_PROMPT_SETTING_KEY]}
             multiline
             textFieldLabel="Enter the chatbot's first line (as a template for {{keyword}})"
-            onTextChange={(text) =>
+            onChange={(text) =>
               updateSettingState(INITIAL_CHATBOT_PROMPT_SETTING_KEY, text)
             }
           />
@@ -260,12 +256,9 @@ const BuilderView: FC = () => {
         <GraaspButton
           buttonDataCy={SETTINGS_SAVE_BUTTON_CY}
           handleOnClick={saveSettings}
-          sx={{
-            xs: { margin: DEFAULT_MARGIN },
-            sm: { margin: DEFAULT_MARGIN },
-          }}
+          sx={{ margin: DEFAULT_MARGIN, mr: 0 }}
           minHeight="55px"
-          disabled={!hasChanged}
+          disabled={!isChanged}
           text="Save"
         />
       </Box>

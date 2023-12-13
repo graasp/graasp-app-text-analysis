@@ -17,7 +17,7 @@ import {
   tooltipClasses,
 } from '@mui/material';
 
-import { keyword } from '../../../config/appSettingTypes';
+import { Keyword } from '../../../config/appSettingTypes';
 import { keywordAlreadyExistsWarningMessage } from '../../../config/messages';
 import {
   ADD_KEYWORD_BUTTON_CY,
@@ -36,8 +36,8 @@ import GraaspButton from './GraaspButton';
 type Prop = {
   textStudents: string;
   chatbotEnabled: boolean;
-  keywords: keyword[];
-  onChange?: (keywords: keyword[]) => void;
+  keywords: Keyword[];
+  onChange: (keywords: Keyword[]) => void;
 };
 
 const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -59,10 +59,10 @@ const KeyWords: FC<Prop> = ({
   onChange,
 }) => {
   const defaultKeywordDef = { word: '', def: '' };
-  const [keywordDef, setKeywordDef] = useState<keyword>(defaultKeywordDef);
+  const [keywordDef, setKeywordDef] = useState<Keyword>(defaultKeywordDef);
 
   const updateKeywordDefinition = (
-    key: keyof keyword,
+    key: keyof Keyword,
     target: { value: string },
   ): void => {
     setKeywordDef({
@@ -80,11 +80,8 @@ const KeyWords: FC<Prop> = ({
       .map(({ word }) => [word, true]),
   );
 
-  const handleOnChanges = (newDictionary: keyword[]): void => {
-    if (onChange) {
-      onChange(newDictionary);
-    }
-  };
+  const handleOnChanges = (newDictionary: Keyword[]): void =>
+    onChange(newDictionary);
 
   const handleClickAdd = (): void => {
     const wordToLowerCase = keywordDef.word.toLocaleLowerCase();
