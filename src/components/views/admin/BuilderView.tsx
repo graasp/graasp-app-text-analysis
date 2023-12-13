@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 
 import { Alert, Box, Typography } from '@mui/material';
 
@@ -8,7 +8,13 @@ import {
   KEYWORDS_SETTING_KEY,
   LESSON_TITLE_SETTING_KEY,
   TEXT_RESOURCE_SETTING_KEY,
+  USE_CHATBOT_SETTING_KEY,
+  keyword,
 } from '../../../config/appSettingTypes';
+import {
+  DEFAULT_TEXT_RESOURCE_SETTING,
+  DEFAULT_USE_CHATBOT_SETTING,
+} from '../../../config/appSettings';
 import {
   BUILDER_VIEW_CY,
   CHATBOT_CONTAINER_CY,
@@ -19,46 +25,137 @@ import {
   TITLE_INPUT_FIELD_CY,
 } from '../../../config/selectors';
 import { DEFAULT_MARGIN } from '../../../config/stylingConstants';
+import { getAppSetting } from '../../../utils/appSettings';
 import PublicAlert from '../../common/PublicAlert';
 import GraaspButton from '../../common/settings/GraaspButton';
 import KeyWords from '../../common/settings/KeyWords';
 import SetText from '../../common/settings/SetText';
 import SwitchModes from '../../common/settings/SwitchModes';
-import { useObserver } from '../../context/ObserverContext';
+import { useAppSettingContext } from '../../context/AppSettingContext';
 
-// eslint-disable-next-line arrow-body-style
 const BuilderView: FC = () => {
-  const [chatbotEnabled, setChatbotEnabled] = useState(false);
-  const [textStudents, setTextStudents] = useState('');
-  const [settingsChanged, setSettingsChanged] = useState<Map<string, boolean>>(
-    new Map(),
+  const defaultSettings = useMemo(
+    () => ({
+      [LESSON_TITLE_SETTING_KEY]: {
+        defaultValue: DEFAULT_TEXT_RESOURCE_SETTING.text,
+        dataKey: 'text',
+      },
+      [TEXT_RESOURCE_SETTING_KEY]: {
+        defaultValue: DEFAULT_TEXT_RESOURCE_SETTING.text,
+        dataKey: 'text',
+      },
+      [USE_CHATBOT_SETTING_KEY]: {
+        defaultValue: DEFAULT_USE_CHATBOT_SETTING.useBot,
+        dataKey: 'useBot',
+      },
+      [INITIAL_PROMPT_SETTING_KEY]: {
+        defaultValue: DEFAULT_TEXT_RESOURCE_SETTING.text,
+        dataKey: 'text',
+      },
+      [INITIAL_CHATBOT_PROMPT_SETTING_KEY]: {
+        defaultValue: DEFAULT_TEXT_RESOURCE_SETTING.text,
+        dataKey: 'text',
+      },
+      [KEYWORDS_SETTING_KEY]: {
+        defaultValue: [] as keyword[],
+        dataKey: 'keywords',
+      },
+    }),
+    [],
   );
-  const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
 
-  const { notifySubscribers } = useObserver();
+  const [settings, setSettings] = useState({
+    [LESSON_TITLE_SETTING_KEY]:
+      defaultSettings[LESSON_TITLE_SETTING_KEY].defaultValue,
+    [TEXT_RESOURCE_SETTING_KEY]:
+      defaultSettings[TEXT_RESOURCE_SETTING_KEY].defaultValue,
+    [USE_CHATBOT_SETTING_KEY]:
+      defaultSettings[USE_CHATBOT_SETTING_KEY].defaultValue,
+    [INITIAL_PROMPT_SETTING_KEY]:
+      defaultSettings[INITIAL_PROMPT_SETTING_KEY].defaultValue,
+    [INITIAL_CHATBOT_PROMPT_SETTING_KEY]:
+      defaultSettings[INITIAL_CHATBOT_PROMPT_SETTING_KEY].defaultValue,
+    [KEYWORDS_SETTING_KEY]: defaultSettings[KEYWORDS_SETTING_KEY].defaultValue,
+  });
 
-  const updateSettingChanged = (key: string, hasChanged: boolean): void => {
-    setSettingsChanged((prevSettingsChanged) => ({
-      ...prevSettingsChanged,
-      [key]: hasChanged,
+  type SettingKey = keyof typeof settings;
+  type SettingValue = (typeof settings)[SettingKey];
+
+  const updateSettingState = <K extends SettingKey, V extends SettingValue>(
+    settingKey: K,
+    value: V,
+  ): void => {
+    setSettings((currSettings) => ({
+      ...currSettings,
+      [settingKey]: value,
     }));
   };
 
-  const handleTextChange = (text: string, hasChanged: boolean): void => {
-    setTextStudents(text.toLowerCase());
-    updateSettingChanged(TEXT_RESOURCE_SETTING_KEY, hasChanged);
-  };
-
-  const handleButtonClicked = (): void => {
-    notifySubscribers();
-    setSettingsChanged(new Map());
-  };
+  const { patchAppSetting, postAppSetting, appSettingArray } =
+    useAppSettingContext();
 
   useEffect(() => {
-    setSaveButtonDisabled(
-      Object.values(settingsChanged).filter((v) => v).length === 0,
-    );
-  }, [settingsChanged]);
+    appSettingArray.forEach((s) => {
+      if (!Object.keys(defaultSettings).includes(s.name)) {
+        throw Error(`The setting key ${s.name} is not valid.`);
+      }
+
+      const key = s.name as SettingKey;
+      const value =
+        s?.data[defaultSettings[key].dataKey] ||
+        defaultSettings[key].defaultValue;
+
+      setSettings((currSettings) => ({
+        ...currSettings,
+        [key]: value,
+      }));
+    });
+  }, [appSettingArray, defaultSettings]);
+
+  const saveSettings = (): void => {
+    Object.entries(settings).forEach(([key, value]) => {
+      const setting = getAppSetting(appSettingArray, key);
+      const settingKey = key as SettingKey;
+      const { dataKey } = defaultSettings[settingKey];
+
+      if (setting) {
+        patchAppSetting({
+          data: { [dataKey]: value },
+          id: setting.id,
+        });
+      } else {
+        postAppSetting({
+          data: { [dataKey]: value },
+          name: key,
+        });
+      }
+    });
+  };
+
+  const hasChanged = Object.entries(settings)
+    .map(([key, value]) => {
+      const settingKey = key as SettingKey;
+      const { dataKey } = defaultSettings[settingKey];
+      const appSettingDataValue = getAppSetting(appSettingArray, key)?.data[
+        dataKey
+      ];
+
+      if (dataKey === 'keywords') {
+        const k1 = value as keyword[];
+        const k2 = (appSettingDataValue ?? []) as keyword[];
+
+        const isKeywordListEqual: boolean =
+          k1.length === k2.length &&
+          k1.every((e1) =>
+            k2.some((e2) => e1.word === e2.word && e1.def === e2.def),
+          );
+        return !isKeywordListEqual;
+      }
+
+      return value !== appSettingDataValue;
+    })
+    .some((v) => v);
+
   return (
     <div data-cy={BUILDER_VIEW_CY}>
       <PublicAlert />
@@ -77,19 +174,21 @@ const BuilderView: FC = () => {
       </Alert>
       <SetText
         textDataCy={TITLE_INPUT_FIELD_CY}
-        resourceKey={LESSON_TITLE_SETTING_KEY}
+        value={settings[LESSON_TITLE_SETTING_KEY]}
         textFieldLabel="Enter the lesson title"
-        onTextChange={(_, hasChanged) =>
-          updateSettingChanged(LESSON_TITLE_SETTING_KEY, hasChanged)
+        onTextChange={(text) =>
+          updateSettingState(LESSON_TITLE_SETTING_KEY, text)
         }
       />
       <SetText
         textDataCy={TEXT_INPUT_FIELD_CY}
-        resourceKey={TEXT_RESOURCE_SETTING_KEY}
+        value={settings[TEXT_RESOURCE_SETTING_KEY]}
         multiline
         minRows={2}
         textFieldLabel="Enter the text students will see"
-        onTextChange={handleTextChange}
+        onTextChange={(text) =>
+          updateSettingState(TEXT_RESOURCE_SETTING_KEY, text)
+        }
       />
       <Typography
         variant="h5"
@@ -106,28 +205,30 @@ const BuilderView: FC = () => {
           directly in the chat. Otherwise, the definitions will be displayed.
         </p>
       </Box>
-      <SwitchModes onChange={setChatbotEnabled} />
-      {chatbotEnabled && (
+      <SwitchModes
+        value={settings[USE_CHATBOT_SETTING_KEY]}
+        onChange={(useChatbot) =>
+          updateSettingState(USE_CHATBOT_SETTING_KEY, useChatbot)
+        }
+      />
+      {settings[USE_CHATBOT_SETTING_KEY] && (
         <Box data-cy={CHATBOT_CONTAINER_CY}>
           <SetText
             textDataCy={INITIAL_PROMPT_INPUT_FIELD_CY}
-            resourceKey={INITIAL_PROMPT_SETTING_KEY}
+            value={settings[INITIAL_PROMPT_SETTING_KEY]}
             multiline
             textFieldLabel="Enter the intial prompt describing the conversation (as a template for {{keyword}})"
-            onTextChange={(_, hasChanged) =>
-              updateSettingChanged(INITIAL_PROMPT_SETTING_KEY, hasChanged)
+            onTextChange={(text) =>
+              updateSettingState(INITIAL_PROMPT_SETTING_KEY, text)
             }
           />
           <SetText
             textDataCy={INITIAL_CHATBOT_PROMPT_INPUT_FIELD_CY}
-            resourceKey={INITIAL_CHATBOT_PROMPT_SETTING_KEY}
+            value={settings[INITIAL_CHATBOT_PROMPT_SETTING_KEY]}
             multiline
             textFieldLabel="Enter the chatbot's first line (as a template for {{keyword}})"
-            onTextChange={(_, hasChanged) =>
-              updateSettingChanged(
-                INITIAL_CHATBOT_PROMPT_SETTING_KEY,
-                hasChanged,
-              )
+            onTextChange={(text) =>
+              updateSettingState(INITIAL_CHATBOT_PROMPT_SETTING_KEY, text)
             }
           />
         </Box>
@@ -142,10 +243,11 @@ const BuilderView: FC = () => {
         Keywords settings
       </Typography>
       <KeyWords
-        textStudents={textStudents}
-        chatbotEnabled={chatbotEnabled}
-        onChanges={(hasChanged) =>
-          updateSettingChanged(KEYWORDS_SETTING_KEY, hasChanged)
+        keywords={settings[KEYWORDS_SETTING_KEY]}
+        textStudents={settings[TEXT_RESOURCE_SETTING_KEY]}
+        chatbotEnabled={settings[USE_CHATBOT_SETTING_KEY]}
+        onChange={(keywords) =>
+          updateSettingState(KEYWORDS_SETTING_KEY, keywords)
         }
       />
 
@@ -157,13 +259,13 @@ const BuilderView: FC = () => {
       >
         <GraaspButton
           buttonDataCy={SETTINGS_SAVE_BUTTON_CY}
-          handleOnClick={handleButtonClicked}
+          handleOnClick={saveSettings}
           sx={{
             xs: { margin: DEFAULT_MARGIN },
             sm: { margin: DEFAULT_MARGIN },
           }}
           minHeight="55px"
-          disabled={saveButtonDisabled}
+          disabled={!hasChanged}
           text="Save"
         />
       </Box>

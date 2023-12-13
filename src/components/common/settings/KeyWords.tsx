@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -17,12 +17,7 @@ import {
   tooltipClasses,
 } from '@mui/material';
 
-import {
-  KEYWORDS_SETTING_KEY,
-  KeywordsData,
-  keyword,
-} from '../../../config/appSettingTypes';
-import { DEFAULT_KEYWORDS_LIST } from '../../../config/appSettings';
+import { keyword } from '../../../config/appSettingTypes';
 import { keywordAlreadyExistsWarningMessage } from '../../../config/messages';
 import {
   ADD_KEYWORD_BUTTON_CY,
@@ -36,19 +31,13 @@ import {
   FULL_WIDTH,
   ICON_MARGIN,
 } from '../../../config/stylingConstants';
-import { useAppSettingContext } from '../../context/AppSettingContext';
-import { useObserver } from '../../context/ObserverContext';
 import GraaspButton from './GraaspButton';
-
-type KeywordDefinition = {
-  keyword: string;
-  definition: string;
-};
 
 type Prop = {
   textStudents: string;
   chatbotEnabled: boolean;
-  onChanges?: (hasChanged: boolean) => void;
+  keywords: keyword[];
+  onChange?: (keywords: keyword[]) => void;
 };
 
 const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -63,20 +52,17 @@ const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }));
 
-const KeyWords: FC<Prop> = ({ textStudents, chatbotEnabled, onChanges }) => {
-  const { subscribe, unsubscribe } = useObserver();
-
-  const defaultKeywordDef = { keyword: '', definition: '' };
-
-  const [keywordDef, setKeywordDef] =
-    useState<KeywordDefinition>(defaultKeywordDef);
-
-  const [dictionary, setDictionary] = useState<keyword[]>([]);
-  const { patchAppSetting, postAppSetting, appSettingArray } =
-    useAppSettingContext();
+const KeyWords: FC<Prop> = ({
+  keywords,
+  textStudents,
+  chatbotEnabled,
+  onChange,
+}) => {
+  const defaultKeywordDef = { word: '', def: '' };
+  const [keywordDef, setKeywordDef] = useState<keyword>(defaultKeywordDef);
 
   const updateKeywordDefinition = (
-    key: keyof KeywordDefinition,
+    key: keyof keyword,
     target: { value: string },
   ): void => {
     setKeywordDef({
@@ -85,92 +71,42 @@ const KeyWords: FC<Prop> = ({ textStudents, chatbotEnabled, onChanges }) => {
     });
   };
 
-  const isDefinitionSet = keywordDef.definition && keywordDef.definition !== '';
+  const isDefinitionSet = keywordDef.def && keywordDef.def !== '';
 
   // contains the keywords that are not in the text
   const keywordsNotInText = new Map(
-    dictionary
+    keywords
       .filter(({ word }) => !textStudents.includes(word.toLowerCase()))
       .map(({ word }) => [word, true]),
   );
 
-  const keywordsResourceSetting = appSettingArray.find(
-    (s) => s.name === KEYWORDS_SETTING_KEY,
-  );
-
-  const isKeywordListEqual = (l1: keyword[], l2: keyword[]): boolean =>
-    l1.length === l2.length &&
-    l1.every((e1) => l2.some((e2) => e1.word === e2.word && e1.def === e2.def));
-
-  const { keywords } = (keywordsResourceSetting?.data ||
-    DEFAULT_KEYWORDS_LIST) as KeywordsData;
-
-  useEffect(() => {
-    setDictionary(keywords);
-  }, [keywords]);
-
   const handleOnChanges = (newDictionary: keyword[]): void => {
-    if (onChanges) {
-      onChanges(!isKeywordListEqual(newDictionary, keywords));
+    if (onChange) {
+      onChange(newDictionary);
     }
   };
 
   const handleClickAdd = (): void => {
-    const wordToLowerCase = keywordDef.keyword.toLocaleLowerCase();
-    const definition = isDefinitionSet
-      ? keywordDef.definition
-      : 'no definition';
+    const wordToLowerCase = keywordDef.word.toLocaleLowerCase();
+    const definition = isDefinitionSet ? keywordDef.def : 'no definition';
     const newKeyword = { word: wordToLowerCase, def: definition };
 
-    if (dictionary.some((k) => k.word === wordToLowerCase)) {
+    if (keywords.some((k) => k.word === wordToLowerCase)) {
       toast.warning(keywordAlreadyExistsWarningMessage(wordToLowerCase));
       return;
     }
 
     if (wordToLowerCase !== '') {
-      const newDictionary = [...dictionary, newKeyword];
-      handleOnChanges(newDictionary);
-      setDictionary(newDictionary);
+      handleOnChanges([...keywords, newKeyword]);
     }
     setKeywordDef(defaultKeywordDef);
   };
 
   const handleDelete = (id: string): void => {
-    const newDictionary = dictionary.filter((k) => k.word !== id);
-    handleOnChanges(newDictionary);
-    setDictionary(newDictionary);
+    handleOnChanges(keywords.filter((k) => k.word !== id));
   };
 
-  useEffect(() => {
-    const handleParentButtonClick = (): void => {
-      if (keywordsResourceSetting) {
-        patchAppSetting({
-          data: { keywords: dictionary },
-          id: keywordsResourceSetting.id,
-        });
-      } else {
-        postAppSetting({
-          data: { keywords: dictionary },
-          name: KEYWORDS_SETTING_KEY,
-        });
-      }
-    };
-
-    subscribe(handleParentButtonClick);
-
-    return () => {
-      unsubscribe(handleParentButtonClick);
-    };
-  }, [
-    dictionary,
-    keywordsResourceSetting,
-    patchAppSetting,
-    postAppSetting,
-    subscribe,
-    unsubscribe,
-  ]);
-
-  const keyWordsItems = dictionary.map((k) => (
+  const keyWordsItems = keywords.map((k) => (
     <ListItem
       data-cy={KEYWORD_LIST_ITEM_CY}
       key={k.word}
@@ -225,21 +161,21 @@ const KeyWords: FC<Prop> = ({ textStudents, chatbotEnabled, onChanges }) => {
           data-cy={ENTER_KEYWORD_FIELD_CY}
           label="Enter the keyword"
           sx={{ width: FULL_WIDTH, marginRight: DEFAULT_MARGIN }}
-          value={keywordDef.keyword}
-          onChange={(e) => updateKeywordDefinition('keyword', e.target)}
+          value={keywordDef.word}
+          onChange={(e) => updateKeywordDefinition('word', e.target)}
         />
         <TextField
           data-cy={ENTER_DEFINITION_FIELD_CY}
           label="Enter the keyword's definition"
           sx={{ width: FULL_WIDTH, marginRight: DEFAULT_MARGIN }}
-          value={keywordDef.definition}
-          onChange={(e) => updateKeywordDefinition('definition', e.target)}
+          value={keywordDef.def}
+          onChange={(e) => updateKeywordDefinition('def', e.target)}
         />
         <Box alignSelf={{ xs: 'flex-end', sm: 'auto' }}>
           <GraaspButton
             buttonDataCy={ADD_KEYWORD_BUTTON_CY}
             handleOnClick={handleClickAdd}
-            disabled={!keywordDef.keyword}
+            disabled={!keywordDef.word}
             sx={{ xs: { margin: '0px' }, sm: { margin: DEFAULT_MARGIN } }}
             minHeight="55px"
             text="Add"
