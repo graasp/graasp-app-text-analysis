@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { Alert, Box, Typography } from '@mui/material';
 
@@ -33,37 +33,34 @@ import SetText from '../../common/settings/SetText';
 import SwitchModes from '../../common/settings/SwitchModes';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 
-const BuilderView: FC = () => {
-  const defaultSettings = useMemo(
-    () => ({
-      [LESSON_TITLE_SETTING_KEY]: {
-        defaultValue: DEFAULT_TEXT_RESOURCE_SETTING.text,
-        dataKey: 'text',
-      },
-      [TEXT_RESOURCE_SETTING_KEY]: {
-        defaultValue: DEFAULT_TEXT_RESOURCE_SETTING.text,
-        dataKey: 'text',
-      },
-      [USE_CHATBOT_SETTING_KEY]: {
-        defaultValue: DEFAULT_USE_CHATBOT_SETTING.useBot,
-        dataKey: 'useBot',
-      },
-      [INITIAL_PROMPT_SETTING_KEY]: {
-        defaultValue: DEFAULT_TEXT_RESOURCE_SETTING.text,
-        dataKey: 'text',
-      },
-      [INITIAL_CHATBOT_PROMPT_SETTING_KEY]: {
-        defaultValue: DEFAULT_TEXT_RESOURCE_SETTING.text,
-        dataKey: 'text',
-      },
-      [KEYWORDS_SETTING_KEY]: {
-        defaultValue: [] as Keyword[],
-        dataKey: 'keywords',
-      },
-    }),
-    [],
-  );
+const defaultSettings = {
+  [LESSON_TITLE_SETTING_KEY]: {
+    defaultValue: DEFAULT_TEXT_RESOURCE_SETTING.text,
+    dataKey: 'text',
+  },
+  [TEXT_RESOURCE_SETTING_KEY]: {
+    defaultValue: DEFAULT_TEXT_RESOURCE_SETTING.text,
+    dataKey: 'text',
+  },
+  [USE_CHATBOT_SETTING_KEY]: {
+    defaultValue: DEFAULT_USE_CHATBOT_SETTING.useBot,
+    dataKey: 'useBot',
+  },
+  [INITIAL_PROMPT_SETTING_KEY]: {
+    defaultValue: DEFAULT_TEXT_RESOURCE_SETTING.text,
+    dataKey: 'text',
+  },
+  [INITIAL_CHATBOT_PROMPT_SETTING_KEY]: {
+    defaultValue: DEFAULT_TEXT_RESOURCE_SETTING.text,
+    dataKey: 'text',
+  },
+  [KEYWORDS_SETTING_KEY]: {
+    defaultValue: [] as Keyword[],
+    dataKey: 'keywords',
+  },
+};
 
+const BuilderView: FC = () => {
   const [settings, setSettings] = useState({
     [LESSON_TITLE_SETTING_KEY]:
       defaultSettings[LESSON_TITLE_SETTING_KEY].defaultValue,
@@ -96,21 +93,19 @@ const BuilderView: FC = () => {
 
   useEffect(() => {
     appSettingArray.forEach((s) => {
-      if (!Object.keys(defaultSettings).includes(s.name)) {
-        throw Error(`The setting key ${s.name} is not valid.`);
+      if (Object.keys(defaultSettings).includes(s.name)) {
+        const settingName = s.name as SettingKey;
+        const value =
+          s?.data[defaultSettings[settingName].dataKey] ||
+          defaultSettings[settingName].defaultValue;
+
+        setSettings((currSettings) => ({
+          ...currSettings,
+          [settingName]: value,
+        }));
       }
-
-      const key = s.name as SettingKey;
-      const value =
-        s?.data[defaultSettings[key].dataKey] ||
-        defaultSettings[key].defaultValue;
-
-      setSettings((currSettings) => ({
-        ...currSettings,
-        [key]: value,
-      }));
     });
-  }, [appSettingArray, defaultSettings]);
+  }, [appSettingArray]);
 
   const saveSettings = (): void => {
     Object.entries(settings).forEach(([key, value]) => {
