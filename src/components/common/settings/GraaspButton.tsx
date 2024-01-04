@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Button } from '@mui/material';
+import { Button, SxProps } from '@mui/material';
 
 import { FULL_WIDTH, GRAASP_VIOLET } from '../../../config/stylingConstants';
 
@@ -11,15 +11,19 @@ type Prop = {
   fullWidth?: boolean;
   marginRight?: string;
   minHeight?: string;
+  text: string;
+  sx?: SxProps;
 };
 
-const SaveButton: FC<Prop> = ({
+const GraaspButton: FC<Prop> = ({
   buttonDataCy,
   handleOnClick,
   disabled,
   fullWidth = false,
   marginRight,
   minHeight,
+  text,
+  sx,
 }) => (
   <Button
     data-cy={buttonDataCy}
@@ -29,12 +33,13 @@ const SaveButton: FC<Prop> = ({
       minHeight,
       marginRight,
       ...(fullWidth && { width: FULL_WIDTH }),
+      ...sx,
     }}
     onClick={handleOnClick}
     disabled={disabled}
   >
-    Save
+    {text}
   </Button>
 );
 
-export default SaveButton;
+export default GraaspButton;

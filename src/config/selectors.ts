@@ -10,22 +10,20 @@ export const TEXT_DISPLAY_FIELD_CY = 'text_display_field';
 
 export const KEYWORD_LIST_ITEM_CY = 'keyword_list_item';
 export const ENTER_KEYWORD_FIELD_CY = 'enter_keyword_field';
+export const ENTER_DEFINITION_FIELD_CY = 'enter_definition_field';
+export const ADD_KEYWORD_BUTTON_CY = 'add_keyword_button';
 export const DELETE_KEYWORD_BUTTON_CY = 'delete_keyword_button';
-export const SAVE_KEYWORDS_BUTTON_CY = 'save_keywords_button';
 
+export const CHATBOT_CONTAINER_CY = 'chatbot_container';
 export const INITIAL_PROMPT_INPUT_FIELD_CY = 'initial_prompt_input_field';
-export const INITIAL_PROMPT_BUTTON_CY = 'initial_prompt_button';
 
 export const INITIAL_CHATBOT_PROMPT_INPUT_FIELD_CY =
   'initial_chatbot_prompt_input_field';
-export const INITIAL_CHATBOT_PROMPT_BUTTON_CY = 'initial_chatbot_prompt_button';
 
 export const USE_CHATBOT_DATA_CY = 'use_chatbot_data_cy';
 
 export const TEXT_INPUT_FIELD_CY = 'text_input_field';
 export const TITLE_INPUT_FIELD_CY = 'title_input_field';
-export const SAVE_TITLE_BUTTON_CY = 'save_title_button';
-export const SAVE_TEXT_BUTTON_CY = 'save_text_button';
 
 export const SUMMON_BUTTON_CY = 'summon_button';
 export const BANNER_CY = 'banner';
@@ -34,6 +32,8 @@ export const KEYWORD_BUTTON_CY = 'keyword_button';
 export const CHAT_WINDOW_CY = 'chat_window';
 export const DICTIONNARY_MODE_CY = 'dictionnary_mode';
 export const CHATBOT_MODE_CY = 'chatbot_mode_cy';
+
+export const SETTINGS_SAVE_BUTTON_CY = 'settings_save_button';
 
 export const buildDataCy = (selector: string): string =>
   `[data-cy=${selector}]`;

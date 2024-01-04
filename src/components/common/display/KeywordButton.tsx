@@ -4,15 +4,15 @@ import { FC } from 'react';
 
 import { Button } from '@mui/material';
 
-import { keyword } from '../../../config/appSettingTypes';
+import { Keyword } from '../../../config/appSettingTypes';
 import { keywordDataCy } from '../../../config/selectors';
 
 type Prop = {
   word: {
     label: string;
-    value: keyword;
+    value: Keyword;
   };
-  onClick: (word: keyword) => void;
+  onClick: (word: Keyword) => void;
 };
 
 const KeywordButton: FC<Prop> = ({ word, onClick }) => {

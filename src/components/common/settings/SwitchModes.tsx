@@ -1,59 +1,29 @@
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 
 import { FormControlLabel, Switch } from '@mui/material';
 
-import {
-  USE_CHATBOT_SETTING_KEY,
-  UseChatbotSetting,
-} from '../../../config/appSettingTypes';
-import { DEFAULT_USE_CHATBOT_SETTING } from '../../../config/appSettings';
 import { USE_CHATBOT_DATA_CY } from '../../../config/selectors';
 import { DEFAULT_MARGIN } from '../../../config/stylingConstants';
-import { useAppSettingContext } from '../../context/AppSettingContext';
 
-const SwitchModes: FC = () => {
-  const [useChatbot, setUseChatbot] = useState(false);
-  const { patchAppSetting, postAppSetting, appSettingArray } =
-    useAppSettingContext();
+type Prop = {
+  value: boolean;
+  onChange: (useChatbot: boolean) => void;
+};
 
-  const useChatbotSetting = appSettingArray.find(
-    (s) => s.name === USE_CHATBOT_SETTING_KEY,
-  ) as UseChatbotSetting;
-
-  useEffect(() => {
-    const { useBot } = useChatbotSetting?.data || DEFAULT_USE_CHATBOT_SETTING;
-    setUseChatbot(useBot);
-  }, [useChatbotSetting]);
-
-  const handleOnChange = ({
-    target,
-  }: {
-    target: { checked: boolean };
-  }): void => {
-    const newValue = target.checked;
-    if (useChatbotSetting) {
-      patchAppSetting({
-        data: { useBot: newValue },
-        id: useChatbotSetting.id,
-      });
-    } else {
-      postAppSetting({
-        data: { useBot: newValue },
-        name: USE_CHATBOT_SETTING_KEY,
-      });
-    }
-  };
+const SwitchModes: FC<Prop> = ({ value, onChange }) => {
+  const handleOnChange = ({ target }: { target: { checked: boolean } }): void =>
+    onChange(target.checked);
 
   return (
     <FormControlLabel
       control={
         <Switch
           data-cy={USE_CHATBOT_DATA_CY}
-          checked={useChatbot}
+          checked={value}
           onChange={handleOnChange}
         />
       }
-      label="use chatbot"
+      label="enable the chatbot"
       sx={{ marginLeft: DEFAULT_MARGIN }}
     />
   );

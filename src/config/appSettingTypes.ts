@@ -10,8 +10,8 @@ export const INITIAL_CHATBOT_PROMPT_SETTING_KEY =
 
 export type TextResourceData = { text: string };
 export type TextResourceSetting = AppSetting & { data: TextResourceData };
-export type keyword = { word: string; def: string };
-export type KeywordsData = { keywords: keyword[] };
+export type Keyword = { word: string; def: string };
+export type KeywordsData = { keywords: Keyword[] };
 export type KeywordsSetting = AppSetting & { data: KeywordsData };
 export type UseChatbotData = { useBot: boolean };
 export type UseChatbotSetting = AppSetting & { data: UseChatbotData };

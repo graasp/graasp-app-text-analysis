@@ -6,13 +6,10 @@ import { APP_DATA_TYPES } from '../../../config/appDataTypes';
 import {
   INITIAL_CHATBOT_PROMPT_SETTING_KEY,
   KEYWORDS_SETTING_KEY,
-  KeywordsData,
+  Keyword,
   LESSON_TITLE_SETTING_KEY,
   TEXT_RESOURCE_SETTING_KEY,
-  TextResourceData,
   USE_CHATBOT_SETTING_KEY,
-  UseChatbotData,
-  keyword,
 } from '../../../config/appSettingTypes';
 import {
   DEFAULT_KEYWORD,
@@ -24,6 +21,7 @@ import {
 import { FIRST_CHATBOT_MESSAGE } from '../../../config/constants';
 import { PLAYER_VIEW_CY } from '../../../config/selectors';
 import { FULL_WIDTH } from '../../../config/stylingConstants';
+import { getDataAppSetting } from '../../../utils/appSettings';
 import PublicAlert from '../../common/PublicAlert';
 import ChatbotWindow from '../../common/chat/ChatbotWindow';
 import Banner from '../../common/display/Banner';
@@ -38,15 +36,21 @@ const PlayerView: FC = () => {
   const [summon, setSummon] = useState(false);
   const [chatbot, setChatbot] = useState(false);
   const [useChatbot, setUseChatbot] = useState(false);
-  const [focusWord, setFocusWord] = useState<keyword>(DEFAULT_KEYWORD);
+  const [focusWord, setFocusWord] = useState<Keyword>(DEFAULT_KEYWORD);
 
-  const { keywords } = (appSettingArray.find(
-    (s) => s.name === KEYWORDS_SETTING_KEY,
-  )?.data || DEFAULT_KEYWORDS_LIST) as KeywordsData;
+  const { keywords } = getDataAppSetting(
+    appSettingArray,
+    KEYWORDS_SETTING_KEY,
+    'keywords',
+    DEFAULT_KEYWORDS_LIST,
+  );
 
-  const useChatbotSetting = (appSettingArray.find(
-    (s) => s.name === USE_CHATBOT_SETTING_KEY,
-  )?.data || DEFAULT_USE_CHATBOT_SETTING) as UseChatbotData;
+  const useChatbotSetting = getDataAppSetting(
+    appSettingArray,
+    USE_CHATBOT_SETTING_KEY,
+    'useBot',
+    DEFAULT_USE_CHATBOT_SETTING,
+  );
 
   const keywordAppData = appDataArray.filter(
     (data) => data.data.keyword === focusWord.word,
@@ -56,30 +60,24 @@ const PlayerView: FC = () => {
     setUseChatbot(useChatbotSetting.useBot);
   }, [useChatbotSetting]);
 
-  const fetchSetting = (
-    key: string,
-    defaultSetting: TextResourceData,
-  ): TextResourceData => {
-    const setting = (appSettingArray.find((s) => s.name === key)?.data ||
-      defaultSetting) as TextResourceData;
-    return setting;
-  };
-
-  const textResource = fetchSetting(
+  const textResource = getDataAppSetting(
+    appSettingArray,
     TEXT_RESOURCE_SETTING_KEY,
+    'text',
     DEFAULT_TEXT_RESOURCE_SETTING,
   ).text;
 
-  const openChatbot = (word: keyword): void => {
+  const openChatbot = (word: Keyword): void => {
     setChatbot(true);
     setFocusWord(word);
   };
 
   useEffect(() => {
-    const initialChatbotPrompt = (
-      (appSettingArray.find(
-        (s) => s.name === INITIAL_CHATBOT_PROMPT_SETTING_KEY,
-      )?.data || FIRST_CHATBOT_MESSAGE) as TextResourceData
+    const initialChatbotPrompt = getDataAppSetting(
+      appSettingArray,
+      INITIAL_CHATBOT_PROMPT_SETTING_KEY,
+      'text',
+      FIRST_CHATBOT_MESSAGE,
     ).text.replaceAll('{{keyword}}', `**${focusWord.word}**`);
 
     if (keywordAppData.length === 0) {
@@ -135,7 +133,12 @@ const PlayerView: FC = () => {
       <PublicAlert />
       <Banner
         title={
-          fetchSetting(LESSON_TITLE_SETTING_KEY, DEFAULT_LESSON_TITLE).text
+          getDataAppSetting(
+            appSettingArray,
+            LESSON_TITLE_SETTING_KEY,
+            'text',
+            DEFAULT_LESSON_TITLE,
+          ).text
         }
         onSummonClick={() => {
           setSummon(true);

@@ -1,6 +1,6 @@
 import { Context, PermissionLevel } from '@graasp/sdk';
 
-import { KeywordsData, TextResourceData, keyword } from './appSettingTypes';
+import { Keyword, KeywordsData, TextResourceData } from './appSettingTypes';
 
 export const DEFAULT_TEXT_RESOURCE_SETTING: TextResourceData = {
   text: '',
@@ -20,7 +20,7 @@ export const DEFAULT_INITIAL_PROMPT: TextResourceData = {
 
 export const DEFAULT_USE_CHATBOT_SETTING = { useBot: false };
 
-export const DEFAULT_KEYWORD: keyword = { word: '', def: '' };
+export const DEFAULT_KEYWORD: Keyword = { word: '', def: '' };
 
 export const DEFAULT_CONTEXT = Context.Builder;
 export const DEFAULT_PERMISSION = PermissionLevel.Read;
