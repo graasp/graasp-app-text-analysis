@@ -24,7 +24,7 @@
     "@tanstack/react-query-devtools": "^4.29.12",
     "@testing-library/cypress": "9.0.0",
     "@testing-library/jest-dom": "5.16.5",
-    "@testing-library/react": "14.0.0",
+    "@testing-library/react": "14.1.2",
     "i18next": "22.5.0",
     "lodash.isequal": "^4.5.0",
     "lodash.isobject": "3.0.2",
