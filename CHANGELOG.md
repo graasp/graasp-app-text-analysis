@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/graasp/graasp-app-text-analysis/compare/v1.0.1...v1.1.0) (2024-01-10)
+
+
+### Features
+
+* delete app setting when empty ([#86](https://github.com/graasp/graasp-app-text-analysis/issues/86)) ([4215a82](https://github.com/graasp/graasp-app-text-analysis/commit/4215a82b49cb279c4f982a3b90d8cf43cba731b1))
+* improve keywords settings ([b7392fb](https://github.com/graasp/graasp-app-text-analysis/commit/b7392fbc0ad9e3ea9d1712ca1d4104ba37b44dd6))
+* improve settings UI ([0a4be78](https://github.com/graasp/graasp-app-text-analysis/commit/0a4be78bfe15c6eaea67bb20e757e0d6ee478bb0))
+* improve text analysis settings ([f65ff10](https://github.com/graasp/graasp-app-text-analysis/commit/f65ff10ed284928fcf77d51e22a117044fbf3361))
+* improve ui on small screen ([6642746](https://github.com/graasp/graasp-app-text-analysis/commit/664274632c1644f0f1a3728648dae079f4e0757e))
+* inform user when keywords already exists or not present in text ([915fb19](https://github.com/graasp/graasp-app-text-analysis/commit/915fb19d9c7527cfc5b062e5848323284fba8922))
+* lift children states up to remove ObserverContext ([ce025f5](https://github.com/graasp/graasp-app-text-analysis/commit/ce025f596684b0ec9a43d571f34451e28448f16c))
+* migrate use chatbot mutation ([fd76540](https://github.com/graasp/graasp-app-text-analysis/commit/fd76540f06e171d491ec4cdaf9955a8ae8e14bc0))
+* move default settings outside the component ([c291226](https://github.com/graasp/graasp-app-text-analysis/commit/c2912262f0a540258e32cbcafd50c18ab1125c67))
+* remove immutable ([dc83913](https://github.com/graasp/graasp-app-text-analysis/commit/dc8391363fd8cc963988f08e92fa7be1d0350c58))
+* remove immutable ([#74](https://github.com/graasp/graasp-app-text-analysis/issues/74)) ([d8496c0](https://github.com/graasp/graasp-app-text-analysis/commit/d8496c0e4d95b94940f579eea37d619af55e7a1c))
+* use chatbot buildPrompt from apps-query-client ([#83](https://github.com/graasp/graasp-app-text-analysis/issues/83)) ([1504a9b](https://github.com/graasp/graasp-app-text-analysis/commit/1504a9b0a89365792e3dd3c21fa9e91140cce860))
+* use chatbot mutation from apps-query-client ([c69f08c](https://github.com/graasp/graasp-app-text-analysis/commit/c69f08c4d340f1e9a213a4df699e47b587835393))
+* use only one save button ([0fa53ed](https://github.com/graasp/graasp-app-text-analysis/commit/0fa53ed430ccb442fc8e4cd8e758c99af39583b9))
+
+
+### Bug Fixes
+
+* add environement in the aws-region ([a9866f0](https://github.com/graasp/graasp-app-text-analysis/commit/a9866f05f70ce754e082c2fd96a54ad170ec3517))
+* add wait-on in github actions of cypress ([13e3acf](https://github.com/graasp/graasp-app-text-analysis/commit/13e3acf6a9735262a8a4d720775ac1d2b02588d0))
+* clean the code and fix the test ([63f69fe](https://github.com/graasp/graasp-app-text-analysis/commit/63f69fe885bead4dd6e76b50e52edf3b030e565b))
+* **deps:** update dependency @emotion/react to v11.11.1 ([b5be3f0](https://github.com/graasp/graasp-app-text-analysis/commit/b5be3f03c415a7df4742c271fecc52860d2ee4c9))
+* **deps:** update dependency @testing-library/react to v14.1.2 ([#92](https://github.com/graasp/graasp-app-text-analysis/issues/92)) ([6913cdc](https://github.com/graasp/graasp-app-text-analysis/commit/6913cdccbaab3b2615e1869be31ac1d27d3c463c))
+* **deps:** update dependency typescript to v5.1.6 ([#67](https://github.com/graasp/graasp-app-text-analysis/issues/67)) ([c4b94ae](https://github.com/graasp/graasp-app-text-analysis/commit/c4b94ae6ae625c67f8921cd5f288d29d6de0673f))
+* remove unused idx in KeyWords ([d5f4e3f](https://github.com/graasp/graasp-app-text-analysis/commit/d5f4e3ff08c3da27dca9d40521b27006bfac44ab))
+* save one setting at a time ([#86](https://github.com/graasp/graasp-app-text-analysis/issues/86)) ([4215a82](https://github.com/graasp/graasp-app-text-analysis/commit/4215a82b49cb279c4f982a3b90d8cf43cba731b1))
+* **test:** enable chatbot in display mock test ([9a5dfc2](https://github.com/graasp/graasp-app-text-analysis/commit/9a5dfc227b7b652b986699d7464d3fc35e2b05c7))
+* update gitignore to push yarn.cjs ([e26b6e7](https://github.com/graasp/graasp-app-text-analysis/commit/e26b6e7952ee64e72a40fabf19923dc1442e5d9e))
+* update node version to 18 in cypress workflow ([aa1251d](https://github.com/graasp/graasp-app-text-analysis/commit/aa1251d2753dde0bcfe66b5a4490a339bd6fabb5))
+* update the test to not exist for chatbot container ([e09f17b](https://github.com/graasp/graasp-app-text-analysis/commit/e09f17b352414b1904702382484671fbb11d0de1))
+
 ## [1.0.1](https://github.com/graasp/graasp-app-text-analysis/compare/v1.0.0...v1.0.1) (2023-08-14)
 
 
