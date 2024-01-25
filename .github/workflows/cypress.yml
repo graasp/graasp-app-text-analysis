@@ -9,7 +9,7 @@ on:
 jobs:
   cypress-run:
     concurrency:
-      group: cypress-${{ github.head_ref || github.ref }}
+      group: cypress-${{ github.head_ref || github.ref }}
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -28,7 +28,7 @@ jobs:
       - name: cypress run
         uses: cypress-io/github-action@v4
         env:
-          PORT: 3000
+          VITE_PORT: 3000
           VITE_GRAASP_API_HOST: http://localhost:3636
           VITE_GRAASP_APP_KEY: id-1234567890
           VITE_ENABLE_MOCK_API: true
@@ -38,7 +38,7 @@ jobs:
           install: false
           build: yarn build
           config: baseUrl=http://localhost:3000
-          start: yarn start:ci
+          start: yarn dev
           browser: chrome
           quiet: true
           # point to new cypress@10 config file

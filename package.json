@@ -62,6 +62,7 @@
     "hooks:install": "husky install",
     "cypress:open": "env-cmd -f ./.env.test cypress open --browser chrome",
     "test": "yarn build:test && concurrently -k -s first \"yarn preview:test\" \"yarn cypress:run\"",
+    "test:ci": "env-cmd -f ./.env.test cypress run --browser chrome --headless && nyc report --reporter=text --reporter=text-summary",
     "cypress:run": "env-cmd -f ./.env.test cypress run --browser chrome",
     "postinstall": "husky install",
     "cov:report": "open ./coverage/lcov-report/index.html",
