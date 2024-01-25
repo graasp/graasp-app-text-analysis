@@ -5628,15 +5628,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chainsaw@npm:>=0.0.7 <0.1":
-  version: 0.0.9
-  resolution: "chainsaw@npm:0.0.9"
-  dependencies:
-    traverse: "npm:>=0.3.0 <0.4"
-  checksum: 282e9d574957976f8139032366d6d8cd4bcc04bd562fd4b9db1e4ab5fdd391b0d2d3b3226010d12fced8f6b3688d6822b8200bd420bfeaf6bac2f5e4621c330c
-  languageName: node
-  linkType: hard
-
 "chalk@npm:4.1.2, chalk@npm:^4.0.0, chalk@npm:^4.1.0, chalk@npm:^4.1.1, chalk@npm:^4.1.2":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
@@ -8623,7 +8614,6 @@ __metadata:
     react-markdown: "npm:^8.0.7"
     react-toastify: "npm:9.1.3"
     remark-breaks: "npm:^3.0.3"
-    remove: "npm:^0.1.5"
     rollup-plugin-visualizer: "npm:^5.12.0"
     standard-version: "npm:9.5.0"
     typescript: "npm:5.1.6"
@@ -8766,15 +8756,6 @@ __metadata:
     is-stream: "npm:^2.0.0"
     type-fest: "npm:^0.8.0"
   checksum: 06cc474bed246761ff61c19d629977eb5f53fa817be4313a255a64ae0f433e831a29e83acb6555e3f4592b348497596f1d1653751008dda4f21c9c21ca60ac5a
-  languageName: node
-  linkType: hard
-
-"hashish@npm:>=0.0.2 <0.1":
-  version: 0.0.4
-  resolution: "hashish@npm:0.0.4"
-  dependencies:
-    traverse: "npm:>=0.2.4"
-  checksum: a1143ad6f3d075458aabef1c7a2e88a253555c71ecc3d7975ac5dd22b4ad6e88b665d63193138ed1d6e07600323efdc7791e28ad9cebd8b9f68ecb91270fc716
   languageName: node
   linkType: hard
 
@@ -12454,15 +12435,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"remove@npm:^0.1.5":
-  version: 0.1.5
-  resolution: "remove@npm:0.1.5"
-  dependencies:
-    seq: "npm:>= 0.3.5"
-  checksum: 5ee886cb3509e09e706789bc4a9014c1d20b0ee6d004db581b382f3a256a45888526e23b36ce441fbd96ba3ecc453a18785d1e0d4d10dddb8e2e118961f93d9f
-  languageName: node
-  linkType: hard
-
 "request-progress@npm:^3.0.0":
   version: 3.0.0
   resolution: "request-progress@npm:3.0.0"
@@ -12894,16 +12866,6 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 01fcb5ff66fb8cb9ff54e898ac9786fbafec65f93d0df910ea9300451719b204b1c5e8007c99c1abb410eb60f84497a1f8c02b1a0e97880842b7f6075e1d82b6
-  languageName: node
-  linkType: hard
-
-"seq@npm:>= 0.3.5":
-  version: 0.3.5
-  resolution: "seq@npm:0.3.5"
-  dependencies:
-    chainsaw: "npm:>=0.0.7 <0.1"
-    hashish: "npm:>=0.0.2 <0.1"
-  checksum: 7fd0934475e01dfb046e8407be5fb534df579b1aa811eed48f96f230baf83efeee107ed13958cc25eb415810fc1cbb6d8c3dd65dd6763284b4d064ef5e1dda31
   languageName: node
   linkType: hard
 
@@ -13691,20 +13653,6 @@ __metadata:
   version: 0.0.3
   resolution: "tr46@npm:0.0.3"
   checksum: 8f1f5aa6cb232f9e1bdc86f485f916b7aa38caee8a778b378ffec0b70d9307873f253f5cbadbe2955ece2ac5c83d0dc14a77513166ccd0a0c7fe197e21396695
-  languageName: node
-  linkType: hard
-
-"traverse@npm:>=0.2.4":
-  version: 0.6.8
-  resolution: "traverse@npm:0.6.8"
-  checksum: b0df554b47e32c6a3525d277a64982bd43c94c05a378248d71ce591e8ee781b74051e9391020e60bb33bdbe8cfe0d26861934979eeadee584918a91812ba82bb
-  languageName: node
-  linkType: hard
-
-"traverse@npm:>=0.3.0 <0.4":
-  version: 0.3.9
-  resolution: "traverse@npm:0.3.9"
-  checksum: ffbb8460a934f271b7b7ae654e676f740d81037d6c20ab9fd05781cfdf644929f494399b5cb3aa3db4ab69cbfef06ff8f885560d523ca49b7da33763f6c4c9f1
   languageName: node
   linkType: hard
 
