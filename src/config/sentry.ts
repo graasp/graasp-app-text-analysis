@@ -8,7 +8,7 @@ type SentryConfigType = {
 export const generateSentryConfig = (): SentryConfigType => {
   let SENTRY_ENVIRONMENT = 'development';
   let SENTRY_TRACE_SAMPLE_RATE = 1.0;
-  switch (process.env.NODE_ENV) {
+  switch (import.meta.env.MODE) {
     case 'production':
       SENTRY_ENVIRONMENT = 'production';
       SENTRY_TRACE_SAMPLE_RATE = 0.1;
@@ -23,9 +23,9 @@ export const generateSentryConfig = (): SentryConfigType => {
   }
 
   return {
-    dsn: (!window.Cypress && process.env.REACT_APP_SENTRY_DSN) || '',
+    dsn: (!window.Cypress && import.meta.env.SENTRY_DSN) || '',
     environment: SENTRY_ENVIRONMENT,
     tracesSampleRate: SENTRY_TRACE_SAMPLE_RATE,
-    release: process.env.REACT_APP_VERSION || '',
+    release: import.meta.env.APP_VERSION || '',
   };
 };

@@ -48,7 +48,7 @@ Cypress.Commands.add(
       win.appContext = {
         memberId: currentMember.id,
         itemId: MOCK_SERVER_ITEM.id,
-        apiHost: Cypress.env('REACT_APP_API_HOST') || MOCK_SERVER_API_HOST,
+        apiHost: Cypress.env('VITE_GRAASP_API_HOST') || MOCK_SERVER_API_HOST,
         ...appContext,
       };
     });

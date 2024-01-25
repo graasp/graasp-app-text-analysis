@@ -359,10 +359,10 @@ jobs:
       - name: cypress run
         uses: cypress-io/github-action@v2
         env:
-          REACT_APP_API_HOST: http://localhost:3636
-          REACT_APP_GRAASP_DOMAIN: localhost
-          REACT_APP_GRAASP_APP_KEY: id-1234567890
-          REACT_APP_ENABLE_MOCK_API: true
+          VITE_GRAASP_API_HOST: http://localhost:3636
+          VITE_GRAASP_DOMAIN: localhost
+          VITE_GRAASP_APP_KEY: id-1234567890
+          VITE_ENABLE_MOCK_API: true
           NODE_ENV: test
         with:
           install: false

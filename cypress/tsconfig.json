@@ -1,9 +1,14 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
     "target": "es5",
-    "lib": ["es5", "dom"],
-    "types": ["cypress", "node"],
-    "esModuleInterop": true
+    "lib": ["es5", "dom", "ES2021.String"],
+    "types": ["cypress", "node", "vite/client"],
+    "esModuleInterop": true,
+    "strictNullChecks": false,
+    "strict": true,
+    "sourceMap": false
   },
-  "include": ["**/*.ts", "../src/data/members.ts"]
+  "include": ["**/*.ts", "../src/data/members.ts", "cypress.d.ts"],
+  "exclude": ["coverage", ".nyc_output"]
 }

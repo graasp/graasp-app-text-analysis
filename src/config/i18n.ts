@@ -15,7 +15,7 @@ i18n.use(initReactI18next).init({
   resources,
   lng: 'en',
   // debug only when not in production
-  debug: process.env.NODE_ENV !== 'production',
+  debug: !import.meta.env.PROD,
   ns: [defaultNS],
   defaultNS,
   keySeparator: false,

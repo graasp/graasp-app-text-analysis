@@ -17,7 +17,7 @@ import {
   DEFAULT_LESSON_TITLE,
   DEFAULT_TEXT_RESOURCE_SETTING,
 } from '../config/appSettings';
-import { REACT_APP_API_HOST } from '../config/env';
+import { GRAASP_API_HOST } from '../config/env';
 
 export const MOCK_SERVER_ITEM = { id: '1234567890' } as DiscriminatedItem;
 
@@ -45,7 +45,7 @@ export const MEMBERS: { [key: string]: CompleteMember } = {
 export const CURRENT_MEMBER = MEMBERS.ANNA;
 
 export const mockContext: LocalContext = {
-  apiHost: REACT_APP_API_HOST,
+  apiHost: GRAASP_API_HOST,
   permission: PermissionLevel.Admin,
   context: Context.Player,
   itemId: MOCK_SERVER_ITEM.id,

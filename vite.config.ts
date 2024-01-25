@@ -1,0 +1,66 @@
+/// <reference types="./src/env.d.ts"/>
+import { resolve } from 'path';
+import { visualizer } from 'rollup-plugin-visualizer';
+import { PluginOption, UserConfigExport, defineConfig, loadEnv } from 'vite';
+import checker from 'vite-plugin-checker';
+import istanbul from 'vite-plugin-istanbul';
+
+import react from '@vitejs/plugin-react';
+
+// https://vitejs.dev/config/
+const config = ({ mode }: { mode: string }): UserConfigExport => {
+  process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
+
+  return defineConfig({
+    base: '/',
+    server: {
+      port: parseInt(process.env.VITE_PORT || '3001', 10),
+      // only auto open the app when in dev mode
+      open: mode === 'development',
+      watch: {
+        ignored: ['**/coverage/**', '**/cypress/downloads/**'],
+      },
+    },
+    preview: {
+      port: parseInt(process.env.VITE_PORT || '3005', 10),
+      strictPort: true,
+    },
+    build: {
+      outDir: 'build',
+    },
+    plugins: [
+      mode === 'test'
+        ? undefined
+        : checker({
+            typescript: true,
+            eslint: { lintCommand: 'eslint "./**/*.{ts,tsx}"' },
+          }),
+      react(),
+      istanbul({
+        include: 'src/*',
+        exclude: ['node_modules', 'test/', '.nyc_output', 'coverage'],
+        extension: ['.js', '.ts', '.tsx'],
+        requireEnv: false,
+        forceBuildInstrument: mode === 'test',
+        checkProd: true,
+      }),
+      ...(mode === 'development'
+        ? [
+            visualizer({
+              template: 'treemap', // or sunburst
+              open: true,
+              gzipSize: true,
+              brotliSize: true,
+              filename: 'bundle_analysis.html',
+            }) as PluginOption,
+          ]
+        : []),
+    ],
+    resolve: {
+      alias: {
+        '@': resolve(__dirname, 'src'),
+      },
+    },
+  });
+};
+export default config;

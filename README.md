@@ -4,10 +4,10 @@
   Create a env.development file with:
 
   PORT=3005
-  REACT_APP_GRAASP_APP_KEY=<app KEY>
-  REACT_APP_ENABLE_MOCK_API=true
-  REACT_APP_GRAASP_DOMAIN=localhost
-  REACT_APP_API_HOST=<request address for the backend>
+  VITE_GRAASP_APP_KEY=<app KEY>
+  VITE_ENABLE_MOCK_API=true
+  VITE_GRAASP_DOMAIN=localhost
+  VITE_GRAASP_API_HOST=<request address for the backend>
 ```
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/graasp/graasp-app-text-analysis?color=green&style=flat-square)

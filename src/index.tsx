@@ -7,7 +7,7 @@ import * as Sentry from '@sentry/react';
 
 import Root from './components/Root';
 import { DICTIONARY_API_BASE_URL } from './config/constants';
-import { MOCK_API } from './config/env';
+import { ENABLE_MOCK_API } from './config/env';
 import { generateSentryConfig } from './config/sentry';
 import buildDatabase, { mockContext, mockMembers } from './data/db';
 import './index.css';
@@ -23,7 +23,7 @@ Sentry.init({
 
 // setup mocked api for cypress or standalone app
 /* istanbul ignore next */
-if (MOCK_API) {
+if (ENABLE_MOCK_API) {
   mockApi(
     {
       externalUrls: [`${DICTIONARY_API_BASE_URL}**`],
