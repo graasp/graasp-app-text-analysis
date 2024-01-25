@@ -7,7 +7,7 @@
   VITE_GRAASP_APP_KEY=<app KEY>
   VITE_ENABLE_MOCK_API=true
   VITE_GRAASP_DOMAIN=localhost
-  VITE_GRAASP_API_HOST=<request address for the backend>
+  VITE_API_HOST=<request address for the backend>
 ```
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/graasp/graasp-app-text-analysis?color=green&style=flat-square)

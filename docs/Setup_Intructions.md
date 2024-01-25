@@ -359,7 +359,7 @@ jobs:
       - name: cypress run
         uses: cypress-io/github-action@v2
         env:
-          VITE_GRAASP_API_HOST: http://localhost:3636
+          VITE_API_HOST: http://localhost:3636
           VITE_GRAASP_DOMAIN: localhost
           VITE_GRAASP_APP_KEY: id-1234567890
           VITE_ENABLE_MOCK_API: true
