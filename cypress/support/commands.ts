@@ -1,4 +1,6 @@
 /// <reference types="../../src/interfaces/window" />
+import { PermissionLevel } from '@graasp/sdk';
+
 import '@testing-library/cypress/add-commands';
 
 import { CURRENT_MEMBER, MEMBERS, MOCK_SERVER_ITEM } from '../../src/data/db';
@@ -48,7 +50,9 @@ Cypress.Commands.add(
       win.appContext = {
         memberId: currentMember.id,
         itemId: MOCK_SERVER_ITEM.id,
-        apiHost: Cypress.env('REACT_APP_API_HOST') || MOCK_SERVER_API_HOST,
+        apiHost: Cypress.env('VITE_API_HOST') || MOCK_SERVER_API_HOST,
+        context: 'standalone',
+        permission: PermissionLevel.Read,
         ...appContext,
       };
     });

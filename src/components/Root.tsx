@@ -14,7 +14,7 @@ import { CssBaseline, ThemeProvider, createTheme, styled } from '@mui/material';
 import { grey, orange, pink } from '@mui/material/colors';
 import { StyledEngineProvider } from '@mui/material/styles';
 
-import { MOCK_API } from '../config/env';
+import { ENABLE_MOCK_API } from '../config/env';
 import i18nConfig from '../config/i18n';
 import {
   CONTEXT_FETCHING_ERROR_MESSAGE,
@@ -104,7 +104,7 @@ const Root: FC = () => {
                 >
                   <ToastContainer position="bottom-right" />
                   <App />
-                  {process.env.NODE_ENV === 'development' && MOCK_API && (
+                  {import.meta.env.DEV && ENABLE_MOCK_API && (
                     <GraaspContextDevTool
                       members={mockMembers}
                       context={mockContext}
@@ -113,7 +113,7 @@ const Root: FC = () => {
                   )}
                 </WithTokenContext>
               </WithLocalContext>
-              {process.env.NODE_ENV === 'development' && (
+              {import.meta.env.DEV && (
                 <ReactQueryDevtools position="top-right" />
               )}
             </QueryClientProvider>

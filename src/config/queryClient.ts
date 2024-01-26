@@ -1,6 +1,6 @@
 import { configureQueryClient } from '@graasp/apps-query-client';
 
-import { MOCK_API, REACT_APP_API_HOST, REACT_APP_GRAASP_APP_KEY } from './env';
+import { ENABLE_MOCK_API, GRAASP_API_HOST, GRAASP_APP_KEY } from './env';
 
 const {
   queryClient,
@@ -18,9 +18,9 @@ const {
   keepPreviousData: true,
   // avoid refetching when same data are closely fetched
   staleTime: 1000, // ms
-  API_HOST: REACT_APP_API_HOST,
-  GRAASP_APP_KEY: REACT_APP_GRAASP_APP_KEY,
-  isStandalone: MOCK_API,
+  API_HOST: GRAASP_API_HOST,
+  GRAASP_APP_KEY,
+  isStandalone: ENABLE_MOCK_API,
 });
 
 export {
