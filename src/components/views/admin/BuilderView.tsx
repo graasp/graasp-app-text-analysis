@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 
-import { Alert, Box, Typography } from '@mui/material';
+import SaveIcon from '@mui/icons-material/Save';
+import { Alert, Box, Fab, Typography } from '@mui/material';
 
 import {
   INITIAL_CHATBOT_PROMPT_SETTING_KEY,
@@ -27,11 +28,11 @@ import {
 import { DEFAULT_MARGIN } from '../../../config/stylingConstants';
 import { getAppSetting } from '../../../utils/appSettings';
 import PublicAlert from '../../common/PublicAlert';
-import GraaspButton from '../../common/settings/GraaspButton';
 import KeyWords from '../../common/settings/KeyWords';
 import SetText from '../../common/settings/SetText';
 import SwitchModes from '../../common/settings/SwitchModes';
 import { useAppSettingContext } from '../../context/AppSettingContext';
+import usePreventUnsavedChanges from './tmp';
 
 const DATA_KEYS = {
   TEXT: 'text',
@@ -152,6 +153,8 @@ const BuilderView: FC = () => {
     })
     .some((v) => v);
 
+  usePreventUnsavedChanges(isChanged);
+
   return (
     <div data-cy={BUILDER_VIEW_CY}>
       <PublicAlert />
@@ -164,10 +167,12 @@ const BuilderView: FC = () => {
       >
         Prepare Your Lesson
       </Typography>
-      <Alert severity="warning" sx={{ margin: DEFAULT_MARGIN }}>
-        Do not forget to save your work with the save button at the bottom of
-        this page.
-      </Alert>
+      {isChanged && (
+        <Alert severity="warning" sx={{ margin: DEFAULT_MARGIN }}>
+          Do not forget to save your work with the save button at the bottom of
+          this page.
+        </Alert>
+      )}
       <SetText
         textDataCy={TITLE_INPUT_FIELD_CY}
         value={settings[LESSON_TITLE_SETTING_KEY].value}
@@ -244,19 +249,19 @@ const BuilderView: FC = () => {
       />
 
       <Box
-        component="span"
         justifyContent="flex-end"
         display="flex"
-        sx={{ margin: DEFAULT_MARGIN }}
+        sx={{ margin: DEFAULT_MARGIN, position: 'sticky', bottom: 10 }}
       >
-        <GraaspButton
-          buttonDataCy={SETTINGS_SAVE_BUTTON_CY}
-          handleOnClick={saveSettings}
-          sx={{ margin: DEFAULT_MARGIN, mr: 0 }}
-          minHeight="55px"
+        <Fab
+          data-cy={{ SETTINGS_SAVE_BUTTON_CY }}
+          color="primary"
+          aria-label="add"
+          onClick={saveSettings}
           disabled={!isChanged}
-          text="Save"
-        />
+        >
+          <SaveIcon />
+        </Fab>
       </Box>
     </div>
   );
