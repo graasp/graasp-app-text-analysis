@@ -39,6 +39,7 @@ import KeyWords from '../../common/settings/KeyWords';
 import SetText from '../../common/settings/SetText';
 import SwitchModes from '../../common/settings/SwitchModes';
 import { useAppSettingContext } from '../../context/AppSettingContext';
+import usePreventUnsavedChanges from './tmp';
 
 const DATA_KEYS = {
   TEXT: 'text',
@@ -159,6 +160,8 @@ const BuilderView: FC = () => {
       return value !== appSettingDataValue;
     })
     .some((v) => v);
+
+  usePreventUnsavedChanges(isChanged);
 
   return (
     <Stack
