@@ -1,7 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 
-import SaveIcon from '@mui/icons-material/Save';
-import { Alert, Box, Fab, Typography } from '@mui/material';
+import { Alert, Box, Button, Typography } from '@mui/material';
+
+import GraaspButton from '@/components/common/settings/GraaspButton';
 
 import {
   INITIAL_CHATBOT_PROMPT_SETTING_KEY,
@@ -32,7 +33,6 @@ import KeyWords from '../../common/settings/KeyWords';
 import SetText from '../../common/settings/SetText';
 import SwitchModes from '../../common/settings/SwitchModes';
 import { useAppSettingContext } from '../../context/AppSettingContext';
-import usePreventUnsavedChanges from './tmp';
 
 const DATA_KEYS = {
   TEXT: 'text',
@@ -153,10 +153,18 @@ const BuilderView: FC = () => {
     })
     .some((v) => v);
 
-  usePreventUnsavedChanges(isChanged);
+  const isUnsavedSxContainer = isChanged
+    ? {
+        boxShadow: '0 0 8px rgba(255, 165, 0, 0.7)',
+        borderRadius: 1,
+      }
+    : {};
 
   return (
-    <div data-cy={BUILDER_VIEW_CY}>
+    <Box
+      data-cy={BUILDER_VIEW_CY}
+      sx={{ margin: 1, paddingTop: '1px', ...isUnsavedSxContainer }}
+    >
       <PublicAlert />
       <Typography
         variant="h4"
@@ -168,9 +176,16 @@ const BuilderView: FC = () => {
         Prepare Your Lesson
       </Typography>
       {isChanged && (
-        <Alert severity="warning" sx={{ margin: DEFAULT_MARGIN }}>
-          Do not forget to save your work with the save button at the bottom of
-          this page.
+        <Alert
+          severity="warning"
+          sx={{ margin: DEFAULT_MARGIN }}
+          action={
+            <Button size="small" variant="contained" onClick={saveSettings}>
+              Save
+            </Button>
+          }
+        >
+          Do not forget to save your work.
         </Alert>
       )}
       <SetText
@@ -251,19 +266,18 @@ const BuilderView: FC = () => {
       <Box
         justifyContent="flex-end"
         display="flex"
-        sx={{ margin: DEFAULT_MARGIN, position: 'sticky', bottom: 10 }}
+        sx={{ margin: DEFAULT_MARGIN }}
       >
-        <Fab
-          data-cy={{ SETTINGS_SAVE_BUTTON_CY }}
-          color="primary"
-          aria-label="add"
-          onClick={saveSettings}
+        <GraaspButton
+          buttonDataCy={SETTINGS_SAVE_BUTTON_CY}
+          handleOnClick={saveSettings}
+          sx={{ margin: DEFAULT_MARGIN, mr: 0 }}
+          minHeight="55px"
           disabled={!isChanged}
-        >
-          <SaveIcon />
-        </Fab>
+          text="Save"
+        />
       </Box>
-    </div>
+    </Box>
   );
 };
 
