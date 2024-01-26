@@ -33,7 +33,6 @@ import KeyWords from '../../common/settings/KeyWords';
 import SetText from '../../common/settings/SetText';
 import SwitchModes from '../../common/settings/SwitchModes';
 import { useAppSettingContext } from '../../context/AppSettingContext';
-import usePreventUnsavedChanges from './tmp';
 
 const DATA_KEYS = {
   TEXT: 'text',
@@ -154,8 +153,6 @@ const BuilderView: FC = () => {
     })
     .some((v) => v);
 
-  usePreventUnsavedChanges(isChanged);
-
   return (
     <Box data-cy={BUILDER_VIEW_CY}>
       <PublicAlert />
@@ -259,17 +256,16 @@ const BuilderView: FC = () => {
       <Box
         justifyContent="flex-end"
         display="flex"
-        sx={{ margin: DEFAULT_MARGIN, position: 'sticky', bottom: 10 }}
+        sx={{ margin: DEFAULT_MARGIN }}
       >
-        <Fab
-          data-cy={{ SETTINGS_SAVE_BUTTON_CY }}
-          color="primary"
-          aria-label="add"
-          onClick={saveSettings}
+        <GraaspButton
+          buttonDataCy={SETTINGS_SAVE_BUTTON_CY}
+          handleOnClick={saveSettings}
+          sx={{ margin: DEFAULT_MARGIN, mr: 0 }}
+          minHeight="55px"
           disabled={!isChanged}
-        >
-          <SaveIcon />
-        </Fab>
+          text="Save"
+        />
       </Box>
     </Box>
   );
