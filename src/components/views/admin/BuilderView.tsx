@@ -153,18 +153,8 @@ const BuilderView: FC = () => {
     })
     .some((v) => v);
 
-  const isUnsavedSxContainer = isChanged
-    ? {
-        boxShadow: '0 0 8px rgba(255, 165, 0, 0.7)',
-        borderRadius: 1,
-      }
-    : {};
-
   return (
-    <Box
-      data-cy={BUILDER_VIEW_CY}
-      sx={{ margin: 1, paddingTop: '1px', ...isUnsavedSxContainer }}
-    >
+    <Box data-cy={BUILDER_VIEW_CY}>
       <PublicAlert />
       <Typography
         variant="h4"
