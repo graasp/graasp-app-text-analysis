@@ -1,9 +1,26 @@
 {
-  "translations": {
-    "New App Data": "New App Data",
-    "Update Setting": "Update Setting",
-    "Local Context": "Local Context",
-    "App Context": "App Context",
-    "Members": "Members"
-  }
+  "CONTEXT_FETCHING_ERROR_MESSAGE": "An error occurred while fetching the context.",
+  "TOKEN_REQUEST_ERROR_MESSAGE": "An error occurred while requesting the token.",
+  "CHAT_BOT_ERROR_MESSAGE": "Sorry, an error occurred with the chatbot.",
+  "KEYWORD_ALREADY_EXIST_WARNING_MESSAGE": "The keyword \"{{keyword}}\" already exists. To update its definition, delete it and enter it again with the new definition.",
+  "FIRST_CHATBOT_MESSAGE": "You clicked on {{keyword}}, what do you want to know about it ?",
+  "MAX_CONVERSATION_LENGTH_ALERT": "You have reached the maximum number of messages allowed in the conversation",
+  "INPUT_BAR_REPLY_HERE": "reply here ...",
+  "INPUT_BAR_SEND_BTN": "send",
+  "BANNER_SHOW_KEYWORDS_BTN": "show keywords",
+  "BANNER_HIDE_KEYWORDS_BTN": "hide keywords",
+  "KEYWORDS_INFO_ALERT_CHATBOT_ENABLED": "When the chatbot is enabled, all the definitions of keywords are ignored. This is because the chatbot is displayed instead of the definition.",
+  "KEYWORDS_NOT_IN_TEXT_TOOLTIP_TITLE": "Keyword not in the text",
+  "KEYWORDS_NOT_IN_TEXT_TOOLTIP_MSG": "The keyword \"{{keyword}}\" is not in the saved version of the text students. It will not be displayed in the player.",
+  "ENABLE_CHATBOT_TOGGLE": "enable the chatbot",
+  "PUBLIC_ALERT_NOT_AUTHENTICATED": "You are not authenticated. You cannot save any data",
+  "BUILDER_VIEW_TITLE": "Prepare Your Lesson",
+  "BUILDER_NOT_SAVE_ALERT_SAVE_BTN": "save",
+  "BUILDER_NOT_SAVE_ALERT_MSG": "Do not forget to save your work.",
+  "BUILDER_TEXTFIELD_LESSON_TITLE": "Enter the lesson title",
+  "BUILDER_TEXTFIELD_TEXT_STUDENT": "Enter the text students will see",
+  "BUILDER_CHATBOT_SETTING_TITLE": "Chatbot settings",
+  "BUILDER_CHATBOT_SETTING_INFO": "If enabled, it will be possible to ask questions about the keywords directly in the chat. Otherwise, the definitions will be displayed.",
+  "BUILDER_KEYWORDS_SETTING_TITLE": "Keywords settings",
+  "BUILDER_SAVE_BTN": "Save"
 }

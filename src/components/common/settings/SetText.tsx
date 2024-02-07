@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { Box, TextField } from '@mui/material';
 
-import { DEFAULT_MARGIN, FULL_WIDTH } from '../../../config/stylingConstants';
+import { FULL_WIDTH } from '../../../config/stylingConstants';
 
 type Prop = {
   value: string;
@@ -31,7 +31,6 @@ const SetText: FC<Prop> = ({
       justifyContent="space-around"
       display="flex"
       alignItems="flex-end"
-      sx={{ margin: DEFAULT_MARGIN }}
     >
       <TextField
         data-cy={textDataCy}

@@ -1,8 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 
-import { Alert, Box, Button, Typography } from '@mui/material';
+import { Alert, Box, Button, Stack, Typography } from '@mui/material';
 
 import GraaspButton from '@/components/common/settings/GraaspButton';
+import { useTextAnalysisTranslation } from '@/config/i18n';
+import { TEXT_ANALYSIS } from '@/langs/constants';
 
 import {
   INITIAL_CHATBOT_PROMPT_SETTING_KEY,
@@ -26,7 +28,11 @@ import {
   TEXT_INPUT_FIELD_CY,
   TITLE_INPUT_FIELD_CY,
 } from '../../../config/selectors';
-import { DEFAULT_MARGIN } from '../../../config/stylingConstants';
+import {
+  DEFAULT_IN_SECTION_SPACING,
+  DEFAULT_MARGIN,
+  DEFAULT_SECTION_SPACING,
+} from '../../../config/stylingConstants';
 import { getAppSetting } from '../../../utils/appSettings';
 import PublicAlert from '../../common/PublicAlert';
 import KeyWords from '../../common/settings/KeyWords';
@@ -72,6 +78,7 @@ type SettingValue = (typeof defaultSettings)[SettingKey]['value'];
 const settingKeys = Object.keys(defaultSettings).map((k) => k as SettingKey);
 
 const BuilderView: FC = () => {
+  const { t } = useTextAnalysisTranslation();
   const [settings, setSettings] = useState(defaultSettings);
 
   // This state is used to avoid to erase changes if another setting is saved.
@@ -154,120 +161,110 @@ const BuilderView: FC = () => {
     .some((v) => v);
 
   return (
-    <Box data-cy={BUILDER_VIEW_CY}>
+    <Stack
+      data-cy={BUILDER_VIEW_CY}
+      spacing={DEFAULT_SECTION_SPACING}
+      pl={DEFAULT_MARGIN}
+      pr={DEFAULT_MARGIN}
+    >
       <PublicAlert />
-      <Typography
-        variant="h4"
-        sx={{
-          color: '#5050d2',
-          margin: '25px',
-        }}
-      >
-        Prepare Your Lesson
+      <Typography variant="h4" sx={{ color: '#5050d2' }}>
+        {t(TEXT_ANALYSIS.BUILDER_VIEW_TITLE)}
       </Typography>
       {isChanged && (
         <Alert
           severity="warning"
-          sx={{ margin: DEFAULT_MARGIN }}
           action={
             <Button size="small" variant="contained" onClick={saveSettings}>
-              Save
+              {t(TEXT_ANALYSIS.BUILDER_NOT_SAVE_ALERT_SAVE_BTN)}
             </Button>
           }
         >
-          Do not forget to save your work.
+          {t(TEXT_ANALYSIS.BUILDER_NOT_SAVE_ALERT_MSG)}
         </Alert>
       )}
-      <SetText
-        textDataCy={TITLE_INPUT_FIELD_CY}
-        value={settings[LESSON_TITLE_SETTING_KEY].value}
-        textFieldLabel="Enter the lesson title"
-        onChange={(text) => updateSettingState(LESSON_TITLE_SETTING_KEY, text)}
-      />
-      <SetText
-        textDataCy={TEXT_INPUT_FIELD_CY}
-        value={settings[TEXT_RESOURCE_SETTING_KEY].value}
-        multiline
-        minRows={2}
-        textFieldLabel="Enter the text students will see"
-        onChange={(text) => updateSettingState(TEXT_RESOURCE_SETTING_KEY, text)}
-      />
-      <Typography
-        variant="h5"
-        sx={{
-          color: '#5050d2',
-          marginLeft: '25px',
-        }}
-      >
-        Chatbot settings
-      </Typography>
-      <Box marginLeft="30px" marginRight="35px">
-        <p>
-          If enabled, it will be possible to ask questions about the keywords
-          directly in the chat. Otherwise, the definitions will be displayed.
-        </p>
-      </Box>
-      <SwitchModes
-        value={settings[USE_CHATBOT_SETTING_KEY].value}
-        onChange={(useChatbot) =>
-          updateSettingState(USE_CHATBOT_SETTING_KEY, useChatbot)
-        }
-      />
-      {settings[USE_CHATBOT_SETTING_KEY].value && (
-        <Box data-cy={CHATBOT_CONTAINER_CY}>
-          <SetText
-            textDataCy={INITIAL_PROMPT_INPUT_FIELD_CY}
-            value={settings[INITIAL_PROMPT_SETTING_KEY].value}
-            multiline
-            textFieldLabel="Enter the intial prompt describing the conversation (as a template for {{keyword}})"
-            onChange={(text) =>
-              updateSettingState(INITIAL_PROMPT_SETTING_KEY, text)
-            }
-          />
-          <SetText
-            textDataCy={INITIAL_CHATBOT_PROMPT_INPUT_FIELD_CY}
-            value={settings[INITIAL_CHATBOT_PROMPT_SETTING_KEY].value}
-            multiline
-            textFieldLabel="Enter the chatbot's first line (as a template for {{keyword}})"
-            onChange={(text) =>
-              updateSettingState(INITIAL_CHATBOT_PROMPT_SETTING_KEY, text)
-            }
-          />
-        </Box>
-      )}
-      <Typography
-        variant="h5"
-        sx={{
-          color: '#5050d2',
-          margin: '25px',
-        }}
-      >
-        Keywords settings
-      </Typography>
-      <KeyWords
-        keywords={settings[KEYWORDS_SETTING_KEY].value}
-        textStudents={settings[TEXT_RESOURCE_SETTING_KEY].value}
-        chatbotEnabled={settings[USE_CHATBOT_SETTING_KEY].value}
-        onChange={(keywords) =>
-          updateSettingState(KEYWORDS_SETTING_KEY, keywords)
-        }
-      />
+      <Stack spacing={DEFAULT_IN_SECTION_SPACING}>
+        <SetText
+          textDataCy={TITLE_INPUT_FIELD_CY}
+          value={settings[LESSON_TITLE_SETTING_KEY].value}
+          textFieldLabel={t(TEXT_ANALYSIS.BUILDER_TEXTFIELD_LESSON_TITLE)}
+          onChange={(text) =>
+            updateSettingState(LESSON_TITLE_SETTING_KEY, text)
+          }
+        />
+        <SetText
+          textDataCy={TEXT_INPUT_FIELD_CY}
+          value={settings[TEXT_RESOURCE_SETTING_KEY].value}
+          multiline
+          minRows={2}
+          textFieldLabel={t(TEXT_ANALYSIS.BUILDER_TEXTFIELD_TEXT_STUDENT)}
+          onChange={(text) =>
+            updateSettingState(TEXT_RESOURCE_SETTING_KEY, text)
+          }
+        />
+      </Stack>
 
-      <Box
-        justifyContent="flex-end"
-        display="flex"
-        sx={{ margin: DEFAULT_MARGIN }}
-      >
+      <Stack spacing={1}>
+        <Typography variant="h5" sx={{ color: '#5050d2' }}>
+          {t(TEXT_ANALYSIS.BUILDER_CHATBOT_SETTING_TITLE)}
+        </Typography>
+        <Typography>{t(TEXT_ANALYSIS.BUILDER_CHATBOT_SETTING_INFO)}</Typography>
+        <SwitchModes
+          value={settings[USE_CHATBOT_SETTING_KEY].value}
+          onChange={(useChatbot) =>
+            updateSettingState(USE_CHATBOT_SETTING_KEY, useChatbot)
+          }
+        />
+        {settings[USE_CHATBOT_SETTING_KEY].value && (
+          <Stack
+            data-cy={CHATBOT_CONTAINER_CY}
+            spacing={DEFAULT_IN_SECTION_SPACING}
+          >
+            <SetText
+              textDataCy={INITIAL_PROMPT_INPUT_FIELD_CY}
+              value={settings[INITIAL_PROMPT_SETTING_KEY].value}
+              multiline
+              textFieldLabel="Enter the intial prompt describing the conversation (as a template for {{keyword}})"
+              onChange={(text) =>
+                updateSettingState(INITIAL_PROMPT_SETTING_KEY, text)
+              }
+            />
+            <SetText
+              textDataCy={INITIAL_CHATBOT_PROMPT_INPUT_FIELD_CY}
+              value={settings[INITIAL_CHATBOT_PROMPT_SETTING_KEY].value}
+              multiline
+              textFieldLabel="Enter the chatbot's first line (as a template for {{keyword}})"
+              onChange={(text) =>
+                updateSettingState(INITIAL_CHATBOT_PROMPT_SETTING_KEY, text)
+              }
+            />
+          </Stack>
+        )}
+      </Stack>
+      <Stack spacing={DEFAULT_IN_SECTION_SPACING}>
+        <Typography variant="h5" sx={{ color: '#5050d2' }}>
+          {t(TEXT_ANALYSIS.BUILDER_KEYWORDS_SETTING_TITLE)}
+        </Typography>
+        <KeyWords
+          keywords={settings[KEYWORDS_SETTING_KEY].value}
+          textStudents={settings[TEXT_RESOURCE_SETTING_KEY].value}
+          chatbotEnabled={settings[USE_CHATBOT_SETTING_KEY].value}
+          onChange={(keywords) =>
+            updateSettingState(KEYWORDS_SETTING_KEY, keywords)
+          }
+        />
+      </Stack>
+
+      <Box justifyContent="flex-end" display="flex">
         <GraaspButton
           buttonDataCy={SETTINGS_SAVE_BUTTON_CY}
           handleOnClick={saveSettings}
-          sx={{ margin: DEFAULT_MARGIN, mr: 0 }}
           minHeight="55px"
           disabled={!isChanged}
-          text="Save"
+          text={t(TEXT_ANALYSIS.BUILDER_SAVE_BTN)}
         />
       </Box>
-    </Box>
+    </Stack>
   );
 };
 

@@ -9,7 +9,10 @@ import {
   useLocalContext,
 } from '@graasp/apps-query-client';
 
-import { Alert, AlertTitle, Box, Stack, styled } from '@mui/material';
+import { Alert, Box, Stack, styled } from '@mui/material';
+
+import { useTextAnalysisTranslation } from '@/config/i18n';
+import { TEXT_ANALYSIS } from '@/langs/constants';
 
 import { APP_DATA_TYPES, ChatAppData } from '../../../config/appDataTypes';
 import {
@@ -20,10 +23,8 @@ import { DEFAULT_INITIAL_PROMPT } from '../../../config/appSettings';
 import {
   ANONYMOUS_USER,
   MAX_CONVERSATION_LENGTH,
-  MAX_CONVERSATION_LENGTH_ALERT,
   SCROLL_SAFETY_MARGIN,
 } from '../../../config/constants';
-import { CHAT_BOT_ERROR_MESSAGE } from '../../../config/messages';
 import { mutations } from '../../../config/queryClient';
 import { CHATBOT_MODE_CY, messagesDataCy } from '../../../config/selectors';
 import {
@@ -73,6 +74,7 @@ const StyledReactMarkdown = styled(ReactMarkdown)(({ theme }) => ({
 type Prop = { focusWord: string; isOpen: boolean };
 
 const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
+  const { t } = useTextAnalysisTranslation();
   const { postAppDataAsync, postAppData, appDataArray } = useAppDataContext();
   const { appSettingArray } = useAppSettingContext();
   const context = useLocalContext();
@@ -113,7 +115,7 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
         setLoading(true);
 
         const appData = {
-          message: CHAT_BOT_ERROR_MESSAGE,
+          message: t(TEXT_ANALYSIS.CHAT_BOT_ERROR_MESSAGE),
           keyword: focusWord,
         };
 
@@ -135,8 +137,7 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
   const renderBar =
     chatAppData.length > MAX_CONVERSATION_LENGTH ? (
       <Alert severity="info">
-        <AlertTitle>Info</AlertTitle>
-        {MAX_CONVERSATION_LENGTH_ALERT}
+        {t(TEXT_ANALYSIS.MAX_CONVERSATION_LENGTH_ALERT)}
       </Alert>
     ) : (
       <InputBar onSend={(input) => onSend(input)} />
