@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Alert, Box, Button, Stack, Typography } from '@mui/material';
 
+import { HistoryCommand, HistoryManager } from '@/commands/commands';
 import GraaspButton from '@/components/common/settings/GraaspButton';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 
@@ -100,8 +101,9 @@ const BuilderView: FC = () => {
     setIsClean(stateIsClean);
   };
 
-  const { patchAppSetting, postAppSetting, appSettingArray } =
-    useAppSettingContext();
+  // const { patchAppSetting, postAppSetting, appSettingArray } =
+  const { appSettingArray, settingContext } = useAppSettingContext();
+  const history = new HistoryManager();
 
   useEffect(() => {
     if (isClean) {
@@ -117,48 +119,76 @@ const BuilderView: FC = () => {
     }
   }, [appSettingArray, isClean]);
 
+  const hasKeyChanged = (settingKey: SettingKey): boolean => {
+    const { value, dataKey } = settings[settingKey];
+    const appSettingDataValue = getAppSetting(appSettingArray, settingKey)
+      ?.data[dataKey];
+
+    if (dataKey === DATA_KEYS.KEYWORDS) {
+      const k1 = value;
+      const k2 = (appSettingDataValue ?? []) as Keyword[];
+
+      const isKeywordListEqual: boolean =
+        k1.length === k2.length &&
+        k1.every((e1) =>
+          k2.some((e2) => e1.word === e2.word && e1.def === e2.def),
+        );
+      return !isKeywordListEqual;
+    }
+
+    return value !== appSettingDataValue;
+  };
+
   const saveSettings = (): void => {
     settingKeys.forEach((settingKey) => {
       const appSetting = getAppSetting(appSettingArray, settingKey);
       const { value, dataKey } = settings[settingKey];
 
       if (appSetting) {
-        patchAppSetting({
-          data: { [dataKey]: value },
-          id: appSetting.id,
-        });
+        // patchAppSetting({
+        //   data: { [dataKey]: value },
+        //   id: appSetting.id,
+        // });
+        // TODO: move the history in on changed instead of saved to have previous state
+        if (!hasKeyChanged(settingKey)) {
+          return;
+        }
+
+        history.execute(
+          new HistoryCommand({
+            apiContext: settingContext,
+            currState: {
+              data: { [dataKey]: value },
+              action: 'patch',
+              id: appSetting.id,
+            },
+          }),
+        );
       } else {
-        postAppSetting({
-          data: { [dataKey]: value },
-          name: settingKey,
-        });
+        //   postAppSetting({
+        //     data: { [dataKey]: value },
+        //     name: settingKey,
+        //   });
+        history.execute(
+          new HistoryCommand({
+            apiContext: settingContext,
+            currState: {
+              data: { [dataKey]: value },
+              action: 'post',
+              name: settingKey,
+            },
+          }),
+        );
       }
+
+      console.log(history.formattedBackHistory());
+      console.log(history.formattedForwardHistory());
     });
 
     setIsClean(true);
   };
 
-  const isChanged = settingKeys
-    .map((settingKey) => {
-      const { value, dataKey } = settings[settingKey];
-      const appSettingDataValue = getAppSetting(appSettingArray, settingKey)
-        ?.data[dataKey];
-
-      if (dataKey === DATA_KEYS.KEYWORDS) {
-        const k1 = value;
-        const k2 = (appSettingDataValue ?? []) as Keyword[];
-
-        const isKeywordListEqual: boolean =
-          k1.length === k2.length &&
-          k1.every((e1) =>
-            k2.some((e2) => e1.word === e2.word && e1.def === e2.def),
-          );
-        return !isKeywordListEqual;
-      }
-
-      return value !== appSettingDataValue;
-    })
-    .some((v) => v);
+  const isChanged = settingKeys.map(hasKeyChanged).some((v) => v);
 
   return (
     <Stack
