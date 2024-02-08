@@ -1,12 +1,13 @@
+import { useTranslation } from 'react-i18next';
+
 import { useLocalContext } from '@graasp/apps-query-client';
 
 import Alert from '@mui/material/Alert';
 
-import { useTextAnalysisTranslation } from '@/config/i18n';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 
 const PublicAlert = (): JSX.Element | null => {
-  const { t } = useTextAnalysisTranslation();
+  const { t } = useTranslation();
 
   const context = useLocalContext();
 

@@ -2,8 +2,6 @@ import { FC } from 'react';
 
 import { Box, TextField } from '@mui/material';
 
-import { FULL_WIDTH } from '../../../config/stylingConstants';
-
 type Prop = {
   value: string;
   textFieldLabel: string;
@@ -38,7 +36,7 @@ const SetText: FC<Prop> = ({
         label={textFieldLabel}
         variant="outlined"
         onChange={handleChange}
-        sx={{ width: FULL_WIDTH }}
+        fullWidth
         value={value}
         minRows={minRows}
       />

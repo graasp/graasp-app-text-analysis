@@ -1,32 +1,45 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
+import i18n from 'i18next';
 
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { initReactI18next, useTranslation } from 'react-i18next';
-
-import buildI18n, { namespaces } from '@graasp/translations';
+import { initReactI18next } from 'react-i18next';
 
 import ar from '../langs/ar.json';
 import de from '../langs/de.json';
 import en from '../langs/en.json';
+import es from '../langs/es.json';
 import fr from '../langs/fr.json';
 import it from '../langs/it.json';
 
-const i18n = buildI18n().use(initReactI18next);
+export const DEFAULT_NAMESPACE = 'translations';
+export const DEFAULT_LANG = 'en';
+export const resources = {
+  ar,
+  de,
+  en,
+  es,
+  fr,
+  it,
+} as const;
 
-export const TEXT_ANALYSIS_NAMESPACE = 'text-analysis';
-i18n.addResourceBundle('ar', TEXT_ANALYSIS_NAMESPACE, ar);
-i18n.addResourceBundle('de', TEXT_ANALYSIS_NAMESPACE, de);
-i18n.addResourceBundle('en', TEXT_ANALYSIS_NAMESPACE, en);
-i18n.addResourceBundle('fr', TEXT_ANALYSIS_NAMESPACE, fr);
-i18n.addResourceBundle('it', TEXT_ANALYSIS_NAMESPACE, it);
+declare module 'react-i18next' {
+  interface CustomTypeOptions {
+    defaultNS: typeof DEFAULT_NAMESPACE;
+    resources: (typeof resources)['en'];
+  }
+}
 
-export const useTextAnalysisTranslation = () =>
-  useTranslation(TEXT_ANALYSIS_NAMESPACE);
-export const useCommonTranslation = () => useTranslation(namespaces.common);
-export const useMessagesTranslation = () => useTranslation(namespaces.messages);
-export const useEnumsTranslation = () => useTranslation(namespaces.enums);
-export const useCategoriesTranslation = () =>
-  useTranslation(namespaces.categories);
-export const useChatboxTranslation = () => useTranslation(namespaces.chatbox);
+i18n.use(initReactI18next).init({
+  resources,
+  fallbackLng: DEFAULT_LANG,
+  lng: DEFAULT_LANG,
+  // debug only when not in production
+  debug: import.meta.env.DEV,
+  ns: [DEFAULT_NAMESPACE],
+  defaultNS: DEFAULT_NAMESPACE,
+  keySeparator: false,
+  interpolation: {
+    escapeValue: false,
+    formatSeparator: ',',
+  },
+});
 
 export default i18n;

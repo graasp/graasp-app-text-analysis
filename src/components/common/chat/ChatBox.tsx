@@ -1,6 +1,7 @@
 import randomColor from 'randomcolor';
 
 import { FC, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 
 import {
@@ -11,7 +12,6 @@ import {
 
 import { Alert, Box, Stack, styled } from '@mui/material';
 
-import { useTextAnalysisTranslation } from '@/config/i18n';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 
 import { APP_DATA_TYPES, ChatAppData } from '../../../config/appDataTypes';
@@ -74,7 +74,7 @@ const StyledReactMarkdown = styled(ReactMarkdown)(({ theme }) => ({
 type Prop = { focusWord: string; isOpen: boolean };
 
 const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
-  const { t } = useTextAnalysisTranslation();
+  const { t } = useTranslation();
   const { postAppDataAsync, postAppData, appDataArray } = useAppDataContext();
   const { appSettingArray } = useAppSettingContext();
   const context = useLocalContext();

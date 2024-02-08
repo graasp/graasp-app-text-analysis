@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Typography } from '@mui/material';
 
-import { useTextAnalysisTranslation } from '@/config/i18n';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 
 import { BANNER_CY, SHOW_KEYWORDS_BUTTON_CY } from '../../../config/selectors';
@@ -18,7 +18,7 @@ type Prop = {
 };
 
 const Banner: FC<Prop> = ({ title, disabled, onClick }) => {
-  const { t } = useTextAnalysisTranslation();
+  const { t } = useTranslation();
   const [showKeywords, setShowKeywords] = useState(false);
 
   const SHOW_KEYWORDS_LABEL = t(TEXT_ANALYSIS.BANNER_SHOW_KEYWORDS_BTN);

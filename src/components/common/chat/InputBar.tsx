@@ -1,4 +1,5 @@
 import { FC, KeyboardEventHandler, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import SendIcon from '@mui/icons-material/Send';
 import {
@@ -9,7 +10,6 @@ import {
   OutlinedInput,
 } from '@mui/material';
 
-import { useTextAnalysisTranslation } from '@/config/i18n';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 
 import { ENTER_KEY } from '../../../config/constants';
@@ -19,7 +19,7 @@ type Prop = {
 };
 
 const InputBar: FC<Prop> = ({ onSend }) => {
-  const { t } = useTextAnalysisTranslation();
+  const { t } = useTranslation();
   const [comment, setComment] = useState('');
 
   const onChange = ({ target }: { target: { value: string } }): void => {

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider, useTranslation } from 'react-i18next';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
@@ -17,7 +17,7 @@ import { StyledEngineProvider } from '@mui/material/styles';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 
 import { ENABLE_MOCK_API } from '../config/env';
-import i18nConfig, { useTextAnalysisTranslation } from '../config/i18n';
+import i18nConfig from '../config/i18n';
 import {
   QueryClientProvider,
   ReactQueryDevtools,
@@ -76,7 +76,7 @@ const RootDiv = styled('div')({
 // This function is necessary to allow to use translations.
 const AppWithContext = (): JSX.Element => {
   const [mockContext, setMockContext] = useObjectState(defaultMockContext);
-  const { t } = useTextAnalysisTranslation();
+  const { t } = useTranslation();
 
   return (
     <WithLocalContext

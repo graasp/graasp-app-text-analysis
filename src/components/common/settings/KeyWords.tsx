@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -18,7 +19,6 @@ import {
   tooltipClasses,
 } from '@mui/material';
 
-import { useTextAnalysisTranslation } from '@/config/i18n';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 import { isKeywordPresent } from '@/utils/keywords';
 
@@ -32,7 +32,6 @@ import {
 } from '../../../config/selectors';
 import {
   DEFAULT_IN_SECTION_SPACING,
-  FULL_WIDTH,
   ICON_MARGIN,
 } from '../../../config/stylingConstants';
 import GraaspButton from './GraaspButton';
@@ -62,7 +61,7 @@ const KeyWords: FC<Prop> = ({
   chatbotEnabled,
   onChange,
 }) => {
-  const { t } = useTextAnalysisTranslation();
+  const { t } = useTranslation();
   const defaultKeywordDef = { word: '', def: '' };
   const [keywordDef, setKeywordDef] = useState<Keyword>(defaultKeywordDef);
 
@@ -158,14 +157,14 @@ const KeyWords: FC<Prop> = ({
         <TextField
           data-cy={ENTER_KEYWORD_FIELD_CY}
           label="Enter the keyword"
-          sx={{ width: FULL_WIDTH }}
+          fullWidth
           value={keywordDef.word}
           onChange={(e) => updateKeywordDefinition('word', e.target)}
         />
         <TextField
           data-cy={ENTER_DEFINITION_FIELD_CY}
           label="Enter the keyword's definition"
-          sx={{ width: FULL_WIDTH }}
+          fullWidth
           value={keywordDef.def}
           onChange={(e) => updateKeywordDefinition('def', e.target)}
         />

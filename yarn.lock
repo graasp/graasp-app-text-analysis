@@ -2649,15 +2649,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graasp/translations@npm:^1.23.0":
-  version: 1.23.0
-  resolution: "@graasp/translations@npm:1.23.0"
-  dependencies:
-    i18next: "npm:23.7.16"
-  checksum: dc0d605b520a28deb1ad3054323dc4b71f709b79adf5924552c602f3c3ed2fa7c3c8538a3015c86c8db05867159df4b2f6ad18583766b2b97c8dd850952d29e2
-  languageName: node
-  linkType: hard
-
 "@graasp/ui@npm:4.1.1":
   version: 4.1.1
   resolution: "@graasp/ui@npm:4.1.1"
@@ -3997,6 +3988,13 @@ __metadata:
   dependencies:
     "@types/unist": "npm:*"
   checksum: fff47998f4c11e21a7454b58673f70478740ecdafd95aaf50b70a3daa7da9cdc57315545bf9c039613732c40b7b0e9e49d11d03fe9a4304721cdc3b29a88141e
+  languageName: node
+  linkType: hard
+
+"@types/i18n@npm:^0.13.10":
+  version: 0.13.10
+  resolution: "@types/i18n@npm:0.13.10"
+  checksum: 4b6c84536bf891d07fb1b1daf2e8d66889d0c317dc3c2b653d65a922ee3df3cef93b811b71e46dfb6483a95beb1515a7c82bf3f0fb05d54084ac519ff93f706d
   languageName: node
   linkType: hard
 
@@ -8569,7 +8567,6 @@ __metadata:
     "@emotion/styled": "npm:11.11.0"
     "@graasp/apps-query-client": "npm:3.3.0"
     "@graasp/sdk": "npm:3.3.0"
-    "@graasp/translations": "npm:^1.23.0"
     "@graasp/ui": "npm:4.1.1"
     "@mui/icons-material": "npm:5.11.16"
     "@mui/lab": "npm:5.0.0-alpha.136"
@@ -8582,6 +8579,7 @@ __metadata:
     "@testing-library/jest-dom": "npm:5.16.5"
     "@testing-library/react": "npm:14.1.2"
     "@trivago/prettier-plugin-sort-imports": "npm:4.3.0"
+    "@types/i18n": "npm:^0.13.10"
     "@types/jest": "npm:29.5.11"
     "@types/lodash.isequal": "npm:^4.5.6"
     "@types/lodash.isobject": "npm:3.0.7"
@@ -8610,6 +8608,7 @@ __metadata:
     eslint-plugin-react: "npm:7.32.2"
     eslint-plugin-react-hooks: "npm:4.6.0"
     husky: "npm:8.0.3"
+    i18next: "npm:^23.8.2"
     lodash.isequal: "npm:^4.5.0"
     lodash.isobject: "npm:3.0.2"
     lodash.isstring: "npm:4.0.1"
@@ -8959,12 +8958,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:23.7.16":
-  version: 23.7.16
-  resolution: "i18next@npm:23.7.16"
+"i18next@npm:^23.8.2":
+  version: 23.8.2
+  resolution: "i18next@npm:23.8.2"
   dependencies:
     "@babel/runtime": "npm:^7.23.2"
-  checksum: 77e74c07a73316f6fb6678a5a3e8ce58a6e66be457dd1ccd23941e9fc57ad8e1da55193fa6328c70b86073337b776cd267f3c13c6309f548b3116f27a1e41787
+  checksum: 594c4d5bafd9ac0073a5f2c0ccb40b157571857d43f7f22949a5ab6ea07e6e6f7e39058ddee6e7396369b54d5d741e76cba59c0d5c23ce0ab99e06b249c66f5e
   languageName: node
   linkType: hard
 

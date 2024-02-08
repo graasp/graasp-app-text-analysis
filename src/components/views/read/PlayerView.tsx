@@ -1,8 +1,8 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Box } from '@mui/material';
 
-import { useTextAnalysisTranslation } from '@/config/i18n';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 
 import { APP_DATA_TYPES } from '../../../config/appDataTypes';
@@ -22,7 +22,6 @@ import {
   DEFAULT_USE_CHATBOT_SETTING,
 } from '../../../config/appSettings';
 import { PLAYER_VIEW_CY } from '../../../config/selectors';
-import { FULL_WIDTH } from '../../../config/stylingConstants';
 import { getDataAppSetting } from '../../../utils/appSettings';
 import PublicAlert from '../../common/PublicAlert';
 import ChatbotWindow from '../../common/chat/ChatbotWindow';
@@ -32,7 +31,7 @@ import { useAppDataContext } from '../../context/AppDataContext';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 
 const PlayerView: FC = () => {
-  const { t } = useTextAnalysisTranslation();
+  const { t } = useTranslation();
   const { appSettingArray } = useAppSettingContext();
   const { appDataArray, postAppData, deleteAppData } = useAppDataContext();
 
@@ -109,7 +108,7 @@ const PlayerView: FC = () => {
             keywords={keywords}
             highlight={summon}
             openChatbot={openChatbot}
-            width={FULL_WIDTH}
+            width="100%"
           />
           <ChatbotWindow
             closeChatbot={() => setChatbot(false)}

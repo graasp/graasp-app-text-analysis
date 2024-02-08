@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Alert, Box, Button, Stack, Typography } from '@mui/material';
 
 import GraaspButton from '@/components/common/settings/GraaspButton';
-import { useTextAnalysisTranslation } from '@/config/i18n';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 
 import {
@@ -78,7 +78,7 @@ type SettingValue = (typeof defaultSettings)[SettingKey]['value'];
 const settingKeys = Object.keys(defaultSettings).map((k) => k as SettingKey);
 
 const BuilderView: FC = () => {
-  const { t } = useTextAnalysisTranslation();
+  const { t } = useTranslation();
   const [settings, setSettings] = useState(defaultSettings);
 
   // This state is used to avoid to erase changes if another setting is saved.
