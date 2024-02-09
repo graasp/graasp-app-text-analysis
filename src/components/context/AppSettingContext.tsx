@@ -17,6 +17,8 @@ export type AppSettingContextType = {
   settingContext: APIContext<CommandDataType>;
   appSettingArray: AppSetting[];
   isError: boolean;
+  isLoading: boolean;
+  isSuccess: boolean;
 };
 
 const defaultContextValue = {
@@ -27,6 +29,8 @@ const defaultContextValue = {
   },
   appSettingArray: [],
   isError: false,
+  isLoading: false,
+  isSuccess: false,
 };
 
 const AppSettingContext =
@@ -35,14 +39,28 @@ const AppSettingContext =
 export const AppSettingProvider: FC<PropsWithChildren> = ({ children }) => {
   const appSetting = hooks.useAppSettings();
 
-  const { mutate: postAppSetting, isError: postError } =
-    mutations.usePostAppSetting();
-  const { mutate: patchAppSetting, isError: patchError } =
-    mutations.usePatchAppSetting();
-  const { mutate: deleteAppSetting, isError: deleteError } =
-    mutations.useDeleteAppSetting();
+  const {
+    mutate: postAppSetting,
+    isError: postError,
+    isLoading: postLoading,
+    isSuccess: postSuccess,
+  } = mutations.usePostAppSetting();
+  const {
+    mutate: patchAppSetting,
+    isError: patchError,
+    isLoading: patchLoading,
+    isSuccess: patchSuccess,
+  } = mutations.usePatchAppSetting();
+  const {
+    mutate: deleteAppSetting,
+    isError: deleteError,
+    isLoading: deleteLoading,
+    isSuccess: deleteSuccess,
+  } = mutations.useDeleteAppSetting();
 
   const isError = postError || patchError || deleteError;
+  const isLoading = postLoading || patchLoading || deleteLoading;
+  const isSuccess = postSuccess || patchSuccess || deleteSuccess;
 
   const settingContext: APIContext<CommandDataType> = useMemo(
     () => ({
@@ -71,9 +89,11 @@ export const AppSettingProvider: FC<PropsWithChildren> = ({ children }) => {
     () => ({
       settingContext,
       isError,
+      isLoading,
+      isSuccess,
       appSettingArray: appSetting.data || [],
     }),
-    [appSetting.data, isError, settingContext],
+    [appSetting.data, isError, isLoading, isSuccess, settingContext],
   );
 
   if (appSetting.isLoading) {

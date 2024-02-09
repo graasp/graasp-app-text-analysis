@@ -22,15 +22,10 @@ import {
   INITIAL_CHATBOT_PROMPT_SETTING_KEY,
   INITIAL_PROMPT_SETTING_KEY,
   KEYWORDS_SETTING_KEY,
-  Keyword,
   LESSON_TITLE_SETTING_KEY,
   TEXT_RESOURCE_SETTING_KEY,
   USE_CHATBOT_SETTING_KEY,
 } from '../../../config/appSettingTypes';
-import {
-  DEFAULT_TEXT_RESOURCE_SETTING,
-  DEFAULT_USE_CHATBOT_SETTING,
-} from '../../../config/appSettings';
 import {
   BUILDER_VIEW_CY,
   CHATBOT_CONTAINER_CY,
@@ -51,68 +46,41 @@ import KeyWords from '../../common/settings/KeyWords';
 import SetText from '../../common/settings/SetText';
 import SwitchModes from '../../common/settings/SwitchModes';
 import { useAppSettingContext } from '../../context/AppSettingContext';
+import { SyncIcon } from './SyncIcon';
+import {
+  DebouncedFunction,
+  SettingKey,
+  SettingValue,
+  defaultSettings,
+  settingKeys,
+} from './types';
+import { getMostRecentTime, hasKeyChanged } from './utils';
 
-// TODO: refactor those files in utils and types of current folder
-const DATA_KEYS = {
-  TEXT: 'text',
-  USE_BOT: 'useBot',
-  KEYWORDS: 'keywords',
-} as const;
-
-const defaultSettings = {
-  [LESSON_TITLE_SETTING_KEY]: {
-    value: DEFAULT_TEXT_RESOURCE_SETTING.text,
-    dataKey: DATA_KEYS.TEXT,
-  },
-  [TEXT_RESOURCE_SETTING_KEY]: {
-    value: DEFAULT_TEXT_RESOURCE_SETTING.text,
-    dataKey: DATA_KEYS.TEXT,
-  },
-  [USE_CHATBOT_SETTING_KEY]: {
-    value: DEFAULT_USE_CHATBOT_SETTING.useBot,
-    dataKey: DATA_KEYS.USE_BOT,
-  },
-  [INITIAL_PROMPT_SETTING_KEY]: {
-    value: DEFAULT_TEXT_RESOURCE_SETTING.text,
-    dataKey: DATA_KEYS.TEXT,
-  },
-  [INITIAL_CHATBOT_PROMPT_SETTING_KEY]: {
-    value: DEFAULT_TEXT_RESOURCE_SETTING.text,
-    dataKey: DATA_KEYS.TEXT,
-  },
-  [KEYWORDS_SETTING_KEY]: {
-    value: [] as Keyword[],
-    dataKey: DATA_KEYS.KEYWORDS,
-  },
-};
-type SettingKey = keyof typeof defaultSettings;
-type SettingValue = (typeof defaultSettings)[SettingKey]['value'];
-
-const settingKeys = Object.keys(defaultSettings).map((k) => k as SettingKey);
-
-interface DebouncedFunction {
-  (): void;
-  cancel(): void;
-}
 const AUTO_SAVE_DEBOUNCE_MS = 700;
 
 const BuilderView: FC = () => {
   const { t } = useTranslation();
-  const [settings, setSettings] = useState(defaultSettings);
   const { lang } = useLocalContext();
+  const { appSettingArray, settingContext, isError, isLoading, isSuccess } =
+    useAppSettingContext();
+  const isOnline = useOnlineStatus();
+  const history = new HistoryManager();
+
+  // This map is used to manage the auto save of each setting.
+  const debounceMap = useRef(new Map<string, DebouncedFunction>());
+
+  const [settings, setSettings] = useState(defaultSettings);
 
   // This state is used to avoid to erase changes if another setting is saved.
   const [isClean, setIsClean] = useState(true);
 
-  const debounceMap = useRef(new Map<string, DebouncedFunction>());
-
-  const { appSettingArray, settingContext, isError } = useAppSettingContext();
-  const isOnline = useOnlineStatus();
-
   const lastSavedTime = useRef<Date>();
   const [lastSavedMsg, setLastSavedMsg] = useState<string>();
 
-  const history = new HistoryManager();
+  const mostRecentTime = appSettingArray.reduce<Date | null>(
+    getMostRecentTime,
+    null,
+  );
 
   // use memo otherwise to avoid multiple calls between the interval
   useMemo(
@@ -127,42 +95,16 @@ const BuilderView: FC = () => {
             }),
           );
         }
-      }, 30_000),
+      }, 20_000),
     [lang],
   );
-
-  // TODO: refactor this to put it in utils
-  const hasKeyChanged = ({
-    settingKey,
-    setting,
-  }: {
-    settingKey: SettingKey;
-    setting: (typeof settings)[typeof settingKey];
-  }): boolean => {
-    const { value, dataKey } = setting;
-    const appSettingDataValue = getAppSetting(appSettingArray, settingKey)
-      ?.data[dataKey];
-
-    if (dataKey === DATA_KEYS.KEYWORDS) {
-      const k1 = value;
-      const k2 = (appSettingDataValue ?? []) as Keyword[];
-
-      const isKeywordListEqual: boolean =
-        k1.length === k2.length &&
-        k1.every((e1) =>
-          k2.some((e2) => e1.word === e2.word && e1.def === e2.def),
-        );
-      return !isKeywordListEqual;
-    }
-
-    return value !== appSettingDataValue;
-  };
 
   const isChanged = settingKeys
     .map((settingKey) =>
       hasKeyChanged({
         settingKey,
         setting: settings[settingKey],
+        appSettings: appSettingArray,
       }),
     )
     .some((v) => v);
@@ -178,7 +120,9 @@ const BuilderView: FC = () => {
     const { value, dataKey } = setting;
 
     if (appSetting) {
-      if (!hasKeyChanged({ settingKey, setting })) {
+      if (
+        !hasKeyChanged({ settingKey, setting, appSettings: appSettingArray })
+      ) {
         return;
       }
 
@@ -207,17 +151,23 @@ const BuilderView: FC = () => {
       );
     }
 
-    // TODO: translate me
-    setLastSavedMsg('saving...');
-
     if (!isError) {
       lastSavedTime.current = new Date();
-      setLastSavedMsg(
-        formatDate(lastSavedTime.current?.toString(), {
-          locale: lang ?? DEFAULT_LANG,
-        }),
-      );
     }
+  };
+
+  const handleDebounce = <K extends SettingKey, V extends SettingValue>(
+    settingKey: K,
+    value: V,
+  ): void => {
+    debounceMap.current.get(settingKey)?.cancel();
+    const newDebounce = debounce(() => {
+      const setting = settings[settingKey];
+      setting.value = value;
+      saveSetting({ settingKey, setting });
+    }, AUTO_SAVE_DEBOUNCE_MS);
+    debounceMap.current.set(settingKey, newDebounce);
+    newDebounce();
   };
 
   const updateSettingState = <K extends SettingKey, V extends SettingValue>(
@@ -234,15 +184,7 @@ const BuilderView: FC = () => {
     }));
 
     setIsClean(stateIsClean);
-
-    debounceMap.current.get(settingKey)?.cancel();
-    const newDebounce = debounce(() => {
-      const setting = settings[settingKey];
-      setting.value = value;
-      saveSetting({ settingKey, setting });
-    }, AUTO_SAVE_DEBOUNCE_MS);
-    debounceMap.current.set(settingKey, newDebounce);
-    newDebounce();
+    handleDebounce(settingKey, value);
   };
 
   useEffect(() => {
@@ -257,6 +199,15 @@ const BuilderView: FC = () => {
         }
       });
     }
+
+    if (lastSavedTime.current && mostRecentTime) {
+      setLastSavedMsg(
+        formatDate(mostRecentTime.toString(), {
+          locale: lang ?? DEFAULT_LANG,
+        }),
+      );
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appSettingArray, isClean]);
 
@@ -275,12 +226,18 @@ const BuilderView: FC = () => {
       pr={DEFAULT_MARGIN}
     >
       <PublicAlert />
-      <Typography variant="h4" sx={{ color: '#5050d2' }}>
-        {t(TEXT_ANALYSIS.BUILDER_VIEW_TITLE)}
-      </Typography>
-      {isOnline ? (
-        <p>{lastSavedMsg ? `last save: ${lastSavedMsg}` : 'no changes'}</p>
-      ) : (
+      <Stack direction="row" spacing={2} alignItems="end">
+        <Typography variant="h4" sx={{ color: '#5050d2' }}>
+          {t(TEXT_ANALYSIS.BUILDER_VIEW_TITLE)}
+        </Typography>
+        <SyncIcon
+          isSuccess={isSuccess}
+          isLoading={isLoading}
+          isError={isError}
+          lastSavedMsg={lastSavedMsg}
+        />
+      </Stack>
+      {!isOnline && (
         <Alert severity="warning">
           {t(TEXT_ANALYSIS.BUILDER_OFFLINE_ALERT_MSG)}
         </Alert>
