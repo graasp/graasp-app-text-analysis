@@ -4064,6 +4064,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.debounce@npm:^4.0.9":
+  version: 4.0.9
+  resolution: "@types/lodash.debounce@npm:4.0.9"
+  dependencies:
+    "@types/lodash": "npm:*"
+  checksum: 8183a152e01928e3b97ca773f6ae6038b8695e76493ba8bf6b743ec143948a62294fbc9d49fa4a78b52265b3ba4892ef57534e0c13d04aa0f111671b5a944feb
+  languageName: node
+  linkType: hard
+
 "@types/lodash.isequal@npm:^4.5.6":
   version: 4.5.6
   resolution: "@types/lodash.isequal@npm:4.5.6"
@@ -8581,6 +8590,7 @@ __metadata:
     "@trivago/prettier-plugin-sort-imports": "npm:4.3.0"
     "@types/i18n": "npm:^0.13.10"
     "@types/jest": "npm:29.5.11"
+    "@types/lodash.debounce": "npm:^4.0.9"
     "@types/lodash.isequal": "npm:^4.5.6"
     "@types/lodash.isobject": "npm:3.0.7"
     "@types/lodash.isstring": "npm:4.0.7"
@@ -8609,6 +8619,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:4.6.0"
     husky: "npm:8.0.3"
     i18next: "npm:^23.8.2"
+    lodash.debounce: "npm:^4.0.8"
     lodash.isequal: "npm:^4.5.0"
     lodash.isobject: "npm:3.0.2"
     lodash.isstring: "npm:4.0.1"

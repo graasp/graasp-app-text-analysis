@@ -99,6 +99,7 @@ export class HistoryCommand<T extends CommandDataType> extends Command<T> {
   }
 }
 
+// TODO: subclass to PostHistory, PatchHistory and DeleteHistory
 export class HistoryManager<T extends CommandDataType> {
   private prevStates: Command<T>[] = [];
 

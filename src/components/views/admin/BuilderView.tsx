@@ -1,4 +1,7 @@
-import { FC, useEffect, useState } from 'react';
+// import debounce from 'lodash.debounce';
+import debounce from 'lodash.debounce';
+
+import { FC, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Alert, Box, Button, Stack, Typography } from '@mui/material';
@@ -85,42 +88,24 @@ const BuilderView: FC = () => {
   // This state is used to avoid to erase changes if another setting is saved.
   const [isClean, setIsClean] = useState(true);
 
-  const updateSettingState = <K extends SettingKey, V extends SettingValue>(
-    settingKey: K,
-    value: V,
-    stateIsClean = false,
-  ): void => {
-    setSettings((currSettings) => ({
-      ...currSettings,
-      [settingKey]: {
-        ...currSettings[settingKey],
-        value,
-      },
-    }));
+  interface DebouncedFunction {
+    (): void;
+    cancel(): void;
+  }
+  const debounceMap = useRef(new Map<string, DebouncedFunction>());
+  const DEBOUNCE_MS = 700;
 
-    setIsClean(stateIsClean);
-  };
-
-  // const { patchAppSetting, postAppSetting, appSettingArray } =
   const { appSettingArray, settingContext } = useAppSettingContext();
   const history = new HistoryManager();
 
-  useEffect(() => {
-    if (isClean) {
-      appSettingArray.forEach((s) => {
-        if (settingKeys.find((k) => k === s.name)) {
-          const settingName = s.name as SettingKey;
-          const { dataKey, value: defaultValue } = defaultSettings[settingName];
-          const appDataValue = s?.data[dataKey] as SettingValue;
-
-          updateSettingState(settingName, appDataValue || defaultValue, true);
-        }
-      });
-    }
-  }, [appSettingArray, isClean]);
-
-  const hasKeyChanged = (settingKey: SettingKey): boolean => {
-    const { value, dataKey } = settings[settingKey];
+  const hasKeyChanged = ({
+    settingKey,
+    setting,
+  }: {
+    settingKey: SettingKey;
+    setting: (typeof settings)[typeof settingKey];
+  }): boolean => {
+    const { value, dataKey } = setting;
     const appSettingDataValue = getAppSetting(appSettingArray, settingKey)
       ?.data[dataKey];
 
@@ -139,56 +124,100 @@ const BuilderView: FC = () => {
     return value !== appSettingDataValue;
   };
 
-  const saveSettings = (): void => {
-    settingKeys.forEach((settingKey) => {
-      const appSetting = getAppSetting(appSettingArray, settingKey);
-      const { value, dataKey } = settings[settingKey];
+  const saveSetting = ({
+    settingKey,
+    setting,
+  }: {
+    settingKey: SettingKey;
+    setting: (typeof settings)[typeof settingKey];
+  }): void => {
+    const appSetting = getAppSetting(appSettingArray, settingKey);
+    const { value, dataKey } = setting;
 
-      if (appSetting) {
-        // patchAppSetting({
-        //   data: { [dataKey]: value },
-        //   id: appSetting.id,
-        // });
-        // TODO: move the history in on changed instead of saved to have previous state
-        if (!hasKeyChanged(settingKey)) {
-          return;
-        }
-
-        history.execute(
-          new HistoryCommand({
-            apiContext: settingContext,
-            currState: {
-              data: { [dataKey]: value },
-              action: 'patch',
-              id: appSetting.id,
-            },
-          }),
-        );
-      } else {
-        //   postAppSetting({
-        //     data: { [dataKey]: value },
-        //     name: settingKey,
-        //   });
-        history.execute(
-          new HistoryCommand({
-            apiContext: settingContext,
-            currState: {
-              data: { [dataKey]: value },
-              action: 'post',
-              name: settingKey,
-            },
-          }),
-        );
+    if (appSetting) {
+      if (!hasKeyChanged({ settingKey, setting })) {
+        return;
       }
 
-      console.log(history.formattedBackHistory());
-      console.log(history.formattedForwardHistory());
-    });
+      history.execute(
+        new HistoryCommand({
+          apiContext: settingContext,
+          currState: {
+            data: { [dataKey]: value },
+            action: 'patch',
+            id: appSetting.id,
+          },
+        }),
+      );
+    } else {
+      history.execute(
+        new HistoryCommand({
+          apiContext: settingContext,
+          currState: {
+            data: { [dataKey]: value },
+            action: 'post',
+            name: settingKey,
+          },
+        }),
+      );
+    }
+  };
 
+  const updateSettingState = <K extends SettingKey, V extends SettingValue>(
+    settingKey: K,
+    value: V,
+    stateIsClean = false,
+  ): void => {
+    setSettings((currSettings) => ({
+      ...currSettings,
+      [settingKey]: {
+        ...currSettings[settingKey],
+        value,
+      },
+    }));
+
+    setIsClean(stateIsClean);
+
+    debounceMap.current.get(settingKey)?.cancel();
+    const newDebounce = debounce(() => {
+      const setting = settings[settingKey];
+      setting.value = value;
+      saveSetting({ settingKey, setting });
+    }, DEBOUNCE_MS);
+    debounceMap.current.set(settingKey, newDebounce);
+    newDebounce();
+  };
+
+  useEffect(() => {
+    if (isClean) {
+      appSettingArray.forEach((s) => {
+        if (settingKeys.find((k) => k === s.name)) {
+          const settingName = s.name as SettingKey;
+          const { dataKey, value: defaultValue } = defaultSettings[settingName];
+          const appDataValue = s?.data[dataKey] as SettingValue;
+
+          updateSettingState(settingName, appDataValue || defaultValue, true);
+        }
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appSettingArray, isClean]);
+
+  const saveSettings = (): void => {
+    settingKeys.forEach((settingKey) =>
+      saveSetting({ settingKey, setting: settings[settingKey] }),
+    );
     setIsClean(true);
   };
 
-  const isChanged = settingKeys.map(hasKeyChanged).some((v) => v);
+  const isChanged = settingKeys
+    .map((settingKey) =>
+      hasKeyChanged({
+        settingKey,
+        setting: settings[settingKey],
+      }),
+    )
+    .some((v) => v);
 
   return (
     <Stack
