@@ -1,17 +1,14 @@
 /* eslint-disable max-classes-per-file */
 
 type PostType = {
-  action: 'post';
   name: string;
 };
 
 type PatchType = {
-  action: 'patch';
   id: string;
 };
 
 type DeleteType = {
-  action: 'delete';
   id: string;
 };
 
@@ -57,49 +54,100 @@ type FormattedCommand<T> = {
   message: string;
 };
 
-export class HistoryCommand<T extends CommandDataType> extends Command<T> {
-  private prevState;
-
-  private currState;
+export abstract class HistoryCommand<T> extends Command<T> {
+  protected currState;
 
   constructor({
-    prevState,
     currState,
     apiContext,
   }: {
-    prevState?: T;
     currState: T;
     apiContext: APIContext<T>;
   }) {
     super(apiContext);
-    this.prevState = prevState;
     this.currState = currState;
   }
 
-  // TODO: improve the way to chose post. patch and delete
-  execute(): void {
-    // check if it is the first data for the app
-    if (this.currState.action === 'post') {
-      this.apiContext.post(this.currState);
-    } else {
-      this.apiContext.patch(this.currState);
-    }
-  }
+  abstract execute(): void;
 
-  undo(): void {
-    if (!this.prevState) {
-      this.apiContext.delete(this.currState);
-    } else {
-      this.apiContext.patch(this.prevState);
-    }
-  }
+  abstract undo(): void;
 
   getInfo(): string {
     return `Command ${JSON.stringify(this.currState)}`;
   }
 }
 
-// TODO: subclass to PostHistory, PatchHistory and DeleteHistory
+export class CreateCommand<
+  T extends CommandDataType,
+> extends HistoryCommand<T> {
+  constructor({
+    currState,
+    apiContext,
+  }: {
+    currState: T;
+    apiContext: APIContext<T>;
+  }) {
+    super({ currState, apiContext });
+  }
+
+  execute(): void {
+    this.apiContext.post(this.currState);
+  }
+
+  undo(): void {
+    this.apiContext.delete(this.currState);
+  }
+}
+
+export class UpdateCommand<
+  T extends CommandDataType,
+> extends HistoryCommand<T> {
+  protected prevState;
+
+  constructor({
+    currState,
+    prevState,
+    apiContext,
+  }: {
+    currState: T;
+    prevState: T;
+    apiContext: APIContext<T>;
+  }) {
+    super({ currState, apiContext });
+    this.prevState = prevState;
+  }
+
+  execute(): void {
+    this.apiContext.patch(this.currState);
+  }
+
+  undo(): void {
+    this.apiContext.patch(this.prevState);
+  }
+}
+
+export class DeleteCommand<
+  T extends CommandDataType,
+> extends HistoryCommand<T> {
+  constructor({
+    currState,
+    apiContext,
+  }: {
+    currState: T;
+    apiContext: APIContext<T>;
+  }) {
+    super({ currState, apiContext });
+  }
+
+  execute(): void {
+    this.apiContext.delete(this.currState);
+  }
+
+  undo(): void {
+    this.apiContext.post(this.currState);
+  }
+}
+
 export class HistoryManager<T extends CommandDataType> {
   private prevStates: Command<T>[] = [];
 

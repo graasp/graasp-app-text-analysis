@@ -1,4 +1,3 @@
-// import debounce from 'lodash.debounce';
 import debounce from 'lodash.debounce';
 
 import { FC, useEffect, useRef, useState } from 'react';
@@ -6,7 +5,11 @@ import { useTranslation } from 'react-i18next';
 
 import { Alert, Box, Button, Stack, Typography } from '@mui/material';
 
-import { HistoryCommand, HistoryManager } from '@/commands/commands';
+import {
+  CreateCommand,
+  HistoryManager,
+  UpdateCommand,
+} from '@/commands/commands';
 import GraaspButton from '@/components/common/settings/GraaspButton';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 
@@ -140,22 +143,24 @@ const BuilderView: FC = () => {
       }
 
       history.execute(
-        new HistoryCommand({
+        new UpdateCommand({
           apiContext: settingContext,
           currState: {
             data: { [dataKey]: value },
-            action: 'patch',
+            id: appSetting.id,
+          },
+          prevState: {
+            data: { [dataKey]: appSetting.data },
             id: appSetting.id,
           },
         }),
       );
     } else {
       history.execute(
-        new HistoryCommand({
+        new CreateCommand({
           apiContext: settingContext,
           currState: {
             data: { [dataKey]: value },
-            action: 'post',
             name: settingKey,
           },
         }),
