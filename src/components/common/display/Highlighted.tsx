@@ -5,6 +5,8 @@ import ReactMarkdown from 'react-markdown';
 
 import { styled } from '@mui/material';
 
+import { isKeywordPresent } from '@/utils/keywords';
+
 import { Keyword } from '../../../config/appSettingTypes';
 import { DEFAULT_KEYWORD } from '../../../config/appSettings';
 import KeywordButton from './KeywordButton';
@@ -40,7 +42,10 @@ const Highlighted: FC<Prop> = ({ text, words, highlight, openChatbot }) => {
     );
   }
 
-  const wordsLowerCase = words.map((word) => word.word.toLocaleLowerCase());
+  const wordsLowerCase = words
+    .map((word) => word.word.toLocaleLowerCase())
+    // remove keywords that are not in the text
+    .filter((w) => isKeywordPresent(text, w));
   const expr = wordsLowerCase.join('|');
   const parts = text.split(new RegExp(`(${expr})`, 'gi'));
   const findKeyword = (part: string): Keyword =>

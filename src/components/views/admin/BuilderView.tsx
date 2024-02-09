@@ -1,6 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 
-import { Alert, Box, Typography } from '@mui/material';
+import { Alert, Box, Button, Typography } from '@mui/material';
+
+import GraaspButton from '@/components/common/settings/GraaspButton';
 
 import {
   INITIAL_CHATBOT_PROMPT_SETTING_KEY,
@@ -27,7 +29,6 @@ import {
 import { DEFAULT_MARGIN } from '../../../config/stylingConstants';
 import { getAppSetting } from '../../../utils/appSettings';
 import PublicAlert from '../../common/PublicAlert';
-import GraaspButton from '../../common/settings/GraaspButton';
 import KeyWords from '../../common/settings/KeyWords';
 import SetText from '../../common/settings/SetText';
 import SwitchModes from '../../common/settings/SwitchModes';
@@ -153,7 +154,7 @@ const BuilderView: FC = () => {
     .some((v) => v);
 
   return (
-    <div data-cy={BUILDER_VIEW_CY}>
+    <Box data-cy={BUILDER_VIEW_CY}>
       <PublicAlert />
       <Typography
         variant="h4"
@@ -164,10 +165,19 @@ const BuilderView: FC = () => {
       >
         Prepare Your Lesson
       </Typography>
-      <Alert severity="warning" sx={{ margin: DEFAULT_MARGIN }}>
-        Do not forget to save your work with the save button at the bottom of
-        this page.
-      </Alert>
+      {isChanged && (
+        <Alert
+          severity="warning"
+          sx={{ margin: DEFAULT_MARGIN }}
+          action={
+            <Button size="small" variant="contained" onClick={saveSettings}>
+              Save
+            </Button>
+          }
+        >
+          Do not forget to save your work.
+        </Alert>
+      )}
       <SetText
         textDataCy={TITLE_INPUT_FIELD_CY}
         value={settings[LESSON_TITLE_SETTING_KEY].value}
@@ -244,7 +254,6 @@ const BuilderView: FC = () => {
       />
 
       <Box
-        component="span"
         justifyContent="flex-end"
         display="flex"
         sx={{ margin: DEFAULT_MARGIN }}
@@ -258,7 +267,7 @@ const BuilderView: FC = () => {
           text="Save"
         />
       </Box>
-    </div>
+    </Box>
   );
 };
 

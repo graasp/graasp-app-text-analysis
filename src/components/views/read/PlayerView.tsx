@@ -140,18 +140,8 @@ const PlayerView: FC = () => {
             DEFAULT_LESSON_TITLE,
           ).text
         }
-        onSummonClick={() => {
-          setSummon(true);
-        }}
-        showDisable={
-          textResource === '' || keywords.length === 0 || summon === true
-        }
-        onHideClick={() => {
-          setSummon(false);
-        }}
-        hideDisable={
-          textResource === '' || keywords.length === 0 || summon === false
-        }
+        onClick={(showKeywords) => setSummon(showKeywords)}
+        disabled={textResource === '' || keywords.length === 0}
       />
       {renderContent()}
     </div>

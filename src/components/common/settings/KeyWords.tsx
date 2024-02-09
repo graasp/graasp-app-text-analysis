@@ -17,6 +17,8 @@ import {
   tooltipClasses,
 } from '@mui/material';
 
+import { isKeywordPresent } from '@/utils/keywords';
+
 import { Keyword } from '../../../config/appSettingTypes';
 import { keywordAlreadyExistsWarningMessage } from '../../../config/messages';
 import {
@@ -73,13 +75,6 @@ const KeyWords: FC<Prop> = ({
 
   const isDefinitionSet = keywordDef.def && keywordDef.def !== '';
 
-  // contains the keywords that are not in the text
-  const keywordsNotInText = new Map(
-    keywords
-      .filter(({ word }) => !textStudents.includes(word.toLowerCase()))
-      .map(({ word }) => [word, true]),
-  );
-
   const handleOnChanges = (newDictionary: Keyword[]): void =>
     onChange(newDictionary);
 
@@ -118,7 +113,7 @@ const KeyWords: FC<Prop> = ({
         <DeleteIcon />
       </IconButton>
       {`${k.word} : ${k.def}`}
-      {keywordsNotInText.get(k.word) && (
+      {!isKeywordPresent(textStudents, k.word) && (
         <HtmlTooltip
           title={
             <>

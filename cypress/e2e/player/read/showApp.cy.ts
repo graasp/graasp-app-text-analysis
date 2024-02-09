@@ -4,7 +4,7 @@ import { DEFAULT_TEXT_RESOURCE_SETTING } from '../../../../src/config/appSetting
 import {
   BANNER_CY,
   PLAYER_VIEW_CY,
-  SUMMON_BUTTON_CY,
+  SHOW_KEYWORDS_BUTTON_CY,
   TEXT_DISPLAY_FIELD_CY,
   buildAllKeywordsButtonDataCy,
   buildDataCy,
@@ -38,8 +38,8 @@ describe('Empty App Settings', () => {
       .should('be.visible')
       .and('have.value', DEFAULT_TEXT_RESOURCE_SETTING.text);
 
-    // check that the summon button is visible but disable
-    cy.get(buildDataCy(SUMMON_BUTTON_CY))
+    // check that the show keywords button is visible but disable
+    cy.get(buildDataCy(SHOW_KEYWORDS_BUTTON_CY))
       .should('be.visible')
       .and('be.disabled');
 
@@ -72,15 +72,15 @@ describe('With App Setting', () => {
       .should('be.visible')
       .and('contain', MOCK_TEXT_RESOURCE);
 
-    // check that the summon button is visible and active
-    cy.get(buildDataCy(SUMMON_BUTTON_CY))
+    // check that the show keywords button is visible and active
+    cy.get(buildDataCy(SHOW_KEYWORDS_BUTTON_CY))
       .should('be.visible')
       .and('not.be.disabled');
   });
 
   it('highlight keywords when summon', () => {
-    // check that the summon button click works
-    cy.get(buildDataCy(SUMMON_BUTTON_CY)).click();
+    // check that the show keywords button click works
+    cy.get(buildDataCy(SHOW_KEYWORDS_BUTTON_CY)).click();
 
     // check that after summon, keywords are highlighted
     cy.get(buildAllKeywordsButtonDataCy()).each((elem) =>

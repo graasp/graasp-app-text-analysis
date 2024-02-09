@@ -25,7 +25,7 @@ export const USE_CHATBOT_DATA_CY = 'use_chatbot_data_cy';
 export const TEXT_INPUT_FIELD_CY = 'text_input_field';
 export const TITLE_INPUT_FIELD_CY = 'title_input_field';
 
-export const SUMMON_BUTTON_CY = 'summon_button';
+export const SHOW_KEYWORDS_BUTTON_CY = 'show_keywords_button';
 export const BANNER_CY = 'banner';
 export const KEYWORD_BUTTON_CY = 'keyword_button';
 

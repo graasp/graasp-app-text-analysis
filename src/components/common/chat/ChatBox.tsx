@@ -1,3 +1,5 @@
+import randomColor from 'randomcolor';
+
 import { FC, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
@@ -27,7 +29,6 @@ import { CHATBOT_MODE_CY, messagesDataCy } from '../../../config/selectors';
 import {
   DEFAULT_BORDER_RADIUS,
   LIGHT_GRAY,
-  LIGHT_VIOLET,
 } from '../../../config/stylingConstants';
 import { useAppDataContext } from '../../context/AppDataContext';
 import { useAppSettingContext } from '../../context/AppSettingContext';
@@ -45,9 +46,18 @@ const StyledMessage = styled(Box)(({ theme }) => ({
   wordBreak: 'break-word',
 }));
 
-const StyledBotMessage = styled(StyledMessage)(() => ({
-  backgroundColor: LIGHT_VIOLET,
-}));
+interface StyledBotMessageProps {
+  wordLowerCase: string;
+}
+
+const StyledBotMessage = styled(StyledMessage)<StyledBotMessageProps>(
+  ({ wordLowerCase }: StyledBotMessageProps) => ({
+    backgroundColor: randomColor({
+      seed: wordLowerCase,
+      luminosity: 'light',
+    }),
+  }),
+);
 
 const StyledUserMessage = styled(StyledMessage)(() => ({
   backgroundColor: LIGHT_GRAY,
@@ -141,7 +151,11 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
       </UserBox>
     ) : (
       <ChatbotBox data-cy={messagesDataCy(msg.id)} key={msg.id}>
-        <StyledBotMessage key={msg.id} alignSelf="flex-start">
+        <StyledBotMessage
+          key={msg.id}
+          alignSelf="flex-start"
+          wordLowerCase={focusWord.toLowerCase()}
+        >
           <StyledReactMarkdown>{msg.data.message}</StyledReactMarkdown>
         </StyledBotMessage>
       </ChatbotBox>
@@ -175,7 +189,12 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
         {renderedMesssages}
         {loading && (
           <ChatbotBox>
-            <StyledBotMessage alignSelf="flex-start">...</StyledBotMessage>
+            <StyledBotMessage
+              alignSelf="flex-start"
+              wordLowerCase={focusWord.toLowerCase()}
+            >
+              ...
+            </StyledBotMessage>
           </ChatbotBox>
         )}
       </Box>

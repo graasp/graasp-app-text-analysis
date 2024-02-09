@@ -39,7 +39,7 @@ const SetText: FC<Prop> = ({
         label={textFieldLabel}
         variant="outlined"
         onChange={handleChange}
-        sx={{ width: FULL_WIDTH, marginRight: DEFAULT_MARGIN }}
+        sx={{ width: FULL_WIDTH }}
         value={value}
         minRows={minRows}
       />
