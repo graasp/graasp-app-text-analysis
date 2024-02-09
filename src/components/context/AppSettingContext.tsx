@@ -16,6 +16,7 @@ import Loader from '../common/Loader';
 export type AppSettingContextType = {
   settingContext: APIContext<CommandDataType>;
   appSettingArray: AppSetting[];
+  isError: boolean;
 };
 
 const defaultContextValue = {
@@ -25,6 +26,7 @@ const defaultContextValue = {
     delete: () => null,
   },
   appSettingArray: [],
+  isError: false,
 };
 
 const AppSettingContext =
@@ -33,9 +35,14 @@ const AppSettingContext =
 export const AppSettingProvider: FC<PropsWithChildren> = ({ children }) => {
   const appSetting = hooks.useAppSettings();
 
-  const { mutate: postAppSetting } = mutations.usePostAppSetting();
-  const { mutate: patchAppSetting } = mutations.usePatchAppSetting();
-  const { mutate: deleteAppSetting } = mutations.useDeleteAppSetting();
+  const { mutate: postAppSetting, isError: postError } =
+    mutations.usePostAppSetting();
+  const { mutate: patchAppSetting, isError: patchError } =
+    mutations.usePatchAppSetting();
+  const { mutate: deleteAppSetting, isError: deleteError } =
+    mutations.useDeleteAppSetting();
+
+  const isError = postError || patchError || deleteError;
 
   const settingContext: APIContext<CommandDataType> = useMemo(
     () => ({
@@ -63,9 +70,10 @@ export const AppSettingProvider: FC<PropsWithChildren> = ({ children }) => {
   const contextValue: AppSettingContextType = useMemo(
     () => ({
       settingContext,
+      isError,
       appSettingArray: appSetting.data || [],
     }),
-    [appSetting.data, settingContext],
+    [appSetting.data, isError, settingContext],
   );
 
   if (appSetting.isLoading) {

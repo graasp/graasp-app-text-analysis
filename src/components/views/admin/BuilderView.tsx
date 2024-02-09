@@ -1,7 +1,10 @@
 import debounce from 'lodash.debounce';
 
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { useLocalContext } from '@graasp/apps-query-client';
+import { formatDate } from '@graasp/sdk';
 
 import { Alert, Box, Button, Stack, Typography } from '@mui/material';
 
@@ -11,6 +14,8 @@ import {
   UpdateCommand,
 } from '@/commands/commands';
 import GraaspButton from '@/components/common/settings/GraaspButton';
+import { useOnlineStatus } from '@/components/hooks/useOnlineStatus';
+import { DEFAULT_LANG } from '@/config/i18n';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 
 import {
@@ -47,6 +52,7 @@ import SetText from '../../common/settings/SetText';
 import SwitchModes from '../../common/settings/SwitchModes';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 
+// TODO: refactor those files in utils and types of current folder
 const DATA_KEYS = {
   TEXT: 'text',
   USE_BOT: 'useBot',
@@ -84,23 +90,48 @@ type SettingValue = (typeof defaultSettings)[SettingKey]['value'];
 
 const settingKeys = Object.keys(defaultSettings).map((k) => k as SettingKey);
 
+interface DebouncedFunction {
+  (): void;
+  cancel(): void;
+}
+const AUTO_SAVE_DEBOUNCE_MS = 700;
+
 const BuilderView: FC = () => {
   const { t } = useTranslation();
   const [settings, setSettings] = useState(defaultSettings);
+  const { lang } = useLocalContext();
 
   // This state is used to avoid to erase changes if another setting is saved.
   const [isClean, setIsClean] = useState(true);
 
-  interface DebouncedFunction {
-    (): void;
-    cancel(): void;
-  }
   const debounceMap = useRef(new Map<string, DebouncedFunction>());
-  const DEBOUNCE_MS = 700;
 
-  const { appSettingArray, settingContext } = useAppSettingContext();
+  const { appSettingArray, settingContext, isError } = useAppSettingContext();
+  const isOnline = useOnlineStatus();
+
+  const lastSavedTime = useRef<Date>();
+  const [lastSavedMsg, setLastSavedMsg] = useState<string>();
+
   const history = new HistoryManager();
 
+  // use memo otherwise to avoid multiple calls between the interval
+  useMemo(
+    () =>
+      setInterval(() => {
+        const lastTime = lastSavedTime.current;
+
+        if (lastTime) {
+          setLastSavedMsg(
+            formatDate(lastSavedTime.current?.toString(), {
+              locale: lang ?? DEFAULT_LANG,
+            }),
+          );
+        }
+      }, 30_000),
+    [lang],
+  );
+
+  // TODO: refactor this to put it in utils
   const hasKeyChanged = ({
     settingKey,
     setting,
@@ -126,6 +157,15 @@ const BuilderView: FC = () => {
 
     return value !== appSettingDataValue;
   };
+
+  const isChanged = settingKeys
+    .map((settingKey) =>
+      hasKeyChanged({
+        settingKey,
+        setting: settings[settingKey],
+      }),
+    )
+    .some((v) => v);
 
   const saveSetting = ({
     settingKey,
@@ -166,6 +206,18 @@ const BuilderView: FC = () => {
         }),
       );
     }
+
+    // TODO: translate me
+    setLastSavedMsg('saving...');
+
+    if (!isError) {
+      lastSavedTime.current = new Date();
+      setLastSavedMsg(
+        formatDate(lastSavedTime.current?.toString(), {
+          locale: lang ?? DEFAULT_LANG,
+        }),
+      );
+    }
   };
 
   const updateSettingState = <K extends SettingKey, V extends SettingValue>(
@@ -188,7 +240,7 @@ const BuilderView: FC = () => {
       const setting = settings[settingKey];
       setting.value = value;
       saveSetting({ settingKey, setting });
-    }, DEBOUNCE_MS);
+    }, AUTO_SAVE_DEBOUNCE_MS);
     debounceMap.current.set(settingKey, newDebounce);
     newDebounce();
   };
@@ -212,17 +264,8 @@ const BuilderView: FC = () => {
     settingKeys.forEach((settingKey) =>
       saveSetting({ settingKey, setting: settings[settingKey] }),
     );
-    setIsClean(true);
+    setIsClean(!isError);
   };
-
-  const isChanged = settingKeys
-    .map((settingKey) =>
-      hasKeyChanged({
-        settingKey,
-        setting: settings[settingKey],
-      }),
-    )
-    .some((v) => v);
 
   return (
     <Stack
@@ -235,9 +278,16 @@ const BuilderView: FC = () => {
       <Typography variant="h4" sx={{ color: '#5050d2' }}>
         {t(TEXT_ANALYSIS.BUILDER_VIEW_TITLE)}
       </Typography>
-      {isChanged && (
+      {isOnline ? (
+        <p>{lastSavedMsg ? `last save: ${lastSavedMsg}` : 'no changes'}</p>
+      ) : (
+        <Alert severity="warning">
+          {t(TEXT_ANALYSIS.BUILDER_OFFLINE_ALERT_MSG)}
+        </Alert>
+      )}
+      {isError && (
         <Alert
-          severity="warning"
+          severity="error"
           action={
             <Button size="small" variant="contained" onClick={saveSettings}>
               {t(TEXT_ANALYSIS.BUILDER_NOT_SAVE_ALERT_SAVE_BTN)}
