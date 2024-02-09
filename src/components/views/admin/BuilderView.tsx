@@ -9,6 +9,7 @@ import { formatDate } from '@graasp/sdk';
 import { Alert, Box, Button, Stack, Typography } from '@mui/material';
 
 import {
+  CommandDataType,
   CreateCommand,
   HistoryManager,
   UpdateCommand,
@@ -46,7 +47,8 @@ import KeyWords from '../../common/settings/KeyWords';
 import SetText from '../../common/settings/SetText';
 import SwitchModes from '../../common/settings/SwitchModes';
 import { useAppSettingContext } from '../../context/AppSettingContext';
-import { SyncIcon } from './SyncIcon';
+import SyncIcon from './SyncIcon';
+import UndoRedoCtrl from './UndoRedoCtrl';
 import {
   DebouncedFunction,
   SettingKey,
@@ -64,7 +66,7 @@ const BuilderView: FC = () => {
   const { appSettingArray, settingContext, isError, isLoading, isSuccess } =
     useAppSettingContext();
   const isOnline = useOnlineStatus();
-  const history = new HistoryManager();
+  const history = useRef(new HistoryManager<CommandDataType>());
 
   // This map is used to manage the auto save of each setting.
   const debounceMap = useRef(new Map<string, DebouncedFunction>());
@@ -73,6 +75,16 @@ const BuilderView: FC = () => {
 
   // This state is used to avoid to erase changes if another setting is saved.
   const [isClean, setIsClean] = useState(true);
+
+  useEffect(() => {
+    const historyEvent = {
+      onChange: () => setIsClean(true),
+    };
+    const currentHistory = history.current;
+    currentHistory.subscribe(historyEvent);
+
+    return () => currentHistory.unSubscribe(historyEvent);
+  }, []);
 
   const lastSavedTime = useRef<Date>();
   const [lastSavedMsg, setLastSavedMsg] = useState<string>();
@@ -126,7 +138,7 @@ const BuilderView: FC = () => {
         return;
       }
 
-      history.execute(
+      history.current.execute(
         new UpdateCommand({
           apiContext: settingContext,
           currState: {
@@ -134,13 +146,13 @@ const BuilderView: FC = () => {
             id: appSetting.id,
           },
           prevState: {
-            data: { [dataKey]: appSetting.data },
+            data: { ...appSetting.data },
             id: appSetting.id,
           },
         }),
       );
     } else {
-      history.execute(
+      history.current.execute(
         new CreateCommand({
           apiContext: settingContext,
           currState: {
@@ -226,7 +238,7 @@ const BuilderView: FC = () => {
       pr={DEFAULT_MARGIN}
     >
       <PublicAlert />
-      <Stack direction="row" spacing={2} alignItems="end">
+      <Stack direction="row" spacing={2} alignItems="center">
         <Typography variant="h4" sx={{ color: '#5050d2' }}>
           {t(TEXT_ANALYSIS.BUILDER_VIEW_TITLE)}
         </Typography>
@@ -254,6 +266,9 @@ const BuilderView: FC = () => {
           {t(TEXT_ANALYSIS.BUILDER_NOT_SAVE_ALERT_MSG)}
         </Alert>
       )}
+
+      <UndoRedoCtrl history={history.current} />
+
       <Stack spacing={DEFAULT_IN_SECTION_SPACING}>
         <SetText
           textDataCy={TITLE_INPUT_FIELD_CY}

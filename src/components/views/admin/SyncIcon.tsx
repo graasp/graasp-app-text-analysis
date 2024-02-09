@@ -2,7 +2,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CloudDoneIcon from '@mui/icons-material/CloudDone';
 import CloudOffIcon from '@mui/icons-material/CloudOff';
 import CloudSyncIcon from '@mui/icons-material/CloudSync';
-import { IconButton, Tooltip } from '@mui/material';
+import { Tooltip } from '@mui/material';
 
 type Props = {
   isSuccess: boolean;
@@ -11,7 +11,9 @@ type Props = {
   lastSavedMsg?: string;
 };
 
-export const SyncIcon = ({
+const ICON_COLOR = '#BBB';
+
+const SyncIcon = ({
   isSuccess,
   isError,
   isLoading,
@@ -19,36 +21,20 @@ export const SyncIcon = ({
 }: Props): JSX.Element => {
   /* TODO: translate  */
   let syncMessage = 'no changes';
-  let syncIcon = (
-    <IconButton aria-label="no-changes" color="info">
-      <CheckCircleOutlineIcon />
-    </IconButton>
-  );
+  let syncIcon = <CheckCircleOutlineIcon htmlColor={ICON_COLOR} />;
 
   if (isError) {
     /* TODO: translate  */
     syncMessage = 'an error occured during the synchronization';
-    syncIcon = (
-      <IconButton aria-label="sync-error" color="error">
-        <CloudOffIcon />
-      </IconButton>
-    );
+    syncIcon = <CloudOffIcon htmlColor={ICON_COLOR} />;
   } else if (isSuccess) {
     /* TODO: translate  */
     syncMessage = `saved ${lastSavedMsg}`;
-    syncIcon = (
-      <IconButton aria-label="changes-saved" color="success">
-        <CloudDoneIcon />
-      </IconButton>
-    );
+    syncIcon = <CloudDoneIcon htmlColor="#BBB" />;
   } else if (isLoading) {
     /* TODO: translate  */
     syncMessage = 'synchronizing';
-    syncIcon = (
-      <IconButton aria-label="sync" color="primary">
-        <CloudSyncIcon />
-      </IconButton>
-    );
+    syncIcon = <CloudSyncIcon htmlColor={ICON_COLOR} />;
   }
 
   return <Tooltip title={syncMessage}>{syncIcon}</Tooltip>;

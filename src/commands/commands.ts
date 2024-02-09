@@ -94,6 +94,7 @@ export class CreateCommand<
     this.apiContext.post(this.currState);
   }
 
+  // TODO: if create command, there is no id... so it is not possible to delete or patch anything
   undo(): void {
     this.apiContext.delete(this.currState);
   }
@@ -148,15 +149,38 @@ export class DeleteCommand<
   }
 }
 
-export class HistoryManager<T extends CommandDataType> {
+export enum HistoryEvent {
+  UNDO = 'undo',
+  REDO = 'redo',
+}
+
+export interface HistoryObserver {
+  onChange: (event: `${HistoryEvent}`) => void;
+}
+
+export class HistoryManager<T> {
   private prevStates: Command<T>[] = [];
 
   private nextStates: Command<T>[] = [];
+
+  private subscribers: HistoryObserver[] = [];
 
   public execute(command: Command<T>): void {
     this.nextStates = [];
     command.execute();
     this.prevStates = [...this.prevStates, command];
+  }
+
+  public subscribe(observer: HistoryObserver): void {
+    if (!this.subscribers.includes(observer)) {
+      this.subscribers.push(observer);
+    }
+  }
+
+  public unSubscribe(observer: HistoryObserver): void {
+    if (this.subscribers.includes(observer)) {
+      this.subscribers = this.subscribers.filter((o) => o !== observer);
+    }
   }
 
   public redo(): void {
@@ -167,16 +191,20 @@ export class HistoryManager<T extends CommandDataType> {
 
     this.prevStates = [...this.prevStates, lastCommand];
     this.nextStates = this.nextStates.slice(0, -1);
+
+    this.subscribers.forEach((s) => s.onChange(HistoryEvent.REDO));
   }
 
   public undo(): void {
     if (!this.prevStates.length) return;
 
     const lastCommand = this.prevStates[this.prevStates.length - 1];
-    lastCommand.execute();
+    lastCommand.undo();
 
     this.nextStates = [...this.nextStates, lastCommand];
     this.prevStates = this.prevStates.slice(0, -1);
+
+    this.subscribers.forEach((s) => s.onChange(HistoryEvent.UNDO));
   }
 
   public formattedBackHistory(): FormattedCommand<T>[] {
