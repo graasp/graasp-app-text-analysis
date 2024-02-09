@@ -26,7 +26,7 @@
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.1.2",
     "cypress-vite": "^1.5.0",
-    "i18next": "22.5.0",
+    "i18next": "22.5.1",
     "lodash.isequal": "^4.5.0",
     "lodash.isobject": "3.0.2",
     "lodash.isstring": "4.0.1",

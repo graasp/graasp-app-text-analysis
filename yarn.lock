@@ -8599,7 +8599,7 @@ __metadata:
     eslint-plugin-react: "npm:7.32.2"
     eslint-plugin-react-hooks: "npm:4.6.0"
     husky: "npm:8.0.3"
-    i18next: "npm:22.5.0"
+    i18next: "npm:22.5.1"
     lodash.isequal: "npm:^4.5.0"
     lodash.isobject: "npm:3.0.2"
     lodash.isstring: "npm:4.0.1"
@@ -8949,12 +8949,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:22.5.0":
-  version: 22.5.0
-  resolution: "i18next@npm:22.5.0"
+"i18next@npm:22.5.1":
+  version: 22.5.1
+  resolution: "i18next@npm:22.5.1"
   dependencies:
     "@babel/runtime": "npm:^7.20.6"
-  checksum: 6eaba7f0c9fa6d9706168bad77f19fae27160fb1fefb5b3649b0a77afb97289f195aecbb8c968b7de9933a0dce986a73675d058a80fb075a2d8f868bbc9e502b
+  checksum: ab1a0adee97911917fc46fb4216b8eb7c4ec0a243966609dda6a384e4b22acd25386a817dc51146328d5272ce1c6133558361788ebc4a36fbca250b8b3e90bd1
   languageName: node
   linkType: hard
 
