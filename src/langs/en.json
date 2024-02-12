@@ -18,6 +18,7 @@
     "BUILDER_VIEW_TITLE": "Prepare Your Lesson",
     "BUILDER_NOT_SAVE_ALERT_SAVE_BTN": "save",
     "BUILDER_NOT_SAVE_ALERT_MSG": "Do not forget to save your work.",
+    "BUILDER_OFFLINE_ALERT_MSG": "You're offline. Please do not leave the page until the connection comes back to avoid losing your work!",
     "BUILDER_TEXTFIELD_LESSON_TITLE": "Enter the lesson title",
     "BUILDER_TEXTFIELD_TEXT_STUDENT": "Enter the text students will see",
     "BUILDER_CHATBOT_SETTING_TITLE": "Chatbot settings",

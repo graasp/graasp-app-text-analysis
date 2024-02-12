@@ -1,24 +1,26 @@
-import { FC, useEffect, useState } from 'react';
+import debounce from 'lodash.debounce';
+
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { useLocalContext } from '@graasp/apps-query-client';
+import { formatDate } from '@graasp/sdk';
 
 import { Alert, Box, Button, Stack, Typography } from '@mui/material';
 
 import GraaspButton from '@/components/common/settings/GraaspButton';
+import { useOnlineStatus } from '@/components/hooks/useOnlineStatus';
+import { DEFAULT_LANG } from '@/config/i18n';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 
 import {
   INITIAL_CHATBOT_PROMPT_SETTING_KEY,
   INITIAL_PROMPT_SETTING_KEY,
   KEYWORDS_SETTING_KEY,
-  Keyword,
   LESSON_TITLE_SETTING_KEY,
   TEXT_RESOURCE_SETTING_KEY,
   USE_CHATBOT_SETTING_KEY,
 } from '../../../config/appSettingTypes';
-import {
-  DEFAULT_TEXT_RESOURCE_SETTING,
-  DEFAULT_USE_CHATBOT_SETTING,
-} from '../../../config/appSettings';
 import {
   BUILDER_VIEW_CY,
   CHATBOT_CONTAINER_CY,
@@ -39,56 +41,40 @@ import KeyWords from '../../common/settings/KeyWords';
 import SetText from '../../common/settings/SetText';
 import SwitchModes from '../../common/settings/SwitchModes';
 import { useAppSettingContext } from '../../context/AppSettingContext';
+import SyncIcon from './SyncIcon';
+import {
+  DebouncedFunction,
+  SettingKey,
+  SettingValue,
+  defaultSettings,
+  settingKeys,
+} from './types';
+import { getMostRecentTime, hasKeyChanged } from './utils';
 
-const DATA_KEYS = {
-  TEXT: 'text',
-  USE_BOT: 'useBot',
-  KEYWORDS: 'keywords',
-} as const;
-
-const defaultSettings = {
-  [LESSON_TITLE_SETTING_KEY]: {
-    value: DEFAULT_TEXT_RESOURCE_SETTING.text,
-    dataKey: DATA_KEYS.TEXT,
-  },
-  [TEXT_RESOURCE_SETTING_KEY]: {
-    value: DEFAULT_TEXT_RESOURCE_SETTING.text,
-    dataKey: DATA_KEYS.TEXT,
-  },
-  [USE_CHATBOT_SETTING_KEY]: {
-    value: DEFAULT_USE_CHATBOT_SETTING.useBot,
-    dataKey: DATA_KEYS.USE_BOT,
-  },
-  [INITIAL_PROMPT_SETTING_KEY]: {
-    value: DEFAULT_TEXT_RESOURCE_SETTING.text,
-    dataKey: DATA_KEYS.TEXT,
-  },
-  [INITIAL_CHATBOT_PROMPT_SETTING_KEY]: {
-    value: DEFAULT_TEXT_RESOURCE_SETTING.text,
-    dataKey: DATA_KEYS.TEXT,
-  },
-  [KEYWORDS_SETTING_KEY]: {
-    value: [] as Keyword[],
-    dataKey: DATA_KEYS.KEYWORDS,
-  },
-};
-type SettingKey = keyof typeof defaultSettings;
-type SettingValue = (typeof defaultSettings)[SettingKey]['value'];
-
-const settingKeys = Object.keys(defaultSettings).map((k) => k as SettingKey);
+const AUTO_SAVE_DEBOUNCE_MS = 700;
 
 const BuilderView: FC = () => {
   const { t } = useTranslation();
-  const [settings, setSettings] = useState(defaultSettings);
+  const { lang } = useLocalContext();
+  const {
+    appSettingArray,
+    isError,
+    isLoading,
+    isSuccess,
+    patchAppSetting,
+    postAppSetting,
+  } = useAppSettingContext();
+  const isOnline = useOnlineStatus();
 
+  // This map is used to manage the auto save of each setting.
+  const debounceMap = useRef(new Map<string, DebouncedFunction>());
   // This state is used to avoid to erase changes if another setting is saved.
   const [isClean, setIsClean] = useState(true);
-
+  const [settings, setSettings] = useState(defaultSettings);
   const updateSettingState = <K extends SettingKey, V extends SettingValue>(
     settingKey: K,
     value: V,
-    stateIsClean = false,
-  ): void => {
+  ): void =>
     setSettings((currSettings) => ({
       ...currSettings,
       [settingKey]: {
@@ -97,11 +83,98 @@ const BuilderView: FC = () => {
       },
     }));
 
-    setIsClean(stateIsClean);
+  const lastSavedTime = useRef<Date>();
+  const [lastSavedMsg, setLastSavedMsg] = useState<string>();
+
+  const mostRecentTime = appSettingArray.reduce<Date | null>(
+    getMostRecentTime,
+    null,
+  );
+
+  // use memo otherwise to avoid multiple calls between the interval
+  useMemo(
+    () =>
+      setInterval(() => {
+        const lastTime = lastSavedTime.current;
+
+        if (lastTime) {
+          setLastSavedMsg(
+            formatDate(lastSavedTime.current?.toString(), {
+              locale: lang ?? DEFAULT_LANG,
+            }),
+          );
+        }
+      }, 20_000),
+    [lang],
+  );
+
+  const isChanged = settingKeys
+    .map((settingKey) =>
+      hasKeyChanged({
+        settingKey,
+        setting: settings[settingKey],
+        appSettings: appSettingArray,
+      }),
+    )
+    .some((v) => v);
+
+  const saveSetting = ({
+    settingKey,
+    setting,
+  }: {
+    settingKey: SettingKey;
+    setting: (typeof settings)[typeof settingKey];
+  }): void => {
+    const appSetting = getAppSetting(appSettingArray, settingKey);
+    const { value, dataKey } = setting;
+
+    if (appSetting) {
+      if (
+        !hasKeyChanged({ settingKey, setting, appSettings: appSettingArray })
+      ) {
+        return;
+      }
+
+      patchAppSetting({
+        data: { [dataKey]: value },
+        id: appSetting.id,
+      });
+    } else {
+      postAppSetting({
+        data: { [dataKey]: value },
+        name: settingKey,
+      });
+    }
+
+    if (!isError) {
+      lastSavedTime.current = new Date();
+    }
   };
 
-  const { patchAppSetting, postAppSetting, appSettingArray } =
-    useAppSettingContext();
+  const handleDebounce = <K extends SettingKey, V extends SettingValue>(
+    settingKey: K,
+    value: V,
+  ): void => {
+    debounceMap.current.get(settingKey)?.cancel();
+    const newDebounce = debounce(() => {
+      const setting = settings[settingKey];
+      setting.value = value;
+      saveSetting({ settingKey, setting });
+    }, AUTO_SAVE_DEBOUNCE_MS);
+    debounceMap.current.set(settingKey, newDebounce);
+    newDebounce();
+  };
+
+  const handleSettingChanged = <K extends SettingKey, V extends SettingValue>(
+    settingKey: K,
+    value: V,
+    stateIsClean = false,
+  ): void => {
+    updateSettingState(settingKey, value);
+
+    setIsClean(stateIsClean);
+    handleDebounce(settingKey, value);
+  };
 
   useEffect(() => {
     if (isClean) {
@@ -111,54 +184,28 @@ const BuilderView: FC = () => {
           const { dataKey, value: defaultValue } = defaultSettings[settingName];
           const appDataValue = s?.data[dataKey] as SettingValue;
 
-          updateSettingState(settingName, appDataValue || defaultValue, true);
+          handleSettingChanged(settingName, appDataValue || defaultValue, true);
         }
       });
     }
+
+    if (lastSavedTime.current && mostRecentTime) {
+      setLastSavedMsg(
+        formatDate(mostRecentTime.toString(), {
+          locale: lang ?? DEFAULT_LANG,
+        }),
+      );
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appSettingArray, isClean]);
 
   const saveSettings = (): void => {
-    settingKeys.forEach((settingKey) => {
-      const appSetting = getAppSetting(appSettingArray, settingKey);
-      const { value, dataKey } = settings[settingKey];
-
-      if (appSetting) {
-        patchAppSetting({
-          data: { [dataKey]: value },
-          id: appSetting.id,
-        });
-      } else {
-        postAppSetting({
-          data: { [dataKey]: value },
-          name: settingKey,
-        });
-      }
-    });
-
-    setIsClean(true);
+    settingKeys.forEach((settingKey) =>
+      saveSetting({ settingKey, setting: settings[settingKey] }),
+    );
+    setIsClean(!isError);
   };
-
-  const isChanged = settingKeys
-    .map((settingKey) => {
-      const { value, dataKey } = settings[settingKey];
-      const appSettingDataValue = getAppSetting(appSettingArray, settingKey)
-        ?.data[dataKey];
-
-      if (dataKey === DATA_KEYS.KEYWORDS) {
-        const k1 = value;
-        const k2 = (appSettingDataValue ?? []) as Keyword[];
-
-        const isKeywordListEqual: boolean =
-          k1.length === k2.length &&
-          k1.every((e1) =>
-            k2.some((e2) => e1.word === e2.word && e1.def === e2.def),
-          );
-        return !isKeywordListEqual;
-      }
-
-      return value !== appSettingDataValue;
-    })
-    .some((v) => v);
 
   return (
     <Stack
@@ -168,12 +215,25 @@ const BuilderView: FC = () => {
       pr={DEFAULT_MARGIN}
     >
       <PublicAlert />
-      <Typography variant="h4" sx={{ color: '#5050d2' }}>
-        {t(TEXT_ANALYSIS.BUILDER_VIEW_TITLE)}
-      </Typography>
-      {isChanged && (
+      <Stack direction="row" spacing={2} alignItems="center">
+        <Typography variant="h4" sx={{ color: '#5050d2' }}>
+          {t(TEXT_ANALYSIS.BUILDER_VIEW_TITLE)}
+        </Typography>
+        <SyncIcon
+          isSuccess={isSuccess}
+          isLoading={isLoading}
+          isError={isError}
+          lastSavedMsg={lastSavedMsg}
+        />
+      </Stack>
+      {!isOnline && (
+        <Alert severity="warning">
+          {t(TEXT_ANALYSIS.BUILDER_OFFLINE_ALERT_MSG)}
+        </Alert>
+      )}
+      {isError && (
         <Alert
-          severity="warning"
+          severity="error"
           action={
             <Button size="small" variant="contained" onClick={saveSettings}>
               {t(TEXT_ANALYSIS.BUILDER_NOT_SAVE_ALERT_SAVE_BTN)}
@@ -183,13 +243,14 @@ const BuilderView: FC = () => {
           {t(TEXT_ANALYSIS.BUILDER_NOT_SAVE_ALERT_MSG)}
         </Alert>
       )}
+
       <Stack spacing={DEFAULT_IN_SECTION_SPACING}>
         <SetText
           textDataCy={TITLE_INPUT_FIELD_CY}
           value={settings[LESSON_TITLE_SETTING_KEY].value}
           textFieldLabel={t(TEXT_ANALYSIS.BUILDER_TEXTFIELD_LESSON_TITLE)}
           onChange={(text) =>
-            updateSettingState(LESSON_TITLE_SETTING_KEY, text)
+            handleSettingChanged(LESSON_TITLE_SETTING_KEY, text)
           }
         />
         <SetText
@@ -199,7 +260,7 @@ const BuilderView: FC = () => {
           minRows={2}
           textFieldLabel={t(TEXT_ANALYSIS.BUILDER_TEXTFIELD_TEXT_STUDENT)}
           onChange={(text) =>
-            updateSettingState(TEXT_RESOURCE_SETTING_KEY, text)
+            handleSettingChanged(TEXT_RESOURCE_SETTING_KEY, text)
           }
         />
       </Stack>
@@ -212,7 +273,7 @@ const BuilderView: FC = () => {
         <SwitchModes
           value={settings[USE_CHATBOT_SETTING_KEY].value}
           onChange={(useChatbot) =>
-            updateSettingState(USE_CHATBOT_SETTING_KEY, useChatbot)
+            handleSettingChanged(USE_CHATBOT_SETTING_KEY, useChatbot)
           }
         />
         {settings[USE_CHATBOT_SETTING_KEY].value && (
@@ -226,7 +287,7 @@ const BuilderView: FC = () => {
               multiline
               textFieldLabel="Enter the intial prompt describing the conversation (as a template for {{keyword}})"
               onChange={(text) =>
-                updateSettingState(INITIAL_PROMPT_SETTING_KEY, text)
+                handleSettingChanged(INITIAL_PROMPT_SETTING_KEY, text)
               }
             />
             <SetText
@@ -235,7 +296,7 @@ const BuilderView: FC = () => {
               multiline
               textFieldLabel="Enter the chatbot's first line (as a template for {{keyword}})"
               onChange={(text) =>
-                updateSettingState(INITIAL_CHATBOT_PROMPT_SETTING_KEY, text)
+                handleSettingChanged(INITIAL_CHATBOT_PROMPT_SETTING_KEY, text)
               }
             />
           </Stack>
@@ -250,7 +311,7 @@ const BuilderView: FC = () => {
           textStudents={settings[TEXT_RESOURCE_SETTING_KEY].value}
           chatbotEnabled={settings[USE_CHATBOT_SETTING_KEY].value}
           onChange={(keywords) =>
-            updateSettingState(KEYWORDS_SETTING_KEY, keywords)
+            handleSettingChanged(KEYWORDS_SETTING_KEY, keywords)
           }
         />
       </Stack>
