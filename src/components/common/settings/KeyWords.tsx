@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -9,6 +10,7 @@ import {
   IconButton,
   List,
   ListItem,
+  Stack,
   TextField,
   Tooltip,
   TooltipProps,
@@ -17,10 +19,10 @@ import {
   tooltipClasses,
 } from '@mui/material';
 
+import { TEXT_ANALYSIS } from '@/langs/constants';
 import { isKeywordPresent } from '@/utils/keywords';
 
 import { Keyword } from '../../../config/appSettingTypes';
-import { keywordAlreadyExistsWarningMessage } from '../../../config/messages';
 import {
   ADD_KEYWORD_BUTTON_CY,
   DELETE_KEYWORD_BUTTON_CY,
@@ -29,8 +31,7 @@ import {
   KEYWORD_LIST_ITEM_CY,
 } from '../../../config/selectors';
 import {
-  DEFAULT_MARGIN,
-  FULL_WIDTH,
+  DEFAULT_IN_SECTION_SPACING,
   ICON_MARGIN,
 } from '../../../config/stylingConstants';
 import GraaspButton from './GraaspButton';
@@ -60,6 +61,7 @@ const KeyWords: FC<Prop> = ({
   chatbotEnabled,
   onChange,
 }) => {
+  const { t } = useTranslation();
   const defaultKeywordDef = { word: '', def: '' };
   const [keywordDef, setKeywordDef] = useState<Keyword>(defaultKeywordDef);
 
@@ -84,7 +86,11 @@ const KeyWords: FC<Prop> = ({
     const newKeyword = { word: wordToLowerCase, def: definition };
 
     if (keywords.some((k) => k.word === wordToLowerCase)) {
-      toast.warning(keywordAlreadyExistsWarningMessage(wordToLowerCase));
+      toast.warning(
+        t(TEXT_ANALYSIS.KEYWORD_ALREADY_EXIST_WARNING_MESSAGE, {
+          keyword: wordToLowerCase,
+        }),
+      );
       return;
     }
 
@@ -117,12 +123,12 @@ const KeyWords: FC<Prop> = ({
         <HtmlTooltip
           title={
             <>
-              <Typography color="inherit">Keyword not in the text</Typography>
-              The keyword &quot;{k.word}&quot; is not in the saved version of
-              the text students.
-              <br />
-              <br />
-              The keyword will not be displayed in the player.
+              <Typography color="inherit">
+                {t(TEXT_ANALYSIS.KEYWORDS_NOT_IN_TEXT_TOOLTIP_TITLE)}
+              </Typography>
+              {t(TEXT_ANALYSIS.KEYWORDS_NOT_IN_TEXT_TOOLTIP_MSG, {
+                keyword: k.word,
+              })}
             </>
           }
         >
@@ -133,12 +139,10 @@ const KeyWords: FC<Prop> = ({
   ));
 
   return (
-    <Box sx={{ margin: DEFAULT_MARGIN }}>
+    <Stack spacing={DEFAULT_IN_SECTION_SPACING}>
       {chatbotEnabled && (
-        <Alert severity="info" sx={{ mb: 4 }}>
-          When the chatbot is enabled, all the definitions of keywords are
-          ignored. This is because the chatbot is displayed instead of the
-          definition.
+        <Alert severity="info">
+          {t(TEXT_ANALYSIS.KEYWORDS_INFO_ALERT_CHATBOT_ENABLED)}
         </Alert>
       )}
       <Box
@@ -147,19 +151,20 @@ const KeyWords: FC<Prop> = ({
         display="flex"
         alignItems={{ xs: 'flex-start', sm: 'center' }}
         flexDirection={{ xs: 'column', sm: 'row' }}
-        rowGap={2}
+        rowGap={DEFAULT_IN_SECTION_SPACING}
+        columnGap={2}
       >
         <TextField
           data-cy={ENTER_KEYWORD_FIELD_CY}
           label="Enter the keyword"
-          sx={{ width: FULL_WIDTH, marginRight: DEFAULT_MARGIN }}
+          fullWidth
           value={keywordDef.word}
           onChange={(e) => updateKeywordDefinition('word', e.target)}
         />
         <TextField
           data-cy={ENTER_DEFINITION_FIELD_CY}
           label="Enter the keyword's definition"
-          sx={{ width: FULL_WIDTH, marginRight: DEFAULT_MARGIN }}
+          fullWidth
           value={keywordDef.def}
           onChange={(e) => updateKeywordDefinition('def', e.target)}
         />
@@ -168,14 +173,13 @@ const KeyWords: FC<Prop> = ({
             buttonDataCy={ADD_KEYWORD_BUTTON_CY}
             handleOnClick={handleClickAdd}
             disabled={!keywordDef.word}
-            sx={{ xs: { margin: '0px' }, sm: { margin: DEFAULT_MARGIN } }}
             minHeight="55px"
             text="Add"
           />
         </Box>
       </Box>
       <List>{keyWordsItems}</List>
-    </Box>
+    </Stack>
   );
 };
 

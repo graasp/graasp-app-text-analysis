@@ -1,6 +1,9 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Box } from '@mui/material';
+
+import { TEXT_ANALYSIS } from '@/langs/constants';
 
 import { APP_DATA_TYPES } from '../../../config/appDataTypes';
 import {
@@ -18,9 +21,7 @@ import {
   DEFAULT_TEXT_RESOURCE_SETTING,
   DEFAULT_USE_CHATBOT_SETTING,
 } from '../../../config/appSettings';
-import { FIRST_CHATBOT_MESSAGE } from '../../../config/constants';
 import { PLAYER_VIEW_CY } from '../../../config/selectors';
-import { FULL_WIDTH } from '../../../config/stylingConstants';
 import { getDataAppSetting } from '../../../utils/appSettings';
 import PublicAlert from '../../common/PublicAlert';
 import ChatbotWindow from '../../common/chat/ChatbotWindow';
@@ -30,6 +31,7 @@ import { useAppDataContext } from '../../context/AppDataContext';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 
 const PlayerView: FC = () => {
+  const { t } = useTranslation();
   const { appSettingArray } = useAppSettingContext();
   const { appDataArray, postAppData, deleteAppData } = useAppDataContext();
 
@@ -77,7 +79,7 @@ const PlayerView: FC = () => {
       appSettingArray,
       INITIAL_CHATBOT_PROMPT_SETTING_KEY,
       'text',
-      FIRST_CHATBOT_MESSAGE,
+      { text: t(TEXT_ANALYSIS.FIRST_CHATBOT_MESSAGE) },
     ).text.replaceAll('{{keyword}}', `**${focusWord.word}**`);
 
     if (keywordAppData.length === 0) {
@@ -106,7 +108,7 @@ const PlayerView: FC = () => {
             keywords={keywords}
             highlight={summon}
             openChatbot={openChatbot}
-            width={FULL_WIDTH}
+            width="100%"
           />
           <ChatbotWindow
             closeChatbot={() => setChatbot(false)}

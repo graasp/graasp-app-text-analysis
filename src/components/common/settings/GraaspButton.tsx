@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { Button, SxProps } from '@mui/material';
 
-import { FULL_WIDTH, GRAASP_VIOLET } from '../../../config/stylingConstants';
+import { GRAASP_VIOLET } from '../../../config/stylingConstants';
 
 type Prop = {
   buttonDataCy: string;
@@ -28,11 +28,11 @@ const GraaspButton: FC<Prop> = ({
   <Button
     data-cy={buttonDataCy}
     variant="contained"
+    fullWidth={fullWidth}
     sx={{
       backgroundColor: GRAASP_VIOLET,
       minHeight,
       marginRight,
-      ...(fullWidth && { width: FULL_WIDTH }),
       ...sx,
     }}
     onClick={handleOnClick}

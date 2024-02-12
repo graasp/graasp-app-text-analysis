@@ -2,8 +2,6 @@ import { FC } from 'react';
 
 import { Box, TextField } from '@mui/material';
 
-import { DEFAULT_MARGIN, FULL_WIDTH } from '../../../config/stylingConstants';
-
 type Prop = {
   value: string;
   textFieldLabel: string;
@@ -31,7 +29,6 @@ const SetText: FC<Prop> = ({
       justifyContent="space-around"
       display="flex"
       alignItems="flex-end"
-      sx={{ margin: DEFAULT_MARGIN }}
     >
       <TextField
         data-cy={textDataCy}
@@ -39,7 +36,7 @@ const SetText: FC<Prop> = ({
         label={textFieldLabel}
         variant="outlined"
         onChange={handleChange}
-        sx={{ width: FULL_WIDTH }}
+        fullWidth
         value={value}
         minRows={minRows}
       />

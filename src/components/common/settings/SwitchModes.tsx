@@ -1,9 +1,11 @@
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { FormControlLabel, Switch } from '@mui/material';
 
+import { TEXT_ANALYSIS } from '@/langs/constants';
+
 import { USE_CHATBOT_DATA_CY } from '../../../config/selectors';
-import { DEFAULT_MARGIN } from '../../../config/stylingConstants';
 
 type Prop = {
   value: boolean;
@@ -11,6 +13,7 @@ type Prop = {
 };
 
 const SwitchModes: FC<Prop> = ({ value, onChange }) => {
+  const { t } = useTranslation();
   const handleOnChange = ({ target }: { target: { checked: boolean } }): void =>
     onChange(target.checked);
 
@@ -23,8 +26,7 @@ const SwitchModes: FC<Prop> = ({ value, onChange }) => {
           onChange={handleOnChange}
         />
       }
-      label="enable the chatbot"
-      sx={{ marginLeft: DEFAULT_MARGIN }}
+      label={t(TEXT_ANALYSIS.ENABLE_CHATBOT_TOGGLE)}
     />
   );
 };

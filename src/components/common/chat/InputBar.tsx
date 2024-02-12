@@ -1,4 +1,5 @@
 import { FC, KeyboardEventHandler, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import SendIcon from '@mui/icons-material/Send';
 import {
@@ -9,6 +10,8 @@ import {
   OutlinedInput,
 } from '@mui/material';
 
+import { TEXT_ANALYSIS } from '@/langs/constants';
+
 import { ENTER_KEY } from '../../../config/constants';
 
 type Prop = {
@@ -16,6 +19,7 @@ type Prop = {
 };
 
 const InputBar: FC<Prop> = ({ onSend }) => {
+  const { t } = useTranslation();
   const [comment, setComment] = useState('');
 
   const onChange = ({ target }: { target: { value: string } }): void => {
@@ -37,7 +41,7 @@ const InputBar: FC<Prop> = ({ onSend }) => {
 
   return (
     <FormControl sx={{ m: 1 }} variant="outlined">
-      <InputLabel>reply here ...</InputLabel>
+      <InputLabel>{t(TEXT_ANALYSIS.INPUT_BAR_REPLY_HERE)}</InputLabel>
       <OutlinedInput
         value={comment}
         onChange={onChange}
@@ -45,7 +49,7 @@ const InputBar: FC<Prop> = ({ onSend }) => {
         endAdornment={
           <InputAdornment position="end">
             <IconButton
-              aria-label="send"
+              aria-label={t(TEXT_ANALYSIS.INPUT_BAR_SEND_BTN)}
               onClick={() => handleClickSend(comment)}
               edge="end"
             >
@@ -53,7 +57,7 @@ const InputBar: FC<Prop> = ({ onSend }) => {
             </IconButton>
           </InputAdornment>
         }
-        label="reply here ..."
+        label={t(TEXT_ANALYSIS.INPUT_BAR_REPLY_HERE)}
       />
     </FormControl>
   );

@@ -4,6 +4,8 @@ import { useLocalContext } from '@graasp/apps-query-client';
 
 import Alert from '@mui/material/Alert';
 
+import { TEXT_ANALYSIS } from '@/langs/constants';
+
 const PublicAlert = (): JSX.Element | null => {
   const { t } = useTranslation();
 
@@ -16,7 +18,7 @@ const PublicAlert = (): JSX.Element | null => {
 
   return (
     <Alert severity="error">
-      {t('You are not authenticated. You cannot save any data')}
+      {t(TEXT_ANALYSIS.PUBLIC_ALERT_NOT_AUTHENTICATED)}
     </Alert>
   );
 };
