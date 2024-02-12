@@ -3,7 +3,7 @@ import React, { FC, PropsWithChildren, createContext, useMemo } from 'react';
 import { AppSetting } from '@graasp/sdk';
 
 import {
-  APIContext,
+  CommandContext,
   CommandDataType,
   DeleteCommandDataType,
   PatchCommandDataType,
@@ -14,7 +14,7 @@ import { hooks, mutations } from '../../config/queryClient';
 import Loader from '../common/Loader';
 
 export type AppSettingContextType = {
-  settingContext: APIContext<CommandDataType>;
+  settingContext: CommandContext<CommandDataType>;
   appSettingArray: AppSetting[];
   isError: boolean;
   isLoading: boolean;
@@ -23,8 +23,8 @@ export type AppSettingContextType = {
 
 const defaultContextValue = {
   settingContext: {
-    patch: () => null,
-    post: () => null,
+    update: () => null,
+    create: () => null,
     delete: () => null,
   },
   appSettingArray: [],
@@ -62,15 +62,15 @@ export const AppSettingProvider: FC<PropsWithChildren> = ({ children }) => {
   const isLoading = postLoading || patchLoading || deleteLoading;
   const isSuccess = postSuccess || patchSuccess || deleteSuccess;
 
-  const settingContext: APIContext<CommandDataType> = useMemo(
+  const settingContext: CommandContext<CommandDataType> = useMemo(
     () => ({
-      patch: (payload: PatchCommandDataType) => {
+      update: (payload: PatchCommandDataType) => {
         patchAppSetting({
           data: { ...payload.data },
           id: payload.id,
         });
       },
-      post: (payload: PostCommandDataType) => {
+      create: (payload: PostCommandDataType) => {
         postAppSetting({
           data: { ...payload.data },
           name: payload.name,

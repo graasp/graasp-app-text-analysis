@@ -28,17 +28,17 @@ export type DeleteCommandDataType = {
   data: { [key: string]: unknown };
 } & DeleteType;
 
-export interface APIContext<T> {
-  patch(data: T): void;
-  post(data: T): void;
+export interface CommandContext<T> {
+  update(data: T): void;
+  create(data: T): void;
   delete(data: T): void;
 }
 
 export abstract class Command<T> {
-  protected apiContext: APIContext<T>;
+  protected commandContext: CommandContext<T>;
 
-  constructor(apiContext: APIContext<T>) {
-    this.apiContext = apiContext;
+  constructor(commandContext: CommandContext<T>) {
+    this.commandContext = commandContext;
   }
 
   abstract execute(): void;
@@ -59,12 +59,12 @@ export abstract class HistoryCommand<T> extends Command<T> {
 
   constructor({
     currState,
-    apiContext,
+    commandContext,
   }: {
     currState: T;
-    apiContext: APIContext<T>;
+    commandContext: CommandContext<T>;
   }) {
-    super(apiContext);
+    super(commandContext);
     this.currState = currState;
   }
 
@@ -77,75 +77,69 @@ export abstract class HistoryCommand<T> extends Command<T> {
   }
 }
 
-export class CreateCommand<
-  T extends CommandDataType,
-> extends HistoryCommand<T> {
+export class CreateCommand<T> extends HistoryCommand<T> {
   constructor({
     currState,
-    apiContext,
+    commandContext,
   }: {
     currState: T;
-    apiContext: APIContext<T>;
+    commandContext: CommandContext<T>;
   }) {
-    super({ currState, apiContext });
+    super({ currState, commandContext });
   }
 
   execute(): void {
-    this.apiContext.post(this.currState);
+    this.commandContext.create(this.currState);
   }
 
   // TODO: if create command, there is no id... so it is not possible to delete or patch anything
   undo(): void {
-    this.apiContext.delete(this.currState);
+    this.commandContext.delete(this.currState);
   }
 }
 
-export class UpdateCommand<
-  T extends CommandDataType,
-> extends HistoryCommand<T> {
+export class UpdateCommand<T> extends HistoryCommand<T> {
   protected prevState;
 
   constructor({
     currState,
     prevState,
-    apiContext,
+    commandContext,
   }: {
     currState: T;
     prevState: T;
-    apiContext: APIContext<T>;
+    commandContext: CommandContext<T>;
   }) {
-    super({ currState, apiContext });
+    super({ currState, commandContext });
     this.prevState = prevState;
   }
 
   execute(): void {
-    this.apiContext.patch(this.currState);
+    this.commandContext.update(this.currState);
   }
 
   undo(): void {
-    this.apiContext.patch(this.prevState);
+    this.commandContext.update(this.prevState);
   }
 }
 
-export class DeleteCommand<
-  T extends CommandDataType,
-> extends HistoryCommand<T> {
+export class DeleteCommand<T> extends HistoryCommand<T> {
   constructor({
     currState,
-    apiContext,
+    commandContext,
   }: {
     currState: T;
-    apiContext: APIContext<T>;
+    commandContext: CommandContext<T>;
   }) {
-    super({ currState, apiContext });
+    super({ currState, commandContext });
   }
 
   execute(): void {
-    this.apiContext.delete(this.currState);
+    this.commandContext.delete(this.currState);
   }
 
   undo(): void {
-    this.apiContext.post(this.currState);
+    this.commandContext.create(this.currState);
   }
 }
 

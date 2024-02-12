@@ -140,7 +140,7 @@ const BuilderView: FC = () => {
 
       history.current.execute(
         new UpdateCommand({
-          apiContext: settingContext,
+          commandContext: settingContext,
           currState: {
             data: { [dataKey]: value },
             id: appSetting.id,
@@ -154,7 +154,7 @@ const BuilderView: FC = () => {
     } else {
       history.current.execute(
         new CreateCommand({
-          apiContext: settingContext,
+          commandContext: settingContext,
           currState: {
             data: { [dataKey]: value },
             name: settingKey,
