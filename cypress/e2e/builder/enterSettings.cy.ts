@@ -45,7 +45,7 @@ describe('Enter Settings', () => {
     cy.get(buildDataCy(BUILDER_VIEW_CY)).should('be.visible');
   });
 
-  it.only('set title', () => {
+  it('set title', () => {
     cy.get(buildDataCy(TITLE_INPUT_FIELD_CY))
       .should('be.visible')
       .type('Title');
