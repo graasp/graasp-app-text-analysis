@@ -1,6 +1,4 @@
-import debounce from 'lodash.debounce';
-
-import { FC, useEffect, useMemo, useRef, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useLocalContext } from '@graasp/apps-query-client';
@@ -65,8 +63,6 @@ const BuilderView: FC = () => {
   } = useAppSettingContext();
   const isOnline = useOnlineStatus();
 
-  // This map is used to manage the auto save of each setting.
-  const debounceMap = useRef(new Map<string, DebouncedFunction>());
   // This state is used to avoid to erase changes if another setting is saved.
   const [isClean, setIsClean] = useState(true);
   const [settings, setSettings] = useState(defaultSettings);
@@ -123,7 +119,8 @@ const BuilderView: FC = () => {
   const handleSettingChanged = <K extends SettingKey, V extends SettingValue>(
     settingKey: K,
     value: V,
-  ): void =>
+    stateIsClean = false,
+  ): void => {
     setSettings((currSettings) => ({
       ...currSettings,
       [settingKey]: {
