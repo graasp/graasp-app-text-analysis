@@ -9,11 +9,15 @@ import { formatDate } from '@graasp/sdk';
 import { Alert, Box, Button, Stack, Typography } from '@mui/material';
 
 import {
+  CommandContext,
   CommandDataType,
   CreateCommand,
-  HistoryManager,
+  DeleteCommandDataType,
+  PatchCommandDataType,
+  PostCommandDataType,
   UpdateCommand,
 } from '@/commands/commands';
+import { useHistoryManager } from '@/commands/useHistoryManager';
 import GraaspButton from '@/components/common/settings/GraaspButton';
 import { useOnlineStatus } from '@/components/hooks/useOnlineStatus';
 import { DEFAULT_LANG } from '@/config/i18n';
@@ -63,28 +67,70 @@ const AUTO_SAVE_DEBOUNCE_MS = 700;
 const BuilderView: FC = () => {
   const { t } = useTranslation();
   const { lang } = useLocalContext();
-  const { appSettingArray, settingContext, isError, isLoading, isSuccess } =
-    useAppSettingContext();
+  const {
+    appSettingArray,
+    isError,
+    isLoading,
+    isSuccess,
+    patchAppSetting,
+    postAppSetting,
+    deleteAppSetting,
+  } = useAppSettingContext();
   const isOnline = useOnlineStatus();
-  const history = useRef(new HistoryManager<CommandDataType>());
+  const historyManager = useHistoryManager<CommandDataType>();
 
   // This map is used to manage the auto save of each setting.
   const debounceMap = useRef(new Map<string, DebouncedFunction>());
-
-  const [settings, setSettings] = useState(defaultSettings);
-
   // This state is used to avoid to erase changes if another setting is saved.
   const [isClean, setIsClean] = useState(true);
+  const [settings, setSettings] = useState(defaultSettings);
+  const updateSettingState = <K extends SettingKey, V extends SettingValue>(
+    settingKey: K,
+    value: V,
+  ): void =>
+    setSettings((currSettings) => ({
+      ...currSettings,
+      [settingKey]: {
+        ...currSettings[settingKey],
+        value,
+      },
+    }));
 
+  // Those ref and useEffect are necessary.
+  // Otherwise, the appSetting in delete method of
+  // settingContext is not up to date.
+  const refAppSetting = useRef(appSettingArray);
   useEffect(() => {
-    const historyEvent = {
-      onChange: () => setIsClean(true),
-    };
-    const currentHistory = history.current;
-    currentHistory.subscribe(historyEvent);
+    refAppSetting.current = appSettingArray;
+  }, [appSettingArray]);
 
-    return () => currentHistory.unSubscribe(historyEvent);
-  }, []);
+  const settingContext: CommandContext<CommandDataType> = {
+    update: ({ settingKey, data, id }: PatchCommandDataType) => {
+      patchAppSetting({
+        data: { ...data },
+        id,
+      });
+      updateSettingState(settingKey, Object.values(data)[0]);
+    },
+    create: ({ settingKey, data, name }: PostCommandDataType) => {
+      postAppSetting({
+        data: { ...data },
+        name,
+      });
+      updateSettingState(settingKey, Object.values(data)[0]);
+    },
+    delete: ({ settingKey }: DeleteCommandDataType) => {
+      const appSetting = getAppSetting(refAppSetting.current, settingKey);
+
+      if (!appSetting) {
+        throw new Error(
+          "The id of the setting was not found ! The setting can't be revert !",
+        );
+      }
+
+      deleteAppSetting({ id: appSetting.id });
+    },
+  };
 
   const lastSavedTime = useRef<Date>();
   const [lastSavedMsg, setLastSavedMsg] = useState<string>();
@@ -138,24 +184,31 @@ const BuilderView: FC = () => {
         return;
       }
 
-      history.current.execute(
+      const prevData = { ...appSetting.data } as {
+        [x: string]: SettingKey;
+      };
+
+      historyManager.execute(
         new UpdateCommand({
           commandContext: settingContext,
           currState: {
+            settingKey,
             data: { [dataKey]: value },
             id: appSetting.id,
           },
           prevState: {
-            data: { ...appSetting.data },
+            settingKey,
+            data: prevData,
             id: appSetting.id,
           },
         }),
       );
     } else {
-      history.current.execute(
+      historyManager.execute(
         new CreateCommand({
           commandContext: settingContext,
           currState: {
+            settingKey,
             data: { [dataKey]: value },
             name: settingKey,
           },
@@ -182,18 +235,12 @@ const BuilderView: FC = () => {
     newDebounce();
   };
 
-  const updateSettingState = <K extends SettingKey, V extends SettingValue>(
+  const handleSettingChanged = <K extends SettingKey, V extends SettingValue>(
     settingKey: K,
     value: V,
     stateIsClean = false,
   ): void => {
-    setSettings((currSettings) => ({
-      ...currSettings,
-      [settingKey]: {
-        ...currSettings[settingKey],
-        value,
-      },
-    }));
+    updateSettingState(settingKey, value);
 
     setIsClean(stateIsClean);
     handleDebounce(settingKey, value);
@@ -207,7 +254,7 @@ const BuilderView: FC = () => {
           const { dataKey, value: defaultValue } = defaultSettings[settingName];
           const appDataValue = s?.data[dataKey] as SettingValue;
 
-          updateSettingState(settingName, appDataValue || defaultValue, true);
+          handleSettingChanged(settingName, appDataValue || defaultValue, true);
         }
       });
     }
@@ -267,7 +314,7 @@ const BuilderView: FC = () => {
         </Alert>
       )}
 
-      <UndoRedoCtrl history={history.current} />
+      <UndoRedoCtrl useHistoryManager={historyManager} />
 
       <Stack spacing={DEFAULT_IN_SECTION_SPACING}>
         <SetText
@@ -275,7 +322,7 @@ const BuilderView: FC = () => {
           value={settings[LESSON_TITLE_SETTING_KEY].value}
           textFieldLabel={t(TEXT_ANALYSIS.BUILDER_TEXTFIELD_LESSON_TITLE)}
           onChange={(text) =>
-            updateSettingState(LESSON_TITLE_SETTING_KEY, text)
+            handleSettingChanged(LESSON_TITLE_SETTING_KEY, text)
           }
         />
         <SetText
@@ -285,7 +332,7 @@ const BuilderView: FC = () => {
           minRows={2}
           textFieldLabel={t(TEXT_ANALYSIS.BUILDER_TEXTFIELD_TEXT_STUDENT)}
           onChange={(text) =>
-            updateSettingState(TEXT_RESOURCE_SETTING_KEY, text)
+            handleSettingChanged(TEXT_RESOURCE_SETTING_KEY, text)
           }
         />
       </Stack>
@@ -298,7 +345,7 @@ const BuilderView: FC = () => {
         <SwitchModes
           value={settings[USE_CHATBOT_SETTING_KEY].value}
           onChange={(useChatbot) =>
-            updateSettingState(USE_CHATBOT_SETTING_KEY, useChatbot)
+            handleSettingChanged(USE_CHATBOT_SETTING_KEY, useChatbot)
           }
         />
         {settings[USE_CHATBOT_SETTING_KEY].value && (
@@ -312,7 +359,7 @@ const BuilderView: FC = () => {
               multiline
               textFieldLabel="Enter the intial prompt describing the conversation (as a template for {{keyword}})"
               onChange={(text) =>
-                updateSettingState(INITIAL_PROMPT_SETTING_KEY, text)
+                handleSettingChanged(INITIAL_PROMPT_SETTING_KEY, text)
               }
             />
             <SetText
@@ -321,7 +368,7 @@ const BuilderView: FC = () => {
               multiline
               textFieldLabel="Enter the chatbot's first line (as a template for {{keyword}})"
               onChange={(text) =>
-                updateSettingState(INITIAL_CHATBOT_PROMPT_SETTING_KEY, text)
+                handleSettingChanged(INITIAL_CHATBOT_PROMPT_SETTING_KEY, text)
               }
             />
           </Stack>
@@ -336,7 +383,7 @@ const BuilderView: FC = () => {
           textStudents={settings[TEXT_RESOURCE_SETTING_KEY].value}
           chatbotEnabled={settings[USE_CHATBOT_SETTING_KEY].value}
           onChange={(keywords) =>
-            updateSettingState(KEYWORDS_SETTING_KEY, keywords)
+            handleSettingChanged(KEYWORDS_SETTING_KEY, keywords)
           }
         />
       </Stack>

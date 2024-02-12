@@ -1,23 +1,24 @@
 import { Button, Stack } from '@mui/material';
 
-import { CommandDataType, HistoryManager } from '@/commands/commands';
+import { CommandDataType } from '@/commands/commands';
+import { UseHistoryManager } from '@/commands/useHistoryManager';
 
 type Props = {
-  history: HistoryManager<CommandDataType>;
+  useHistoryManager: UseHistoryManager<CommandDataType>;
 };
 
-const UndoRedoCtrl = ({ history }: Props): JSX.Element => (
+const UndoRedoCtrl = ({ useHistoryManager }: Props): JSX.Element => (
   <Stack direction="row">
     <Button
-      onClick={() => history.undo()}
-      disabled={!history.formattedBackHistory().length}
+      onClick={() => useHistoryManager.undo()}
+      disabled={!useHistoryManager.hasPrevCommand()}
     >
       {/* TODO: translate */}
       Undo
     </Button>
     <Button
-      onClick={() => history.redo()}
-      disabled={!history.formattedForwardHistory().length}
+      onClick={() => useHistoryManager.redo()}
+      disabled={!useHistoryManager.hasNextCommand()}
     >
       {/* TODO: translate */}
       Redo

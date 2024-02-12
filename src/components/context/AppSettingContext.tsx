@@ -2,19 +2,27 @@ import React, { FC, PropsWithChildren, createContext, useMemo } from 'react';
 
 import { AppSetting } from '@graasp/sdk';
 
-import {
-  CommandContext,
-  CommandDataType,
-  DeleteCommandDataType,
-  PatchCommandDataType,
-  PostCommandDataType,
-} from '@/commands/commands';
-
 import { hooks, mutations } from '../../config/queryClient';
 import Loader from '../common/Loader';
 
+type PostAppSettingType = {
+  data: { [key: string]: unknown };
+  name: string;
+};
+
+type PatchAppSettingType = {
+  data: { [key: string]: unknown };
+  id: string;
+};
+
+type DeleteAppSettingType = {
+  id: string;
+};
+
 export type AppSettingContextType = {
-  settingContext: CommandContext<CommandDataType>;
+  postAppSetting: (payload: PostAppSettingType) => void;
+  patchAppSetting: (payload: PatchAppSettingType) => void;
+  deleteAppSetting: (payload: DeleteAppSettingType) => void;
   appSettingArray: AppSetting[];
   isError: boolean;
   isLoading: boolean;
@@ -22,11 +30,9 @@ export type AppSettingContextType = {
 };
 
 const defaultContextValue = {
-  settingContext: {
-    update: () => null,
-    create: () => null,
-    delete: () => null,
-  },
+  postAppSetting: () => null,
+  patchAppSetting: () => null,
+  deleteAppSetting: () => null,
   appSettingArray: [],
   isError: false,
   isLoading: false,
@@ -62,38 +68,25 @@ export const AppSettingProvider: FC<PropsWithChildren> = ({ children }) => {
   const isLoading = postLoading || patchLoading || deleteLoading;
   const isSuccess = postSuccess || patchSuccess || deleteSuccess;
 
-  const settingContext: CommandContext<CommandDataType> = useMemo(
-    () => ({
-      update: (payload: PatchCommandDataType) => {
-        patchAppSetting({
-          data: { ...payload.data },
-          id: payload.id,
-        });
-      },
-      create: (payload: PostCommandDataType) => {
-        postAppSetting({
-          data: { ...payload.data },
-          name: payload.name,
-        });
-      },
-      delete: (payload: DeleteCommandDataType) => {
-        deleteAppSetting({
-          id: payload.id,
-        });
-      },
-    }),
-    [deleteAppSetting, patchAppSetting, postAppSetting],
-  );
-
   const contextValue: AppSettingContextType = useMemo(
     () => ({
-      settingContext,
+      postAppSetting,
+      patchAppSetting,
+      deleteAppSetting,
       isError,
       isLoading,
       isSuccess,
       appSettingArray: appSetting.data || [],
     }),
-    [appSetting.data, isError, isLoading, isSuccess, settingContext],
+    [
+      appSetting.data,
+      deleteAppSetting,
+      isError,
+      isLoading,
+      isSuccess,
+      patchAppSetting,
+      postAppSetting,
+    ],
   );
 
   if (appSetting.isLoading) {
