@@ -71,17 +71,6 @@ const BuilderView: FC = () => {
   // This state is used to avoid to erase changes if another setting is saved.
   const [isClean, setIsClean] = useState(true);
   const [settings, setSettings] = useState(defaultSettings);
-  const updateSettingState = <K extends SettingKey, V extends SettingValue>(
-    settingKey: K,
-    value: V,
-  ): void =>
-    setSettings((currSettings) => ({
-      ...currSettings,
-      [settingKey]: {
-        ...currSettings[settingKey],
-        value,
-      },
-    }));
 
   const lastSavedTime = useRef<Date>();
   const [lastSavedMsg, setLastSavedMsg] = useState<string>();
@@ -170,7 +159,13 @@ const BuilderView: FC = () => {
     value: V,
     stateIsClean = false,
   ): void => {
-    updateSettingState(settingKey, value);
+    setSettings((currSettings) => ({
+      ...currSettings,
+      [settingKey]: {
+        ...currSettings[settingKey],
+        value,
+      },
+    }));
 
     setIsClean(stateIsClean);
     handleDebounce(settingKey, value);

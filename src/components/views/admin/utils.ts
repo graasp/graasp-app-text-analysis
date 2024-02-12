@@ -37,8 +37,11 @@ export const hasKeyChanged = ({
       k1.every((e1) =>
         k2.some((e2) => e1.word === e2.word && e1.def === e2.def),
       );
+
     return !isKeywordListEqual;
   }
 
-  return value !== appSettingDataValue;
+  // Undefined and empty string should be considered as
+  // the same to have save button disabled when no settings.
+  return !(!value && !appSettingDataValue) && value !== appSettingDataValue;
 };
