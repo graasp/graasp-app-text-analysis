@@ -23,6 +23,8 @@
     "BUILDER_TEXTFIELD_TEXT_STUDENT": "Enter the text students will see",
     "BUILDER_CHATBOT_SETTING_TITLE": "Chatbot settings",
     "BUILDER_CHATBOT_SETTING_INFO": "If enabled, it will be possible to ask questions about the keywords directly in the chat. Otherwise, the definitions will be displayed.",
+    "BUILDER_CHATBOT_SETTING_INIT_PROMPT_LABEL": "Enter the intial prompt describing the conversation (as a template for {{keyword}})",
+    "BUILDER_CHATBOT_SETTING_FIRST_LINE_LABEL": "Enter the chatbot's first line (as a template for {{keyword}})",
     "BUILDER_KEYWORDS_SETTING_TITLE": "Keywords settings",
     "BUILDER_SAVE_BTN": "Save"
   }

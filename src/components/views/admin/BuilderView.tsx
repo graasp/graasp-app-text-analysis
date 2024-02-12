@@ -67,7 +67,7 @@ const BuilderView: FC = () => {
   const isOnline = useOnlineStatus();
 
   // This map is used to manage the auto save of each setting.
-  const debounceMap = useRef(new Map<string, DebouncedFunction>());
+  const autoSaveDebounceMap = useRef(new Map<string, DebouncedFunction>());
   // This state is used to avoid to erase changes if another setting is saved.
   const [isClean, setIsClean] = useState(true);
   const [settings, setSettings] = useState(defaultSettings);
@@ -80,7 +80,7 @@ const BuilderView: FC = () => {
     null,
   );
 
-  // use memo otherwise to avoid multiple calls between the interval
+  // use memo to avoid multiple calls between the interval
   useMemo(
     () =>
       setInterval(() => {
@@ -144,13 +144,13 @@ const BuilderView: FC = () => {
     settingKey: K,
     value: V,
   ): void => {
-    debounceMap.current.get(settingKey)?.cancel();
+    autoSaveDebounceMap.current.get(settingKey)?.cancel();
     const newDebounce = debounce(() => {
       const setting = settings[settingKey];
       setting.value = value;
       saveSetting({ settingKey, setting });
     }, AUTO_SAVE_DEBOUNCE_MS);
-    debounceMap.current.set(settingKey, newDebounce);
+    autoSaveDebounceMap.current.set(settingKey, newDebounce);
     newDebounce();
   };
 
@@ -280,7 +280,9 @@ const BuilderView: FC = () => {
               textDataCy={INITIAL_PROMPT_INPUT_FIELD_CY}
               value={settings[INITIAL_PROMPT_SETTING_KEY].value}
               multiline
-              textFieldLabel="Enter the intial prompt describing the conversation (as a template for {{keyword}})"
+              textFieldLabel={t(
+                TEXT_ANALYSIS.BUILDER_CHATBOT_SETTING_INIT_PROMPT_LABEL,
+              )}
               onChange={(text) =>
                 handleSettingChanged(INITIAL_PROMPT_SETTING_KEY, text)
               }
@@ -289,7 +291,9 @@ const BuilderView: FC = () => {
               textDataCy={INITIAL_CHATBOT_PROMPT_INPUT_FIELD_CY}
               value={settings[INITIAL_CHATBOT_PROMPT_SETTING_KEY].value}
               multiline
-              textFieldLabel="Enter the chatbot's first line (as a template for {{keyword}})"
+              textFieldLabel={t(
+                TEXT_ANALYSIS.BUILDER_CHATBOT_SETTING_FIRST_LINE_LABEL,
+              )}
               onChange={(text) =>
                 handleSettingChanged(INITIAL_CHATBOT_PROMPT_SETTING_KEY, text)
               }
