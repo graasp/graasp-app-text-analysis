@@ -19,25 +19,36 @@ const SyncIcon = ({
   isLoading,
   lastSavedMsg,
 }: Props): JSX.Element => {
-  /* TODO: translate  */
-  let syncMessage = 'no changes';
-  let syncIcon = <CheckCircleOutlineIcon htmlColor={ICON_COLOR} />;
-
-  if (isError) {
-    /* TODO: translate  */
-    syncMessage = 'an error occured during the synchronization';
-    syncIcon = <CloudOffIcon htmlColor={ICON_COLOR} />;
-  } else if (isSuccess) {
-    /* TODO: translate  */
-    syncMessage = `saved ${lastSavedMsg}`;
-    syncIcon = <CloudDoneIcon htmlColor="#BBB" />;
-  } else if (isLoading) {
-    /* TODO: translate  */
-    syncMessage = 'synchronizing';
-    syncIcon = <CloudSyncIcon htmlColor={ICON_COLOR} />;
+  switch (true) {
+    case isLoading:
+      /* TODO: translate  */
+      return (
+        <Tooltip title="synchronizing">
+          <CloudSyncIcon htmlColor={ICON_COLOR} />
+        </Tooltip>
+      );
+    case isSuccess:
+      /* TODO: translate  */
+      return (
+        <Tooltip title={`saved ${lastSavedMsg}`}>
+          <CloudDoneIcon htmlColor={ICON_COLOR} />
+        </Tooltip>
+      );
+    case isError:
+      /* TODO: translate  */
+      return (
+        <Tooltip title="an error occured during the synchronization">
+          <CloudOffIcon color="error" />
+        </Tooltip>
+      );
+    default: {
+      return (
+        <Tooltip title="no changes">
+          <CheckCircleOutlineIcon htmlColor={ICON_COLOR} />
+        </Tooltip>
+      );
+    }
   }
-
-  return <Tooltip title={syncMessage}>{syncIcon}</Tooltip>;
 };
 
 export default SyncIcon;

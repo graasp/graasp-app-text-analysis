@@ -140,7 +140,7 @@ const BuilderView: FC = () => {
     }
   };
 
-  const handleDebounce = <K extends SettingKey, V extends SettingValue>(
+  const debounceSaveSetting = <K extends SettingKey, V extends SettingValue>(
     settingKey: K,
     value: V,
   ): void => {
@@ -168,7 +168,7 @@ const BuilderView: FC = () => {
     }));
 
     setIsClean(stateIsClean);
-    handleDebounce(settingKey, value);
+    debounceSaveSetting(settingKey, value);
   };
 
   useEffect(() => {
