@@ -1,3 +1,28 @@
 {
-  "translations": {}
+  "translations": {
+    "CONTEXT_FETCHING_ERROR_MESSAGE": "حدث خطأ أثناء جلب السياق.",
+    "TOKEN_REQUEST_ERROR_MESSAGE": "حدث خطأ أثناء طلب الرمز المميز.",
+    "CHAT_BOT_ERROR_MESSAGE": "عذرًا، حدث خطأ في برنامج الدردشة الآلية.",
+    "KEYWORD_ALREADY_EXIST_WARNING_MESSAGE": "الكلمة الرئيسية \"{{keyword}}\" موجودة بالفعل. لتحديث تعريفه، قم بحذفه وإدخاله مرة أخرى بالتعريف الجديد.",
+    "FIRST_CHATBOT_MESSAGE": "لقد قمت بالضغط على {{keyword}}، ماذا تريد أن تعرف عنها؟",
+    "MAX_CONVERSATION_LENGTH_ALERT": "لقد وصلت إلى الحد الأقصى لعدد الرسائل المسموح بها في المحادثة",
+    "INPUT_BAR_REPLY_HERE": "الرد هنا...",
+    "INPUT_BAR_SEND_BTN": "يرسل",
+    "BANNER_SHOW_KEYWORDS_BTN": "إظهار الكلمات الرئيسية",
+    "BANNER_HIDE_KEYWORDS_BTN": "إخفاء الكلمات الرئيسية",
+    "KEYWORDS_INFO_ALERT_CHATBOT_ENABLED": "عند تمكين chatbot، يتم تجاهل كافة تعريفات الكلمات الرئيسية. وذلك لأنه يتم عرض chatbot بدلاً من التعريف.",
+    "KEYWORDS_NOT_IN_TEXT_TOOLTIP_TITLE": "الكلمة الرئيسية ليست في النص",
+    "KEYWORDS_NOT_IN_TEXT_TOOLTIP_MSG": "الكلمة الأساسية \"{{keyword}}\" غير موجودة في النسخة المحفوظة من نص الطلاب. لن يتم عرضه في المشغل.",
+    "ENABLE_CHATBOT_TOGGLE": "تمكين الشات بوت",
+    "PUBLIC_ALERT_NOT_AUTHENTICATED": "لم تتم المصادقة عليك. لا يمكنك حفظ أية بيانات",
+    "BUILDER_VIEW_TITLE": "قم بإعداد الدرس الخاص بك",
+    "BUILDER_NOT_SAVE_ALERT_SAVE_BTN": "يحفظ",
+    "BUILDER_NOT_SAVE_ALERT_MSG": "لا تنسى حفظ عملك.",
+    "BUILDER_TEXTFIELD_LESSON_TITLE": "أدخل عنوان الدرس",
+    "BUILDER_TEXTFIELD_TEXT_STUDENT": "أدخل النص الذي سيراه الطلاب",
+    "BUILDER_CHATBOT_SETTING_TITLE": "إعدادات الشات بوت",
+    "BUILDER_CHATBOT_SETTING_INFO": "إذا تم تمكينه، سيكون من الممكن طرح أسئلة حول الكلمات الرئيسية مباشرة في الدردشة. وإلا سيتم عرض التعريفات.",
+    "BUILDER_KEYWORDS_SETTING_TITLE": "إعدادات الكلمات الرئيسية",
+    "BUILDER_SAVE_BTN": "يحفظ"
+  }
 }
