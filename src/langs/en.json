@@ -26,6 +26,10 @@
     "BUILDER_CHATBOT_SETTING_INIT_PROMPT_LABEL": "Enter the intial prompt describing the conversation (as a template for {{keyword}})",
     "BUILDER_CHATBOT_SETTING_FIRST_LINE_LABEL": "Enter the chatbot's first line (as a template for {{keyword}})",
     "BUILDER_KEYWORDS_SETTING_TITLE": "Keywords settings",
-    "BUILDER_SAVE_BTN": "Save"
+    "BUILDER_SAVE_BTN": "Save",
+    "PLAYER_SYNC_ICON_LOADING_LABEL": "synchronizing",
+    "PLAYER_SYNC_ICON_SAVED_LABEL": "saved {{time_ago}}",
+    "PLAYER_SYNC_ICON_NO_CHANGES_LABEL": "no changes",
+    "PLAYER_SYNC_ICON_ERROR_LABEL": "an error occured during the synchronization"
   }
 }

@@ -1,6 +1,6 @@
 import debounce from 'lodash.debounce';
 
-import { FC, useEffect, useMemo, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useLocalContext } from '@graasp/apps-query-client';
@@ -52,6 +52,7 @@ import {
 import { getMostRecentTime, hasKeyChanged } from './utils';
 
 const AUTO_SAVE_DEBOUNCE_MS = 700;
+const REFRESH_SAVE_TIME_MS = 20_000;
 
 const BuilderView: FC = () => {
   const { t } = useTranslation();
@@ -80,22 +81,22 @@ const BuilderView: FC = () => {
     null,
   );
 
-  // use memo to avoid multiple calls between the interval
-  useMemo(
-    () =>
-      setInterval(() => {
-        const lastTime = lastSavedTime.current;
+  // This used effect is used to refresh the last saved time periodically.
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const lastTime = lastSavedTime.current;
+      if (lastTime) {
+        setLastSavedMsg(
+          formatDate(lastSavedTime.current?.toString(), {
+            locale: lang ?? DEFAULT_LANG,
+          }),
+        );
+      }
+    }, REFRESH_SAVE_TIME_MS);
 
-        if (lastTime) {
-          setLastSavedMsg(
-            formatDate(lastSavedTime.current?.toString(), {
-              locale: lang ?? DEFAULT_LANG,
-            }),
-          );
-        }
-      }, 20_000),
-    [lang],
-  );
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastSavedTime.current]);
 
   const isChanged = settingKeys
     .map((settingKey) =>

@@ -1,21 +1,19 @@
 import { useEffect, useState } from 'react';
 
+// This effect allows to detect when the client is offline.
 export const useOnlineStatus = (): boolean => {
   const [online, setOnline] = useState(
     typeof window !== 'undefined' ? window.navigator.onLine : true,
   );
 
   useEffect(() => {
-    // create event handler
     const handleStatusChange = (): void => {
       setOnline(navigator.onLine);
     };
 
-    // listen for online and ofline event
     window.addEventListener('online', handleStatusChange);
     window.addEventListener('offline', handleStatusChange);
 
-    // clean up to avoid memory-leak
     return () => {
       window.removeEventListener('online', handleStatusChange);
       window.removeEventListener('offline', handleStatusChange);
