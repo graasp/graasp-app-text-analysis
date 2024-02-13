@@ -9,13 +9,10 @@
   VITE_API_HOST=<request address for the backend>
 ```
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/graasp/graasp-app-text-analysis?color=green&style=flat-square)
-
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-
+[![GitHub package.json version](https://img.shields.io/github/package-json/v/graasp/graasp-app-text-analysis?color=green&style=flat-square)](https://github.com/graasp/graasp-app-text-analysis)
+[![GitLocalize](https://gitlocalize.com/repo/9343/whole_project/badge.svg)](https://gitlocalize.com/repo/9343?utm_source=badge)
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Contributors ✨
 
