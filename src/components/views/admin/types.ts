@@ -50,8 +50,3 @@ export type SettingValue = (typeof defaultSettings)[SettingKey]['value'];
 export const settingKeys = Object.keys(defaultSettings).map(
   (k) => k as SettingKey,
 );
-
-export interface DebouncedFunction {
-  (): void;
-  cancel(): void;
-}

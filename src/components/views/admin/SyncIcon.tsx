@@ -36,7 +36,7 @@ const SyncIcon = ({
       return (
         <Tooltip
           title={t(TEXT_ANALYSIS.PLAYER_SYNC_ICON_SAVED_LABEL, {
-            time_ago: lastSavedMsg,
+            timeAgo: lastSavedMsg,
           })}
         >
           <CloudDoneIcon htmlColor={ICON_COLOR} />

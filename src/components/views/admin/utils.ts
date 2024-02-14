@@ -1,18 +1,10 @@
+import isequal from 'lodash.isequal';
+
 import { AppSetting } from '@graasp/sdk';
 
-import { Keyword } from '@/config/appSettingTypes';
 import { getAppSetting } from '@/utils/appSettings';
 
 import { DATA_KEYS, SettingKey, defaultSettings } from './types';
-
-export const getMostRecentTime = (acc: Date | null, val: AppSetting): Date => {
-  const date = new Date(val.updatedAt ?? val.createdAt);
-  if (!acc) {
-    return date;
-  }
-
-  return acc > date ? acc : date;
-};
 
 export const hasKeyChanged = ({
   settingKey,
@@ -29,19 +21,10 @@ export const hasKeyChanged = ({
   ];
 
   if (dataKey === DATA_KEYS.KEYWORDS) {
-    const k1 = value;
-    const k2 = (appSettingDataValue ?? []) as Keyword[];
-
-    const isKeywordListEqual: boolean =
-      k1.length === k2.length &&
-      k1.every((e1) =>
-        k2.some((e2) => e1.word === e2.word && e1.def === e2.def),
-      );
-
-    return !isKeywordListEqual;
+    return !isequal(value, appSettingDataValue ?? []);
   }
 
   // Undefined and empty string should be considered as
   // the same to have save button disabled when no settings.
-  return !(!value && !appSettingDataValue) && value !== appSettingDataValue;
+  return Boolean(value || appSettingDataValue) && value !== appSettingDataValue;
 };

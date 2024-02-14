@@ -1,6 +1,4 @@
-import debounce from 'lodash.debounce';
-
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useLocalContext } from '@graasp/apps-query-client';
@@ -9,6 +7,7 @@ import { formatDate } from '@graasp/sdk';
 import { Alert, Box, Button, Stack, Typography } from '@mui/material';
 
 import GraaspButton from '@/components/common/settings/GraaspButton';
+import { useAutoSave } from '@/components/hooks/useAutoSave';
 import { useOnlineStatus } from '@/components/hooks/useOnlineStatus';
 import { DEFAULT_LANG } from '@/config/i18n';
 import { TEXT_ANALYSIS } from '@/langs/constants';
@@ -43,23 +42,20 @@ import SwitchModes from '../../common/settings/SwitchModes';
 import { useAppSettingContext } from '../../context/AppSettingContext';
 import SyncIcon from './SyncIcon';
 import {
-  DebouncedFunction,
   SettingKey,
   SettingValue,
   defaultSettings,
   settingKeys,
 } from './types';
-import { getMostRecentTime, hasKeyChanged } from './utils';
-
-const AUTO_SAVE_DEBOUNCE_MS = 700;
-const REFRESH_SAVE_TIME_MS = 20_000;
+import { hasKeyChanged } from './utils';
 
 const BuilderView: FC = () => {
   const { t } = useTranslation();
   const { lang } = useLocalContext();
   const {
     appSettingArray,
-    isError,
+    patchError,
+    postError,
     isLoading,
     isSuccess,
     patchAppSetting,
@@ -67,46 +63,29 @@ const BuilderView: FC = () => {
   } = useAppSettingContext();
   const isOnline = useOnlineStatus();
 
-  // This map is used to manage the auto save of each setting.
-  const autoSaveDebounceMap = useRef(new Map<string, DebouncedFunction>());
   // This state is used to avoid to erase changes if another setting is saved.
   const [isClean, setIsClean] = useState(true);
   const [settings, setSettings] = useState(defaultSettings);
 
-  const lastSavedTime = useRef<Date>();
   const [lastSavedMsg, setLastSavedMsg] = useState<string>();
 
-  const mostRecentTime = appSettingArray.reduce<Date | null>(
-    getMostRecentTime,
-    null,
+  const autoSave = useAutoSave({
+    onRefreshLastSaved: (newDate: Date): void => {
+      setLastSavedMsg(
+        formatDate(newDate.toString(), {
+          locale: lang ?? DEFAULT_LANG,
+        }),
+      );
+    },
+  });
+
+  const isChanged = settingKeys.some((settingKey) =>
+    hasKeyChanged({
+      settingKey,
+      setting: settings[settingKey],
+      appSettings: appSettingArray,
+    }),
   );
-
-  // This used effect is used to refresh the last saved time periodically.
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const lastTime = lastSavedTime.current;
-      if (lastTime) {
-        setLastSavedMsg(
-          formatDate(lastSavedTime.current?.toString(), {
-            locale: lang ?? DEFAULT_LANG,
-          }),
-        );
-      }
-    }, REFRESH_SAVE_TIME_MS);
-
-    return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastSavedTime.current]);
-
-  const isChanged = settingKeys
-    .map((settingKey) =>
-      hasKeyChanged({
-        settingKey,
-        setting: settings[settingKey],
-        appSettings: appSettingArray,
-      }),
-    )
-    .some((v) => v);
 
   const saveSetting = ({
     settingKey,
@@ -128,31 +107,13 @@ const BuilderView: FC = () => {
       patchAppSetting({
         data: { [dataKey]: value },
         id: appSetting.id,
-      });
+      }).then(() => autoSave.updateSaveTimeToNow());
     } else {
       postAppSetting({
         data: { [dataKey]: value },
         name: settingKey,
-      });
+      }).then(() => autoSave.updateSaveTimeToNow());
     }
-
-    if (!isError) {
-      lastSavedTime.current = new Date();
-    }
-  };
-
-  const debounceSaveSetting = <K extends SettingKey, V extends SettingValue>(
-    settingKey: K,
-    value: V,
-  ): void => {
-    autoSaveDebounceMap.current.get(settingKey)?.cancel();
-    const newDebounce = debounce(() => {
-      const setting = settings[settingKey];
-      setting.value = value;
-      saveSetting({ settingKey, setting });
-    }, AUTO_SAVE_DEBOUNCE_MS);
-    autoSaveDebounceMap.current.set(settingKey, newDebounce);
-    newDebounce();
   };
 
   const handleSettingChanged = <K extends SettingKey, V extends SettingValue>(
@@ -169,7 +130,13 @@ const BuilderView: FC = () => {
     }));
 
     setIsClean(stateIsClean);
-    debounceSaveSetting(settingKey, value);
+
+    const setting = settings[settingKey];
+    setting.value = value;
+    autoSave.debounceSaveSetting({
+      settingKey,
+      saveCallBack: () => saveSetting({ settingKey, setting }),
+    });
   };
 
   useEffect(() => {
@@ -185,14 +152,6 @@ const BuilderView: FC = () => {
       });
     }
 
-    if (lastSavedTime.current && mostRecentTime) {
-      setLastSavedMsg(
-        formatDate(mostRecentTime.toString(), {
-          locale: lang ?? DEFAULT_LANG,
-        }),
-      );
-    }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appSettingArray, isClean]);
 
@@ -200,7 +159,7 @@ const BuilderView: FC = () => {
     settingKeys.forEach((settingKey) =>
       saveSetting({ settingKey, setting: settings[settingKey] }),
     );
-    setIsClean(!isError);
+    setIsClean(!patchError && !postError);
   };
 
   return (
@@ -218,7 +177,7 @@ const BuilderView: FC = () => {
         <SyncIcon
           isSuccess={isSuccess}
           isLoading={isLoading}
-          isError={isError}
+          isError={patchError || postError}
           lastSavedMsg={lastSavedMsg}
         />
       </Stack>
@@ -227,7 +186,7 @@ const BuilderView: FC = () => {
           {t(TEXT_ANALYSIS.BUILDER_OFFLINE_ALERT_MSG)}
         </Alert>
       )}
-      {isError && (
+      {(patchError || postError) && (
         <Alert
           severity="error"
           action={
