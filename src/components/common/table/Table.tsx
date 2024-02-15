@@ -161,6 +161,16 @@ const Table = ({
         handleSaveKeyword(keyword);
         break;
       case TableActionEvent.DELETE:
+        setEditing((currState) => {
+          const newMap = new Map(currState);
+          newMap.delete(keyword);
+          return newMap;
+        });
+        onDeleteSelection(keywords.filter((k) => k.word === keyword));
+        setSelected((currSelection) =>
+          currSelection.filter((s) => s.word !== keyword),
+        );
+        break;
       default:
         console.error(`TableActionEvent "${event}" unknown.`);
     }
@@ -181,6 +191,11 @@ const Table = ({
 
   const handleDeleteSelection = (): void => {
     if (selected.length) {
+      setEditing((currState) => {
+        const newMap = new Map(currState);
+        filteredSelection.forEach((k) => newMap.delete(k.word));
+        return newMap;
+      });
       onDeleteSelection(filteredSelection);
       setSelected((currSelection) =>
         currSelection.filter((s) => !filteredSelection.includes(s)),
