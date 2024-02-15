@@ -3,7 +3,7 @@
     "CONTEXT_FETCHING_ERROR_MESSAGE": "An error occurred while fetching the context.",
     "TOKEN_REQUEST_ERROR_MESSAGE": "An error occurred while requesting the token.",
     "CHAT_BOT_ERROR_MESSAGE": "Sorry, an error occurred with the chatbot.",
-    "KEYWORD_ALREADY_EXIST_WARNING_MESSAGE": "The keyword \"{{keyword}}\" already exists. To update its definition, delete it and enter it again with the new definition.",
+    "KEYWORD_ALREADY_EXIST_WARNING_MESSAGE": "The keyword \"{{keyword}}\" already exists.",
     "FIRST_CHATBOT_MESSAGE": "You clicked on {{keyword}}, what do you want to know about it ?",
     "MAX_CONVERSATION_LENGTH_ALERT": "You have reached the maximum number of messages allowed in the conversation",
     "INPUT_BAR_REPLY_HERE": "reply here ...",
