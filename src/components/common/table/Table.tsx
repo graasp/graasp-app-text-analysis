@@ -214,12 +214,14 @@ const Table = ({
     }
   };
 
-  const handleKeyWordChanged = (oldKey: string, newKeyword: Keyword): void =>
-    setEditing((currState) => {
+  const handleKeyWordChanged = (oldKey: string, newKeyword: Keyword): void => {
+    console.log('editing', oldKey, newKeyword);
+    return setEditing((currState) => {
       const newMap = new Map(currState);
       newMap.set(oldKey, newKeyword);
       return newMap;
     });
+  };
 
   const renderWarningIcon = (title: JSX.Element): JSX.Element => (
     <HtmlTooltip title={title}>
@@ -334,7 +336,11 @@ const Table = ({
                       value={editing.get(k.word)?.word ?? k.word}
                       size="small"
                       onChange={(value) =>
-                        handleKeyWordChanged(k.word, { ...k, word: value })
+                        handleKeyWordChanged(k.word, {
+                          word: value,
+                          // TODO: put in function
+                          def: editing.get(k.word)?.def ?? k.def,
+                        })
                       }
                       readonly={!isInEdition(k.word)}
                     />
@@ -368,7 +374,11 @@ const Table = ({
                     value={editing.get(k.word)?.def ?? k.def}
                     size="small"
                     onChange={(value) =>
-                      handleKeyWordChanged(k.word, { ...k, def: value })
+                      handleKeyWordChanged(k.word, {
+                        def: value,
+                        // TODO: put in function
+                        word: editing.get(k.word)?.word ?? k.word,
+                      })
                     }
                     multiline
                     readonly={!isInEdition(k.word)}
