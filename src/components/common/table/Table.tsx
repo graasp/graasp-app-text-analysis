@@ -58,10 +58,6 @@ const StyledTd = styled('td')({
   textAlign: 'left',
 });
 
-const StyledTFoot = styled('tfoot')({
-  padding: '8px',
-});
-
 const includes = (text: string, search: string): boolean =>
   text.toLowerCase().includes(search.toLowerCase());
 
@@ -184,10 +180,12 @@ const Table = ({
   };
 
   const handleDeleteSelection = (): void => {
-    onDeleteSelection(filteredSelection);
-    setSelected((currSelection) =>
-      currSelection.filter((s) => !filteredSelection.includes(s)),
-    );
+    if (selected.length) {
+      onDeleteSelection(filteredSelection);
+      setSelected((currSelection) =>
+        currSelection.filter((s) => !filteredSelection.includes(s)),
+      );
+    }
   };
 
   const handleKeyWordChanged = (oldKey: string, newKeyword: Keyword): void =>
@@ -204,115 +202,147 @@ const Table = ({
   );
 
   return (
-    <StyledTable>
-      <thead>
-        <tr>
-          <StyledTh>
-            <TextField
-              // TODO: translate me
-              placeholder="Filter out by keyword or definition"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-              variant="outlined"
-              size="small"
-              onChange={(event) => setFilter(event.target.value)}
-            />
-          </StyledTh>
-          <StyledTh>Keyword</StyledTh>
-          <StyledTh>Definition</StyledTh>
-          <StyledTh>Actions</StyledTh>
-        </tr>
-      </thead>
-      <tbody>
-        {filteredKeywords.length ? (
-          filteredKeywords.map((k, idx) => (
-            <tr key={k.word}>
-              <StyledTd>
-                <Checkbox
-                  onChange={(_e, isChecked) =>
-                    handleCheckBoxChanged(isChecked, k)
+    <Stack>
+      <Stack direction="row" justifyContent="space-between" padding={1}>
+        <TextField
+          // TODO: translate me
+          placeholder="Filter out by keyword or definition"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          variant="outlined"
+          size="small"
+          onChange={(event) => setFilter(event.target.value)}
+        />
+      </Stack>
+      <StyledTable>
+        <thead>
+          <tr>
+            {/* TODO: add a global checkbox */}
+            <StyledTh>
+              <Checkbox
+                checked={Boolean(
+                  filteredSelection.length &&
+                    filteredSelection.length === filteredKeywords.length,
+                )}
+                indeterminate={Boolean(
+                  filteredSelection.length &&
+                    filteredSelection.length !== filteredKeywords.length,
+                )}
+                onChange={(_e, isChecked) => {
+                  const newSelection = selected.filter(
+                    (s) => !filteredSelection.includes(s),
+                  );
+
+                  if (isChecked) {
+                    filteredKeywords.forEach((k) => newSelection.push(k));
                   }
-                  checked={selected.includes(k)}
-                />
-              </StyledTd>
-              <StyledTd>
-                <Stack direction="row" spacing={1} alignItems="center">
+                  setSelected(newSelection);
+                }}
+              />
+            </StyledTh>
+            <StyledTh>Keyword</StyledTh>
+            <StyledTh>Definition</StyledTh>
+            <StyledTh>Actions</StyledTh>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredKeywords.length ? (
+            filteredKeywords.map((k, idx) => (
+              <tr key={k.word}>
+                <StyledTd style={{ maxWidth: '10px' }}>
+                  <Checkbox
+                    onChange={(_e, isChecked) =>
+                      handleCheckBoxChanged(isChecked, k)
+                    }
+                    checked={selected.includes(k)}
+                  />
+                </StyledTd>
+                <StyledTd>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <DebouncedTextField
+                      value={editing.get(k.word)?.word ?? k.word}
+                      size="small"
+                      onChange={(value) =>
+                        handleKeyWordChanged(k.word, { ...k, word: value })
+                      }
+                      readonly={!isInEdition(k.word)}
+                    />
+                    {!isKeywordPresent(text, k.word) &&
+                      renderWarningIcon(
+                        <>
+                          <Typography color="inherit">
+                            {t(
+                              TEXT_ANALYSIS.KEYWORDS_NOT_IN_TEXT_TOOLTIP_TITLE,
+                            )}
+                          </Typography>
+                          {t(TEXT_ANALYSIS.KEYWORDS_NOT_IN_TEXT_TOOLTIP_MSG, {
+                            keyword: k.word,
+                          })}
+                        </>,
+                      )}
+                    {(keywordsDuplication.get(k.word)?.number ?? 0) > 1 &&
+                      (keywordsDuplication.get(k.word)?.firstIdx ?? -1) !==
+                        idx &&
+                      // TODO: translate
+                      renderWarningIcon(
+                        <Typography>
+                          The keyword {k.word} is already set. Only the first
+                          one will be used in the player.
+                        </Typography>,
+                      )}
+                  </Stack>
+                </StyledTd>
+                <StyledTd>
                   <DebouncedTextField
-                    value={editing.get(k.word)?.word ?? k.word}
+                    value={editing.get(k.word)?.def ?? k.def}
                     size="small"
                     onChange={(value) =>
-                      handleKeyWordChanged(k.word, { ...k, word: value })
+                      handleKeyWordChanged(k.word, { ...k, def: value })
                     }
+                    multiline
                     readonly={!isInEdition(k.word)}
                   />
-                  {!isKeywordPresent(text, k.word) &&
-                    renderWarningIcon(
-                      <>
-                        <Typography color="inherit">
-                          {t(TEXT_ANALYSIS.KEYWORDS_NOT_IN_TEXT_TOOLTIP_TITLE)}
-                        </Typography>
-                        {t(TEXT_ANALYSIS.KEYWORDS_NOT_IN_TEXT_TOOLTIP_MSG, {
-                          keyword: k.word,
-                        })}
-                      </>,
-                    )}
-                  {(keywordsDuplication.get(k.word)?.number ?? 0) > 1 &&
-                    (keywordsDuplication.get(k.word)?.firstIdx ?? -1) !== idx &&
-                    // TODO: translate
-                    renderWarningIcon(
-                      <Typography>
-                        The keyword {k.word} is already set. Only the first one
-                        will be used in the player.
-                      </Typography>,
-                    )}
-                </Stack>
-              </StyledTd>
-              <StyledTd>
-                <DebouncedTextField
-                  value={editing.get(k.word)?.def ?? k.def}
-                  size="small"
-                  onChange={(value) =>
-                    handleKeyWordChanged(k.word, { ...k, def: value })
-                  }
-                  multiline
-                  readonly={!isInEdition(k.word)}
-                />
-              </StyledTd>
-              <StyledTd>
-                <TableActions
-                  keyword={k.word}
-                  editing={isInEdition(k.word)}
-                  onEvent={handleActionEvents}
-                />
-              </StyledTd>
-            </tr>
-          ))
-        ) : (
-          // TODO: translate me
-          <Box padding={2}>
-            <Typography>No keywords found for {filter}.</Typography>
-          </Box>
-        )}
-      </tbody>
-      <StyledTFoot>
-        {filteredSelection.length > 0 && (
-          <Box padding={1}>
-            <Button
-              startIcon={<DeleteIcon />}
-              variant="contained"
-              onClick={handleDeleteSelection}
-            >
-              Delete selection ({filteredSelection.length})
-            </Button>
-          </Box>
-        )}
-      </StyledTFoot>
-    </StyledTable>
+                </StyledTd>
+                <StyledTd>
+                  <TableActions
+                    keyword={k.word}
+                    editing={isInEdition(k.word)}
+                    onEvent={handleActionEvents}
+                  />
+                </StyledTd>
+              </tr>
+            ))
+          ) : (
+            // TODO: translate me
+            <Box padding={2}>
+              <Typography>No keywords found for {filter}.</Typography>
+            </Box>
+          )}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan={4}>
+              <Box padding={1}>
+                <Button
+                  startIcon={<DeleteIcon />}
+                  variant="contained"
+                  onClick={handleDeleteSelection}
+                  disabled={!filteredSelection.length}
+                >
+                  {/* TODO: translate me */}
+                  Delete selection ({filteredSelection.length})
+                </Button>
+              </Box>
+            </td>
+          </tr>
+        </tfoot>
+      </StyledTable>
+    </Stack>
   );
 };
 
