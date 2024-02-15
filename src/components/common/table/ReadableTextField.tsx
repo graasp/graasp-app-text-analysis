@@ -1,4 +1,4 @@
-import { TextField, TextFieldProps, Typography } from '@mui/material';
+import { TextField, TextFieldProps, Typography, styled } from '@mui/material';
 
 type Props = {
   readonly: boolean;
@@ -8,7 +8,13 @@ type Props = {
   onChange: (value: string) => void;
 };
 
-const DebouncedTextField = ({
+// Set the same padding as for the text input to avoid
+// movements between Typography and Textfield texts.
+const ReadyonlyTextField = styled(Typography)({
+  padding: '8px 14px',
+});
+
+const ReadableTextField = ({
   readonly,
   value,
   onChange,
@@ -20,15 +26,19 @@ const DebouncedTextField = ({
   };
 
   return readonly ? (
-    <Typography>{value}</Typography>
+    <ReadyonlyTextField>{value}</ReadyonlyTextField>
   ) : (
     <TextField
       size={size}
       multiline={multiline}
       value={value}
       onChange={(e) => handleOnChanges(e.target.value)}
+      fullWidth
+      sx={{
+        minWidth: '150px',
+      }}
     />
   );
 };
 
-export default DebouncedTextField;
+export default ReadableTextField;

@@ -3,13 +3,16 @@ import { t } from 'i18next';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
+import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
 import SearchIcon from '@mui/icons-material/Search';
 import WarningIcon from '@mui/icons-material/Warning';
 import {
   Box,
   Button,
   Checkbox,
+  IconButton,
   InputAdornment,
   Stack,
   TextField,
@@ -24,7 +27,7 @@ import { Keyword } from '@/config/appSettingTypes';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 import { isKeywordPresent } from '@/utils/keywords';
 
-import DebouncedTextField from './DebouncedTextField';
+import ReadableTextField from './ReadableTextField';
 import TableActions, { TableActionEvent } from './TableActions';
 
 const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -39,10 +42,18 @@ const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }));
 
+const StyledBox = styled(Box)({
+  width: '100%',
+  borderCollapse: 'collapse',
+  border: '1px solid #dddddd',
+  overflowY: 'auto',
+});
+
 const StyledTable = styled('table')({
   width: '100%',
   borderCollapse: 'collapse',
   border: '1px solid #dddddd',
+  overflowY: 'auto',
 });
 
 const StyledTh = styled('th')({
@@ -217,28 +228,68 @@ const Table = ({
   );
 
   return (
-    <Stack>
-      <Stack direction="row" justifyContent="space-between" padding={1}>
-        <TextField
-          // TODO: translate me
-          placeholder="Filter out by keyword or definition"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-          variant="outlined"
-          size="small"
-          onChange={(event) => setFilter(event.target.value)}
-        />
-      </Stack>
+    <StyledBox>
       <StyledTable>
         <thead>
           <tr>
+            <StyledTd colSpan={editing.size ? 3 : 4}>
+              <TextField
+                // TODO: translate me
+                placeholder="Search for a keyword"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                variant="outlined"
+                size="small"
+                onChange={(event) => setFilter(event.target.value)}
+              />
+            </StyledTd>
+            {Boolean(editing.size) && (
+              <StyledTd>
+                <Stack direction="row">
+                  {/* TODO: translate me too */}
+                  <Tooltip title="Save all the modifications">
+                    <IconButton
+                      aria-label="save-all-rows-icon"
+                      onClick={() => {
+                        editing.forEach((_keyword, key) => {
+                          if (filteredKeywords.find((k) => k.word === key)) {
+                            handleSaveKeyword(key);
+                          }
+                        });
+                      }}
+                    >
+                      <SaveIcon />
+                    </IconButton>
+                  </Tooltip>
+                  {/* TODO: translate me */}
+                  <Tooltip title="Discard all the modifications">
+                    <IconButton
+                      aria-label="cancel-all-rows-icon"
+                      onClick={() => {
+                        editing.forEach((_keyword, key) => {
+                          if (filteredKeywords.find((k) => k.word === key)) {
+                            removeEditingKeyword(key);
+                          }
+                        });
+                      }}
+                    >
+                      <CancelIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Stack>
+              </StyledTd>
+            )}
+          </tr>
+        </thead>
+        <thead>
+          <tr>
             {/* TODO: add a global checkbox */}
-            <StyledTh>
+            <StyledTh style={{ width: '10px' }}>
               <Checkbox
                 checked={Boolean(
                   filteredSelection.length &&
@@ -277,9 +328,9 @@ const Table = ({
                     checked={selected.includes(k)}
                   />
                 </StyledTd>
-                <StyledTd>
+                <StyledTd style={{ width: '50%' }}>
                   <Stack direction="row" spacing={1} alignItems="center">
-                    <DebouncedTextField
+                    <ReadableTextField
                       value={editing.get(k.word)?.word ?? k.word}
                       size="small"
                       onChange={(value) =>
@@ -312,8 +363,8 @@ const Table = ({
                       )}
                   </Stack>
                 </StyledTd>
-                <StyledTd>
-                  <DebouncedTextField
+                <StyledTd style={{ width: '50%' }}>
+                  <ReadableTextField
                     value={editing.get(k.word)?.def ?? k.def}
                     size="small"
                     onChange={(value) =>
@@ -323,7 +374,7 @@ const Table = ({
                     readonly={!isInEdition(k.word)}
                   />
                 </StyledTd>
-                <StyledTd>
+                <StyledTd style={{ width: '10px' }}>
                   <TableActions
                     keyword={k.word}
                     editing={isInEdition(k.word)}
@@ -333,10 +384,18 @@ const Table = ({
               </tr>
             ))
           ) : (
-            // TODO: translate me
-            <Box padding={2}>
-              <Typography>No keywords found for {filter}.</Typography>
-            </Box>
+            <tr>
+              <td colSpan={4}>
+                {/* TODO: translate me */}
+                <Box padding={2}>
+                  <Typography>
+                    {!keywords.length
+                      ? 'There is no keywords for now.'
+                      : `No keywords found for "${filter}".`}
+                  </Typography>
+                </Box>
+              </td>
+            </tr>
           )}
         </tbody>
         <tfoot>
@@ -357,7 +416,7 @@ const Table = ({
           </tr>
         </tfoot>
       </StyledTable>
-    </Stack>
+    </StyledBox>
   );
 };
 
