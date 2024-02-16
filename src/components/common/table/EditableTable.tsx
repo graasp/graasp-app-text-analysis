@@ -62,6 +62,11 @@ export type Row<T extends RowType> = { rowId: RowId } & T;
 const isKeysEquals = (r1: RowId, r2: RowId): boolean =>
   r1.toLowerCase() === r2.toLowerCase();
 
+const rowsInclude = <T extends RowType>(
+  rows: Row<T>[],
+  rowId: RowId,
+): boolean => rows.find((r) => isKeysEquals(r.rowId, rowId)) !== undefined;
+
 type Props<T extends RowType> = {
   columns: Column<T>[];
   rows: Row<T>[];
@@ -85,30 +90,47 @@ const EditableTable = <T extends RowType>({
 }: Props<T>): JSX.Element => {
   const [filter, setFilter] = useState<string>('');
   const [selected, setSelected] = useState<Row<T>[]>([]);
-  // TODO: check if editingRows is useful here or if we have to lift up.
   const [editingRows, setEditingRows] = useState<Map<RowId, Row<T>>>(new Map());
 
-  console.log('selected', selected);
-
-  // TODO: check for those two too
   const filteredRows = rows.filter((r) => rowIsInFilter(r, filter));
   const filteredSelection = selected.filter((r) => rowIsInFilter(r, filter));
   const totalColumns =
-    columns.length + (isSelectable ? 1 : 0) + (isEditable ? 1 : 0); // add checkbox and actions columns
+    columns.length +
+    // add checkbox and actions columns
+    (isSelectable ? 1 : 0) +
+    (isEditable ? 1 : 0);
 
   const isEditing = (rowId: RowId): boolean => editingRows.has(rowId);
 
+  const isGlobalChecked = Boolean(
+    filteredSelection.length &&
+      filteredSelection.length === filteredRows.length,
+  );
+
+  const isGlobalIndeterminate = Boolean(
+    filteredSelection.length &&
+      filteredSelection.length !== filteredRows.length,
+  );
+
+  const getColValue = (row: Row<T>, col: string): string =>
+    editingRows.get(row.rowId)?.[col] ?? row[col];
+
+  const getRow = (rowId: RowId): Row<T> | undefined =>
+    rows.find((r) => isKeysEquals(r.rowId, rowId));
+
+  const addInEditing = (row: Row<T>): void =>
+    setEditingRows((currState) => new Map([...currState, [row.rowId, row]]));
+
   const handleCheckBoxChanged = (isChecked: boolean, rowId: RowId): void => {
-    const rowInSelection = selected.find((s) => isKeysEquals(s.rowId, rowId));
-    const row = rows.find((s) => isKeysEquals(s.rowId, rowId));
-    // TODO: notify to the parent that the checkbox changed
+    const rowInSelection = rowsInclude(selected, rowId);
     if (isChecked && !rowInSelection) {
+      const row = getRow(rowId);
       if (row) {
         setSelected((currState) => [...currState, row]);
       }
     } else if (!isChecked && rowInSelection) {
       setSelected((currState) =>
-        currState.filter((s) => isKeysEquals(s.rowId, rowId)),
+        currState.filter((s) => !isKeysEquals(s.rowId, rowId)),
       );
     }
   };
@@ -122,7 +144,9 @@ const EditableTable = <T extends RowType>({
       });
       onDeleteSelection(filteredSelection);
       setSelected((currSelection) =>
-        currSelection.filter((s) => !filteredSelection.includes(s)),
+        currSelection.filter(
+          ({ rowId }) => !rowsInclude(filteredSelection, rowId),
+        ),
       );
     }
   };
@@ -145,14 +169,21 @@ const EditableTable = <T extends RowType>({
     const newRow = editingRows.get(rowId);
 
     if (newRow) {
-      onUpdate(rowId, newRow).then(() => removeRowFromEditing(rowId));
+      onUpdate(rowId, newRow).then(() => {
+        removeRowFromEditing(rowId);
+      });
+
+      // remove the update item from the selection because we don't know its new id from this component.
+      // TODO: remove this code if the keyword had a unique ID that didn't change after an update.
+      setSelected((currSelection) =>
+        currSelection.filter(({ rowId: rId }) => !isKeysEquals(rId, rowId)),
+      );
     }
   };
 
   const handleSaveAll = (): void => {
     editingRows.forEach((_, rowId) => {
-      // TODO: manage this
-      if (filteredRows.find((r) => isKeysEquals(r.rowId, rowId))) {
+      if (rowsInclude(filteredRows, rowId)) {
         saveRow(rowId);
       }
     });
@@ -160,17 +191,11 @@ const EditableTable = <T extends RowType>({
 
   const handleDiscardAll = (): void => {
     editingRows.forEach((_, rowId) => {
-      if (filteredRows.find((r) => isKeysEquals(r.rowId, rowId))) {
+      if (rowsInclude(filteredRows, rowId)) {
         removeRowFromEditing(rowId);
       }
     });
   };
-
-  const getRow = (rowId: RowId): Row<T> | undefined =>
-    rows.find((r) => isKeysEquals(r.rowId, rowId));
-
-  const addInEditing = (row: Row<T>): void =>
-    setEditingRows((currState) => new Map([...currState, [row.rowId, row]]));
 
   const handleOnEdit = (rowId: RowId): void => {
     if (isEditing(rowId)) {
@@ -207,27 +232,16 @@ const EditableTable = <T extends RowType>({
     }
   };
 
-  const isGlobalChecked = Boolean(
-    filteredSelection.length &&
-      filteredSelection.length === filteredRows.length,
-  );
-
-  const isGlobalIndeterminate = Boolean(
-    filteredSelection.length &&
-      filteredSelection.length !== filteredRows.length,
-  );
-
   const handleGlobalOnChange = (isChecked: boolean): void => {
-    const newSelection = selected.filter((s) => !filteredSelection.includes(s));
+    const newSelection = selected.filter(
+      ({ rowId }) => !rowsInclude(filteredSelection, rowId),
+    );
 
     if (isChecked) {
       filteredRows.forEach((r) => newSelection.push(r));
     }
     setSelected(newSelection);
   };
-
-  const getColValue = (row: Row<T>, col: string): string =>
-    editingRows.get(row.rowId)?.[col] ?? row[col];
 
   return (
     <StyledBox>
@@ -312,8 +326,7 @@ const EditableTable = <T extends RowType>({
                       onChange={(_e, isChecked) =>
                         handleCheckBoxChanged(isChecked, r.rowId)
                       }
-                      // TODO: check if includes works correctly
-                      checked={selected.includes(r)}
+                      checked={rowsInclude(selected, r.rowId)}
                     />
                   </StyledTd>
                 )}

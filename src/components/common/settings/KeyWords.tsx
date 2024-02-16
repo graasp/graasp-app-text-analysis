@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
@@ -33,6 +33,17 @@ const KeyWords: FC<Prop> = ({
   const { t } = useTranslation();
   const defaultKeywordDef = { word: '', def: '' };
   const [keywordDef, setKeywordDef] = useState<Keyword>(defaultKeywordDef);
+
+  // This temporary storage for keywords is necessary to handle multiple saves.
+  // Without it, subsequent saves could overwrite previous changes
+  // as the parent component's keywords state might not update in time.
+  // Using keywords.map directly would not account for unsaved changes.
+  const pendingKeywordsRef = useRef<Keyword[]>(keywords);
+
+  // Effect to synchronize temporary storage with the latest keywords state.
+  useEffect(() => {
+    pendingKeywordsRef.current = keywords;
+  }, [keywords]);
 
   const updateKeywordDefinition = (
     key: keyof Keyword,
@@ -113,10 +124,12 @@ const KeyWords: FC<Prop> = ({
         keywords={keywords}
         text={textStudents}
         onUpdate={(oldKey, newKeyword) => {
-          const updatedKeywords = keywords.map((keyword) =>
-            keyword.word === oldKey ? newKeyword : keyword,
+          // Update the temporary storage with the new keyword.
+          pendingKeywordsRef.current = pendingKeywordsRef.current.map(
+            (keyword) => (keyword.word === oldKey ? newKeyword : keyword),
           );
-          handleOnChanges(updatedKeywords);
+          // Propagate changes to the parent component.
+          handleOnChanges(pendingKeywordsRef.current);
         }}
         onDeleteSelection={handleDelete}
       />
