@@ -20,8 +20,8 @@ export type AppSettingContextType = {
   postAppSetting: (payload: PostAppSettingType) => Promise<AppSetting<Data>>;
   patchAppSetting: (payload: PatchAppSettingType) => Promise<AppSetting<Data>>;
   appSettingArray: AppSetting[];
-  patchError: boolean;
-  postError: boolean;
+  isPatchError: boolean;
+  isPostError: boolean;
   isLoading: boolean;
   isSuccess: boolean;
 };
@@ -30,8 +30,8 @@ const defaultContextValue = {
   postAppSetting: () => Promise.reject(),
   patchAppSetting: () => Promise.reject(),
   appSettingArray: [],
-  patchError: false,
-  postError: false,
+  isPatchError: false,
+  isPostError: false,
   isLoading: false,
   isSuccess: false,
 };
@@ -44,13 +44,13 @@ export const AppSettingProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const {
     mutateAsync: postAppSetting,
-    isError: postError,
+    isError: isPostError,
     isLoading: postLoading,
     isSuccess: postSuccess,
   } = mutations.usePostAppSetting();
   const {
     mutateAsync: patchAppSetting,
-    isError: patchError,
+    isError: isPatchError,
     isLoading: patchLoading,
     isSuccess: patchSuccess,
   } = mutations.usePatchAppSetting();
@@ -62,8 +62,8 @@ export const AppSettingProvider: FC<PropsWithChildren> = ({ children }) => {
     () => ({
       postAppSetting,
       patchAppSetting,
-      patchError,
-      postError,
+      isPatchError,
+      isPostError,
       isLoading,
       isSuccess,
       appSettingArray: appSetting.data || [],
@@ -73,9 +73,9 @@ export const AppSettingProvider: FC<PropsWithChildren> = ({ children }) => {
       isLoading,
       isSuccess,
       patchAppSetting,
-      patchError,
+      isPatchError,
       postAppSetting,
-      postError,
+      isPostError,
     ],
   );
 

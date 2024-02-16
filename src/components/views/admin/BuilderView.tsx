@@ -54,8 +54,8 @@ const BuilderView: FC = () => {
   const { lang } = useLocalContext();
   const {
     appSettingArray,
-    patchError,
-    postError,
+    isPatchError,
+    isPostError,
     isLoading,
     isSuccess,
     patchAppSetting,
@@ -159,7 +159,7 @@ const BuilderView: FC = () => {
     settingKeys.forEach((settingKey) =>
       saveSetting({ settingKey, setting: settings[settingKey] }),
     );
-    setIsClean(!patchError && !postError);
+    setIsClean(!isPatchError && !isPostError);
   };
 
   return (
@@ -177,7 +177,7 @@ const BuilderView: FC = () => {
         <SyncIcon
           isSuccess={isSuccess}
           isLoading={isLoading}
-          isError={patchError || postError}
+          isError={isPatchError || isPostError}
           lastSavedMsg={lastSavedMsg}
         />
       </Stack>
@@ -186,7 +186,7 @@ const BuilderView: FC = () => {
           {t(TEXT_ANALYSIS.BUILDER_OFFLINE_ALERT_MSG)}
         </Alert>
       )}
-      {(patchError || postError) && (
+      {(isPatchError || isPostError) && (
         <Alert
           severity="error"
           action={
