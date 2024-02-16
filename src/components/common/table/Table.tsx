@@ -25,7 +25,7 @@ import {
 
 import { Keyword } from '@/config/appSettingTypes';
 import { TEXT_ANALYSIS } from '@/langs/constants';
-import { isKeywordPresent } from '@/utils/keywords';
+import { isKeywordPresent, isKeywordsEquals } from '@/utils/keywords';
 
 import ReadableTextField from './ReadableTextField';
 import TableActions, { TableActionEvent } from './TableActions';
@@ -86,14 +86,19 @@ const Table = ({
   onDeleteSelection,
 }: Props): JSX.Element => {
   const [filter, setFilter] = useState<string>('');
-
-  const filterKeywords = (k: Keyword): boolean =>
-    includes(k.word, filter) || includes(k.def, filter);
-
-  const filteredKeywords = keywords.filter(filterKeywords);
   const [selected, setSelected] = useState<Keyword[]>([]);
-  const filteredSelection = selected.filter(filterKeywords);
-  const keywordsDuplication = keywords.reduce<
+  const [editingKeywords, setEditingKeywords] = useState<Map<string, Keyword>>(
+    new Map(),
+  );
+
+  const keywordIsInFilter = (k: Keyword): boolean =>
+    includes(k.word, filter) || includes(k.def, filter);
+  const isEditing = (keyword: string): boolean => editingKeywords.has(keyword);
+
+  const filteredKeywords = keywords.filter(keywordIsInFilter);
+  const filteredSelection = selected.filter(keywordIsInFilter);
+
+  const keywordsOccurence = keywords.reduce<
     Map<string, { firstIdx: number; number: number }>
   >((acc, keyword, idx) => {
     acc.set(keyword.word, {
@@ -103,57 +108,51 @@ const Table = ({
     return acc;
   }, new Map());
 
-  const [editing, setEditing] = useState<Map<string, Keyword>>(new Map());
-
-  const isInEdition = (keyword: string): boolean => editing.has(keyword);
-
   const getKeyword = (word: string): Keyword | undefined =>
-    keywords.find((k) => k.word === word);
+    keywords.find((k) => isKeywordsEquals(k, word));
 
-  const addInEdition = (keyWord: Keyword): void =>
-    setEditing((currState) => new Map([...currState, [keyWord.word, keyWord]]));
+  const addInEditing = (keyWord: Keyword): void =>
+    setEditingKeywords(
+      (currState) => new Map([...currState, [keyWord.word, keyWord]]),
+    );
 
-  const handleEdit = (word: string): void => {
-    if (isInEdition(word)) {
-      console.warn(`Keyword ${word} is already been editing...`);
+  const handleOnEdit = (word: string): void => {
+    if (isEditing(word)) {
+      // Keyword is already been editingKeywords.
       return;
     }
 
     const keyword = getKeyword(word);
     if (keyword) {
-      addInEdition(keyword);
-    } else {
-      console.warn(`Keyword ${word} is not found !`);
+      addInEditing(keyword);
     }
   };
 
-  const removeEditingKeyword = (word: string): void =>
-    setEditing((currState) => {
+  const removeKeywordFromEditing = (word: string): void =>
+    setEditingKeywords((currState) => {
       const newMap = new Map(currState);
       newMap.delete(word);
       return newMap;
     });
 
-  const handleSaveKeyword = (word: string): void => {
-    const newKeyword = editing.get(word);
-
-    if (
-      word.toLowerCase() !== newKeyword?.word.toLowerCase() &&
-      keywords.find(
-        (k) => k.word.toLowerCase() === newKeyword?.word.toLowerCase(),
-      )
-    ) {
-      toast.warning(
-        t(TEXT_ANALYSIS.KEYWORD_ALREADY_EXIST_WARNING_MESSAGE, {
-          keyword: newKeyword?.word?.toLowerCase(),
-        }),
-      );
-      return;
-    }
+  const saveKeyword = (word: string): void => {
+    const newKeyword = editingKeywords.get(word);
 
     if (newKeyword) {
+      if (
+        isKeywordsEquals(word, newKeyword) &&
+        keywords.find((k) => isKeywordsEquals(k, newKeyword))
+      ) {
+        toast.warning(
+          t(TEXT_ANALYSIS.KEYWORD_ALREADY_EXIST_WARNING_MESSAGE, {
+            keyword: newKeyword.word.toLowerCase(),
+          }),
+        );
+        return;
+      }
+
       onUpdate(word, newKeyword);
-      removeEditingKeyword(word);
+      removeKeywordFromEditing(word);
     }
   };
 
@@ -163,27 +162,23 @@ const Table = ({
   ): void => {
     switch (event) {
       case TableActionEvent.EDIT:
-        handleEdit(keyword);
+        handleOnEdit(keyword);
         break;
       case TableActionEvent.DISCARD:
-        removeEditingKeyword(keyword);
+        removeKeywordFromEditing(keyword);
         break;
       case TableActionEvent.SAVE:
-        handleSaveKeyword(keyword);
+        saveKeyword(keyword);
         break;
       case TableActionEvent.DELETE:
-        setEditing((currState) => {
-          const newMap = new Map(currState);
-          newMap.delete(keyword);
-          return newMap;
-        });
-        onDeleteSelection(keywords.filter((k) => k.word === keyword));
+        removeKeywordFromEditing(keyword);
+        onDeleteSelection(keywords.filter((k) => isKeywordsEquals(k, keyword)));
         setSelected((currSelection) =>
-          currSelection.filter((s) => s.word !== keyword),
+          currSelection.filter((s) => !isKeywordsEquals(s, keyword)),
         );
         break;
       default:
-        console.error(`TableActionEvent "${event}" unknown.`);
+        throw new Error(`TableActionEvent "${event}" unknown.`);
     }
   };
 
@@ -195,14 +190,14 @@ const Table = ({
       setSelected((currState) => [...currState, keyword]);
     } else if (!isChecked && selected.includes(keyword)) {
       setSelected((currState) =>
-        currState.filter((k) => k.word.localeCompare(keyword.word)),
+        currState.filter((k) => isKeywordsEquals(k, keyword)),
       );
     }
   };
 
   const handleDeleteSelection = (): void => {
     if (selected.length) {
-      setEditing((currState) => {
+      setEditingKeywords((currState) => {
         const newMap = new Map(currState);
         filteredSelection.forEach((k) => newMap.delete(k.word));
         return newMap;
@@ -214,14 +209,12 @@ const Table = ({
     }
   };
 
-  const handleKeyWordChanged = (oldKey: string, newKeyword: Keyword): void => {
-    console.log('editing', oldKey, newKeyword);
-    return setEditing((currState) => {
+  const handleKeyWordChanged = (oldKey: string, newKeyword: Keyword): void =>
+    setEditingKeywords((currState) => {
       const newMap = new Map(currState);
       newMap.set(oldKey, newKeyword);
       return newMap;
     });
-  };
 
   const renderWarningIcon = (title: JSX.Element): JSX.Element => (
     <HtmlTooltip title={title}>
@@ -234,7 +227,7 @@ const Table = ({
       <StyledTable>
         <thead>
           <tr>
-            <StyledTd colSpan={editing.size ? 3 : 4}>
+            <StyledTd colSpan={editingKeywords.size ? 3 : 4}>
               <TextField
                 // TODO: translate me
                 placeholder="Search for a keyword"
@@ -250,7 +243,7 @@ const Table = ({
                 onChange={(event) => setFilter(event.target.value)}
               />
             </StyledTd>
-            {Boolean(editing.size) && (
+            {Boolean(editingKeywords.size) && (
               <StyledTd>
                 <Stack direction="row">
                   {/* TODO: translate me too */}
@@ -258,9 +251,13 @@ const Table = ({
                     <IconButton
                       aria-label="save-all-rows-icon"
                       onClick={() => {
-                        editing.forEach((_keyword, key) => {
-                          if (filteredKeywords.find((k) => k.word === key)) {
-                            handleSaveKeyword(key);
+                        editingKeywords.forEach((_keyword, key) => {
+                          if (
+                            filteredKeywords.find((k) =>
+                              isKeywordsEquals(k, key),
+                            )
+                          ) {
+                            saveKeyword(key);
                           }
                         });
                       }}
@@ -273,9 +270,13 @@ const Table = ({
                     <IconButton
                       aria-label="cancel-all-rows-icon"
                       onClick={() => {
-                        editing.forEach((_keyword, key) => {
-                          if (filteredKeywords.find((k) => k.word === key)) {
-                            removeEditingKeyword(key);
+                        editingKeywords.forEach((_keyword, key) => {
+                          if (
+                            filteredKeywords.find((k) =>
+                              isKeywordsEquals(k, key),
+                            )
+                          ) {
+                            removeKeywordFromEditing(key);
                           }
                         });
                       }}
@@ -313,6 +314,7 @@ const Table = ({
                 }}
               />
             </StyledTh>
+            {/* TODO: translate  */}
             <StyledTh>Keyword</StyledTh>
             <StyledTh>Definition</StyledTh>
             <StyledTh>Actions</StyledTh>
@@ -333,16 +335,16 @@ const Table = ({
                 <StyledTd style={{ width: '50%' }}>
                   <Stack direction="row" spacing={1} alignItems="center">
                     <ReadableTextField
-                      value={editing.get(k.word)?.word ?? k.word}
+                      value={editingKeywords.get(k.word)?.word ?? k.word}
                       size="small"
                       onChange={(value) =>
                         handleKeyWordChanged(k.word, {
                           word: value,
                           // TODO: put in function
-                          def: editing.get(k.word)?.def ?? k.def,
+                          def: editingKeywords.get(k.word)?.def ?? k.def,
                         })
                       }
-                      readonly={!isInEdition(k.word)}
+                      readonly={!isEditing(k.word)}
                     />
                     {!isKeywordPresent(text, k.word) &&
                       renderWarningIcon(
@@ -357,9 +359,8 @@ const Table = ({
                           })}
                         </>,
                       )}
-                    {(keywordsDuplication.get(k.word)?.number ?? 0) > 1 &&
-                      (keywordsDuplication.get(k.word)?.firstIdx ?? -1) !==
-                        idx &&
+                    {(keywordsOccurence.get(k.word)?.number ?? 0) > 1 &&
+                      (keywordsOccurence.get(k.word)?.firstIdx ?? -1) !== idx &&
                       // TODO: translate
                       renderWarningIcon(
                         <Typography>
@@ -371,23 +372,23 @@ const Table = ({
                 </StyledTd>
                 <StyledTd style={{ width: '50%' }}>
                   <ReadableTextField
-                    value={editing.get(k.word)?.def ?? k.def}
+                    value={editingKeywords.get(k.word)?.def ?? k.def}
                     size="small"
                     onChange={(value) =>
                       handleKeyWordChanged(k.word, {
                         def: value,
                         // TODO: put in function
-                        word: editing.get(k.word)?.word ?? k.word,
+                        word: editingKeywords.get(k.word)?.word ?? k.word,
                       })
                     }
                     multiline
-                    readonly={!isInEdition(k.word)}
+                    readonly={!isEditing(k.word)}
                   />
                 </StyledTd>
                 <StyledTd style={{ width: '10px' }}>
                   <TableActions
-                    keyword={k.word}
-                    editing={isInEdition(k.word)}
+                    rowId={k.word}
+                    isEditing={isEditing(k.word)}
                     onEvent={handleActionEvents}
                   />
                 </StyledTd>

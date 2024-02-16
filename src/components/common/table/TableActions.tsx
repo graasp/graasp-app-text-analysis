@@ -12,18 +12,17 @@ export enum TableActionEvent {
 }
 
 type Props = {
-  editing: boolean;
-  keyword: string;
-  onEvent: (keyword: string, event: TableActionEvent) => void;
+  isEditing: boolean;
+  rowId: string;
+  onEvent: (rowId: string, event: TableActionEvent) => void;
 };
 
-const TableActions = ({ editing, keyword, onEvent }: Props): JSX.Element => {
-  const handleEvent = (event: TableActionEvent): void =>
-    onEvent(keyword, event);
+const TableActions = ({ isEditing, rowId, onEvent }: Props): JSX.Element => {
+  const handleEvent = (event: TableActionEvent): void => onEvent(rowId, event);
 
   return (
     <Stack direction="row">
-      {editing ? (
+      {isEditing ? (
         <>
           {/* TODO: translate me too */}
           <Tooltip title="Save the modifications">
