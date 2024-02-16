@@ -4,7 +4,7 @@ type Props = {
   readonly: boolean;
   size?: TextFieldProps['size'];
   multiline?: TextFieldProps['multiline'];
-  value: string;
+  value: string | unknown;
   onChange: (value: string) => void;
 };
 
@@ -26,7 +26,7 @@ const ReadableTextField = ({
   };
 
   return readonly ? (
-    <ReadyonlyTextField>{value}</ReadyonlyTextField>
+    <ReadyonlyTextField>{`${value}`}</ReadyonlyTextField>
   ) : (
     <TextField
       size={size}

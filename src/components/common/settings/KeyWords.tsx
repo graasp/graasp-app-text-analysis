@@ -14,7 +14,7 @@ import {
   ENTER_KEYWORD_FIELD_CY,
 } from '../../../config/selectors';
 import { DEFAULT_IN_SECTION_SPACING } from '../../../config/stylingConstants';
-import KeywordsTable from '../table/KeywordsTable';
+import KeywordsTable from '../../views/admin/KeywordsTable';
 import GraaspButton from './GraaspButton';
 
 type Prop = {

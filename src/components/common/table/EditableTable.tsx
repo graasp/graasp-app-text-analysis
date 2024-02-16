@@ -1,63 +1,13 @@
 import { useState } from 'react';
 
-import CancelIcon from '@mui/icons-material/Cancel';
-import DeleteIcon from '@mui/icons-material/Delete';
-import SaveIcon from '@mui/icons-material/Save';
-import SearchIcon from '@mui/icons-material/Search';
-import {
-  Box,
-  Button,
-  Checkbox,
-  IconButton,
-  InputAdornment,
-  Stack,
-  TextField,
-  Tooltip,
-  Typography,
-  styled,
-} from '@mui/material';
+import { Checkbox, Stack, Typography } from '@mui/material';
 
 import ReadableTextField from './ReadableTextField';
 import TableActions, { TableActionEvent } from './TableActions';
-
-const StyledBox = styled(Box)({
-  width: '100%',
-  borderCollapse: 'collapse',
-  border: '1px solid #dddddd',
-  overflowY: 'auto',
-});
-
-const StyledTable = styled('table')({
-  width: '100%',
-  borderCollapse: 'collapse',
-  border: '1px solid #dddddd',
-  overflowY: 'auto',
-});
-
-const StyledTh = styled('th')({
-  border: '1px solid #dddddd',
-  padding: '8px',
-  textAlign: 'left',
-  backgroundColor: '#f2f2f2',
-});
-
-const StyledTd = styled('td')({
-  border: '1px solid #dddddd',
-  padding: '8px',
-  textAlign: 'left',
-});
-
-// An alias to better represent the value of the string.
-type RowId = string;
-type RowType = { [key: string]: string };
-
-type RowKey<T extends RowType> = Extract<keyof T, string>;
-export type Column<T extends RowType> = {
-  key: RowKey<T>;
-  displayColumn: string;
-  multiline?: boolean;
-};
-export type Row<T extends RowType> = { rowId: RowId } & T;
+import TableFooter from './TableFooter';
+import TableHeader from './TableHeader';
+import { StyledBox, StyledTable, StyledTd } from './styles';
+import { Column, Row, RowId, RowType } from './types';
 
 const isKeysEquals = (r1: RowId, r2: RowId): boolean =>
   r1.toLowerCase() === r2.toLowerCase();
@@ -112,7 +62,7 @@ const EditableTable = <T extends RowType>({
       filteredSelection.length !== filteredRows.length,
   );
 
-  const getColValue = (row: Row<T>, col: string): string =>
+  const getColValue = (row: Row<T>, col: string): unknown =>
     editingRows.get(row.rowId)?.[col] ?? row[col];
 
   const getRow = (rowId: RowId): Row<T> | undefined =>
@@ -246,82 +196,25 @@ const EditableTable = <T extends RowType>({
   return (
     <StyledBox>
       <StyledTable>
-        <thead>
-          <tr>
-            <StyledTd
-              colSpan={editingRows.size ? totalColumns - 1 : totalColumns}
-            >
-              <TextField
-                // TODO: translate me
-                placeholder="Search in the table"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                }}
-                variant="outlined"
-                size="small"
-                onChange={(event) => setFilter(event.target.value)}
-              />
-            </StyledTd>
-            {Boolean(editingRows.size) && (
-              <StyledTd>
-                <Stack direction="row">
-                  {/* TODO: translate me too */}
-                  <Tooltip title="Save all the modifications">
-                    <IconButton
-                      aria-label="save-all-rows-icon"
-                      onClick={handleSaveAll}
-                    >
-                      <SaveIcon />
-                    </IconButton>
-                  </Tooltip>
-                  {/* TODO: translate me */}
-                  <Tooltip title="Discard all the modifications">
-                    <IconButton
-                      aria-label="cancel-all-rows-icon"
-                      onClick={handleDiscardAll}
-                    >
-                      <CancelIcon />
-                    </IconButton>
-                  </Tooltip>
-                </Stack>
-              </StyledTd>
-            )}
-          </tr>
-        </thead>
-        <thead>
-          <tr>
-            {isSelectable && (
-              <StyledTh style={{ width: '10px' }}>
-                <Checkbox
-                  checked={isGlobalChecked}
-                  indeterminate={isGlobalIndeterminate}
-                  onChange={(_e, isChecked) => handleGlobalOnChange(isChecked)}
-                />
-              </StyledTh>
-            )}
-            {/* TODO: translate  */}
-            {columns.map((c) => (
-              <StyledTh key={`th-${c.key}`}>{c.displayColumn}</StyledTh>
-            ))}
-            {isEditable && (
-              <StyledTh style={{ width: '10px' }}>
-                {/* TODO: translates me  */}
-                Actions
-              </StyledTh>
-            )}
-          </tr>
-        </thead>
+        <TableHeader
+          isEditing={Boolean(editingRows.size)}
+          isSelectable={isSelectable}
+          isEditable={isEditable}
+          totalColumns={totalColumns}
+          isGlobalChecked={isGlobalChecked}
+          isGlobalIndeterminate={isGlobalIndeterminate}
+          columns={columns}
+          onSaveAll={handleSaveAll}
+          onDiscardAll={handleDiscardAll}
+          onFilterChanged={setFilter}
+          onGlobalCheckChanged={handleGlobalOnChange}
+        />
         <tbody>
           {filteredRows.length ? (
             filteredRows.map((r) => (
               <tr key={r.rowId}>
                 {isSelectable && (
-                  // TODO: don't use style
-                  <StyledTd style={{ maxWidth: '10px' }}>
+                  <StyledTd>
                     <Checkbox
                       onChange={(_e, isChecked) =>
                         handleCheckBoxChanged(isChecked, r.rowId)
@@ -332,23 +225,25 @@ const EditableTable = <T extends RowType>({
                 )}
 
                 {columns.map((c) => (
-                  // TODO: don't use style
                   <StyledTd
                     key={`td-${c.key}`}
-                    style={{ width: `${100 / columns.length}%` }}
+                    width={`${100 / columns.length}%`}
                   >
-                    <ReadableTextField
-                      value={getColValue(r, c.key.toString())}
-                      size="small"
-                      onChange={(value) =>
-                        handleRowChanged(r.rowId, {
-                          ...(editingRows.get(r.rowId) ?? r),
-                          [c.key.toString()]: value,
-                        })
-                      }
-                      multiline={c.multiline}
-                      readonly={!isEditing(r.rowId)}
-                    />
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <ReadableTextField
+                        value={getColValue(r, c.key.toString())}
+                        size="small"
+                        onChange={(value) =>
+                          handleRowChanged(r.rowId, {
+                            ...(editingRows.get(r.rowId) ?? r),
+                            [c.key.toString()]: value,
+                          })
+                        }
+                        multiline={c.multiline}
+                        readonly={!isEditing(r.rowId)}
+                      />
+                      {c.renderAfter?.(r)}
+                    </Stack>
                   </StyledTd>
                 ))}
 
@@ -365,38 +260,24 @@ const EditableTable = <T extends RowType>({
             ))
           ) : (
             <tr>
-              <td colSpan={4}>
+              <StyledTd colSpan={totalColumns} padding={3}>
                 {/* TODO: translate me */}
-                <Box padding={2}>
-                  <Typography>
-                    {!rows.length
-                      ? 'There is no data for now.'
-                      : `No data found for "${filter}".`}
-                  </Typography>
-                </Box>
-              </td>
+                <Typography>
+                  {!rows.length
+                    ? 'There is no data for now.'
+                    : `No data found for "${filter}".`}
+                </Typography>
+              </StyledTd>
             </tr>
           )}
         </tbody>
-        {isSelectable && isEditable && (
-          <tfoot>
-            <tr>
-              <td colSpan={4}>
-                <Box padding={1}>
-                  <Button
-                    startIcon={<DeleteIcon />}
-                    variant="contained"
-                    onClick={handleDeleteSelection}
-                    disabled={!filteredSelection.length}
-                  >
-                    {/* TODO: translate me */}
-                    Delete selection ({filteredSelection.length})
-                  </Button>
-                </Box>
-              </td>
-            </tr>
-          </tfoot>
-        )}
+        <TableFooter
+          isSelectable={isSelectable}
+          isEditable={isEditable}
+          totalColumns={totalColumns}
+          numberFilteredSelection={filteredSelection.length}
+          handleDeleteSelection={handleDeleteSelection}
+        />
       </StyledTable>
     </StyledBox>
   );

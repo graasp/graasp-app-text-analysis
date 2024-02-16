@@ -2,14 +2,64 @@ import { t } from 'i18next';
 
 import { toast } from 'react-toastify';
 
+import WarningIcon from '@mui/icons-material/Warning';
+import {
+  Tooltip,
+  TooltipProps,
+  Typography,
+  styled,
+  tooltipClasses,
+} from '@mui/material';
+
 import { Keyword } from '@/config/appSettingTypes';
 import { TEXT_ANALYSIS } from '@/langs/constants';
-import { isKeywordsEquals } from '@/utils/keywords';
+import { isKeywordPresent, isKeywordsEquals } from '@/utils/keywords';
 
-import EditableTable, { Column, Row } from './EditableTable';
+import EditableTable from '../../common/table/EditableTable';
+import { Column, Row } from '../../common/table/types';
+
+const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}));
+
+const renderWarningIcon = (
+  row: Row<Keyword>,
+  text: string,
+): JSX.Element | null => {
+  if (!isKeywordPresent(text, row.word)) {
+    return (
+      <HtmlTooltip
+        title={
+          <>
+            <Typography color="inherit">
+              {t(TEXT_ANALYSIS.KEYWORDS_NOT_IN_TEXT_TOOLTIP_TITLE)}
+            </Typography>
+            {t(TEXT_ANALYSIS.KEYWORDS_NOT_IN_TEXT_TOOLTIP_MSG, {
+              keyword: row.word,
+            })}
+          </>
+        }
+      >
+        <WarningIcon sx={{ marginLeft: '5px', color: '#FFCC00' }} />
+      </HtmlTooltip>
+    );
+  }
+  return null;
+};
 
 const includes = (text: string, search: string): boolean =>
   text.toLowerCase().includes(search.toLowerCase());
+
+const keywordIsInFilter = (k: Row<Keyword>, filter: string): boolean =>
+  includes(k.word, filter) || includes(k.def, filter);
 
 type Props = {
   keywords: Keyword[];
@@ -17,9 +67,6 @@ type Props = {
   onUpdate: (oldKey: string, newKeyword: Keyword) => void;
   onDeleteSelection: (selectedKeywords: Keyword[]) => void;
 };
-
-const keywordIsInFilter = (k: Row<Keyword>, filter: string): boolean =>
-  includes(k.word, filter) || includes(k.def, filter);
 
 const KeywordsTable = ({
   keywords,
@@ -29,7 +76,11 @@ const KeywordsTable = ({
 }: Props): JSX.Element => {
   // TODO: translate me
   const columns: Column<Keyword>[] = [
-    { key: 'word', displayColumn: 'Keyword' },
+    {
+      key: 'word',
+      displayColumn: 'Keyword',
+      renderAfter: (content) => renderWarningIcon(content, text),
+    },
     { key: 'def', displayColumn: 'Definition', multiline: true },
   ];
 
