@@ -37,6 +37,10 @@ export const isKeywordsEquals = (
     return compareStrings(k1.word, k2);
   }
 
+  if (!k1IsString && !k2IsString) {
+    return compareStrings(k1.word, k2.word);
+  }
+
   throw new Error(
     `${typeof k1} and ${typeof k1} must be valid keywords or strings.`,
   );

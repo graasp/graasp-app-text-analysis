@@ -140,7 +140,7 @@ const Table = ({
 
     if (newKeyword) {
       if (
-        isKeywordsEquals(word, newKeyword) &&
+        !isKeywordsEquals(word, newKeyword) &&
         keywords.find((k) => isKeywordsEquals(k, newKeyword))
       ) {
         toast.warning(
