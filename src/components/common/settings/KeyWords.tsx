@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { Alert, Box, Stack, TextField } from '@mui/material';
 
 import { TEXT_ANALYSIS } from '@/langs/constants';
+import { includes } from '@/utils/keywords';
 
 import { Keyword } from '../../../config/appSettingTypes';
 import {
@@ -13,7 +14,7 @@ import {
   ENTER_KEYWORD_FIELD_CY,
 } from '../../../config/selectors';
 import { DEFAULT_IN_SECTION_SPACING } from '../../../config/stylingConstants';
-import Table from '../table/Table';
+import KeywordsTable from '../table/KeywordsTable';
 import GraaspButton from './GraaspButton';
 
 type Prop = {
@@ -65,9 +66,8 @@ const KeyWords: FC<Prop> = ({
     setKeywordDef(defaultKeywordDef);
   };
 
-  const handleDelete = (deletedKeywords: Keyword[]): void => {
-    handleOnChanges(keywords.filter((k) => !deletedKeywords.includes(k)));
-  };
+  const handleDelete = (deletedKeywords: Keyword[]): void =>
+    handleOnChanges(keywords.filter((k) => !includes(deletedKeywords, k)));
 
   return (
     <Stack spacing={DEFAULT_IN_SECTION_SPACING}>
@@ -109,7 +109,7 @@ const KeyWords: FC<Prop> = ({
           />
         </Box>
       </Box>
-      <Table
+      <KeywordsTable
         keywords={keywords}
         text={textStudents}
         onUpdate={(oldKey, newKeyword) => {

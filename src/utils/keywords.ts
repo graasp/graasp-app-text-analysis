@@ -45,3 +45,8 @@ export const isKeywordsEquals = (
     `${typeof k1} and ${typeof k1} must be valid keywords or strings.`,
   );
 };
+
+export const includes = (
+  keywords: Keyword[],
+  keyword: Keyword | string,
+): boolean => keywords.find((k) => isKeywordsEquals(k, keyword)) !== undefined;
