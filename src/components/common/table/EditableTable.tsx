@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Checkbox, Stack, Typography } from '@mui/material';
+
+import { TEXT_ANALYSIS } from '@/langs/constants';
 
 import ReadableTextField from './ReadableTextField';
 import TableActions, { TableActionEvent } from './TableActions';
@@ -38,6 +41,7 @@ const EditableTable = <T extends RowType>({
   onDeleteSelection,
   rowIsInFilter,
 }: Props<T>): JSX.Element => {
+  const { t } = useTranslation();
   const [filter, setFilter] = useState<string>('');
   const [selected, setSelected] = useState<Row<T>[]>([]);
   const [editingRows, setEditingRows] = useState<Map<RowId, Row<T>>>(new Map());
@@ -261,11 +265,12 @@ const EditableTable = <T extends RowType>({
           ) : (
             <tr>
               <StyledTd colSpan={totalColumns} padding={3}>
-                {/* TODO: translate me */}
                 <Typography>
                   {!rows.length
-                    ? 'There is no data for now.'
-                    : `No data found for "${filter}".`}
+                    ? t(TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_NO_DATA)
+                    : t(TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_FILTER_NO_DATA, {
+                        filter,
+                      })}
                 </Typography>
               </StyledTd>
             </tr>

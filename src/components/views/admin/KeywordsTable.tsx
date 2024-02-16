@@ -74,14 +74,17 @@ const KeywordsTable = ({
   onUpdate,
   onDeleteSelection,
 }: Props): JSX.Element => {
-  // TODO: translate me
   const columns: Column<Keyword>[] = [
     {
       key: 'word',
-      displayColumn: 'Keyword',
+      displayColumn: t(TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_KEYWORD_COLUMN),
       renderAfter: (content) => renderWarningIcon(content, text),
     },
-    { key: 'def', displayColumn: 'Definition', multiline: true },
+    {
+      key: 'def',
+      displayColumn: t(TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_DEFINITION_COLUMN),
+      multiline: true,
+    },
   ];
 
   const rows = keywords.map((k) => ({ rowId: k.word, ...k }));

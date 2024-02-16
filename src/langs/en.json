@@ -30,6 +30,19 @@
     "PLAYER_SYNC_ICON_LOADING_LABEL": "synchronizing",
     "PLAYER_SYNC_ICON_SAVED_LABEL": "saved {{timeAgo}}",
     "PLAYER_SYNC_ICON_NO_CHANGES_LABEL": "no changes",
-    "PLAYER_SYNC_ICON_ERROR_LABEL": "an error occurred during the synchronization"
+    "PLAYER_SYNC_ICON_ERROR_LABEL": "an error occurred during the synchronization",
+    "BUILDER_KEYWORDS_TABLE_NO_DATA": "There is no data for now.",
+    "BUILDER_KEYWORDS_TABLE_FILTER_NO_DATA": "No data found for \"{{filter}}\".",
+    "BUILDER_KEYWORDS_TABLE_SAVE_ROW_TOOLTIP": "Save the modifications",
+    "BUILDER_KEYWORDS_TABLE_DISCARD_ROW_TOOLTIP": "Discard the modifications",
+    "BUILDER_KEYWORDS_TABLE_EDIT_ROW_TOOLTIP": "Edit the row",
+    "BUILDER_KEYWORDS_TABLE_DELETE_ROW_TOOLTIP": "Delete the row",
+    "BUILDER_KEYWORDS_TABLE_DELETE_SELECTION_BTN": "Delete selection ({{numberFilteredSelection}})",
+    "BUILDER_KEYWORDS_TABLE_SEARCH_PLACEHOLDER": "Search in the table",
+    "BUILDER_KEYWORDS_TABLE_SAVE_ALL_ROWS_TOOLTIP": "Save all the modifications",
+    "BUILDER_KEYWORDS_TABLE_DISCARD_ALL_ROWS_TOOLTIP": "Discard all the modifications",
+    "BUILDER_KEYWORDS_TABLE_ACTIONS_COLUMN": "Actions",
+    "BUILDER_KEYWORDS_TABLE_KEYWORD_COLUMN": "Keyword",
+    "BUILDER_KEYWORDS_TABLE_DEFINITION_COLUMN": "Definition"
   }
 }

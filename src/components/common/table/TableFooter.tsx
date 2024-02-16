@@ -1,5 +1,9 @@
+import { t } from 'i18next';
+
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Button } from '@mui/material';
+
+import { TEXT_ANALYSIS } from '@/langs/constants';
 
 import { StyledTd } from './styles';
 
@@ -30,8 +34,9 @@ const TableFooter = ({
               onClick={handleDeleteSelection}
               disabled={!numberFilteredSelection}
             >
-              {/* TODO: translate me */}
-              Delete selection ({numberFilteredSelection})
+              {t(TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_DELETE_SELECTION_BTN, {
+                numberFilteredSelection,
+              })}
             </Button>
           </StyledTd>
         </tr>

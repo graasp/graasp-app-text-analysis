@@ -1,8 +1,12 @@
+import { t } from 'i18next';
+
 import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import { IconButton, Stack, Tooltip } from '@mui/material';
+
+import { TEXT_ANALYSIS } from '@/langs/constants';
 
 export enum TableActionEvent {
   EDIT = 'edit',
@@ -24,8 +28,9 @@ const TableActions = ({ isEditing, rowId, onEvent }: Props): JSX.Element => {
     <Stack direction="row">
       {isEditing ? (
         <>
-          {/* TODO: translate me too */}
-          <Tooltip title="Save the modifications">
+          <Tooltip
+            title={t(TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_SAVE_ROW_TOOLTIP)}
+          >
             <IconButton
               aria-label="save-row-icon"
               color="success"
@@ -34,8 +39,9 @@ const TableActions = ({ isEditing, rowId, onEvent }: Props): JSX.Element => {
               <SaveIcon />
             </IconButton>
           </Tooltip>
-          {/* TODO: translate me */}
-          <Tooltip title="Discard the modifications">
+          <Tooltip
+            title={t(TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_DISCARD_ROW_TOOLTIP)}
+          >
             <IconButton
               aria-label="cancel-row-icon"
               color="error"
@@ -47,8 +53,9 @@ const TableActions = ({ isEditing, rowId, onEvent }: Props): JSX.Element => {
         </>
       ) : (
         <>
-          {/* TODO: translate me */}
-          <Tooltip title="Edit the row">
+          <Tooltip
+            title={t(TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_EDIT_ROW_TOOLTIP)}
+          >
             <IconButton
               aria-label="edit-row-icon"
               onClick={() => handleEvent(TableActionEvent.EDIT)}
@@ -56,8 +63,9 @@ const TableActions = ({ isEditing, rowId, onEvent }: Props): JSX.Element => {
               <EditIcon />
             </IconButton>
           </Tooltip>
-          {/* TODO: translate me */}
-          <Tooltip title="Delete the row">
+          <Tooltip
+            title={t(TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_DELETE_ROW_TOOLTIP)}
+          >
             <IconButton
               aria-label="delete-row-icon"
               onClick={() => handleEvent(TableActionEvent.DELETE)}

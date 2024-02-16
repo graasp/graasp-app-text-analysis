@@ -1,3 +1,5 @@
+import { t } from 'i18next';
+
 import CancelIcon from '@mui/icons-material/Cancel';
 import SaveIcon from '@mui/icons-material/Save';
 import SearchIcon from '@mui/icons-material/Search';
@@ -9,6 +11,8 @@ import {
   TextField,
   Tooltip,
 } from '@mui/material';
+
+import { TEXT_ANALYSIS } from '@/langs/constants';
 
 import { StyledTd, StyledTh } from './styles';
 import { Column, RowType } from './types';
@@ -47,8 +51,9 @@ const TableHeader = <T extends RowType>({
       <tr>
         <StyledTd colSpan={isEditing ? totalColumns - 1 : totalColumns}>
           <TextField
-            // TODO: translate me
-            placeholder="Search in the table"
+            placeholder={t(
+              TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_SEARCH_PLACEHOLDER,
+            )}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -64,14 +69,20 @@ const TableHeader = <T extends RowType>({
         {isEditing && (
           <StyledTd>
             <Stack direction="row">
-              {/* TODO: translate me too */}
-              <Tooltip title="Save all the modifications">
+              <Tooltip
+                title={t(
+                  TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_SAVE_ALL_ROWS_TOOLTIP,
+                )}
+              >
                 <IconButton aria-label="save-all-rows-icon" onClick={onSaveAll}>
                   <SaveIcon />
                 </IconButton>
               </Tooltip>
-              {/* TODO: translate me */}
-              <Tooltip title="Discard all the modifications">
+              <Tooltip
+                title={t(
+                  TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_DISCARD_ALL_ROWS_TOOLTIP,
+                )}
+              >
                 <IconButton
                   aria-label="cancel-all-rows-icon"
                   onClick={onDiscardAll}
@@ -95,14 +106,12 @@ const TableHeader = <T extends RowType>({
             />
           </StyledTh>
         )}
-        {/* TODO: translate  */}
         {columns.map((c) => (
           <StyledTh key={`th-${c.key}`}>{c.displayColumn}</StyledTh>
         ))}
         {isEditable && (
           <StyledTh>
-            {/* TODO: translates me  */}
-            Actions
+            {t(TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_ACTIONS_COLUMN)}
           </StyledTh>
         )}
       </tr>
