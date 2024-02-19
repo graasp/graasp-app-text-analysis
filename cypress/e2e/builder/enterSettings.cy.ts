@@ -49,12 +49,12 @@ describe('Enter Settings', () => {
     cy.get(buildDataCy(TITLE_INPUT_FIELD_CY))
       .should('be.visible')
       .type('Title');
-    cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).click();
+    // should be disabled automatically by auto save
     cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).should('be.disabled');
 
     cy.get(buildDataCy(TITLE_INPUT_FIELD_CY)).type('New Title');
     cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).should('not.be.disabled');
-    cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).click();
+    // should be disabled automatically by auto save
     cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).should('be.disabled');
 
     // test that multiline is disabled, because it is rendered inline in player
@@ -69,7 +69,7 @@ describe('Enter Settings', () => {
         'Lorem ipsum dolor sit amet. Ut optio laborum qui ducimus rerum eum illum possimus non quidem facere.',
       );
 
-    cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).click();
+    // should be disabled automatically by auto save
 
     cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).should('be.disabled');
 

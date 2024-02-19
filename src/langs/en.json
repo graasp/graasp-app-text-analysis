@@ -16,13 +16,20 @@
     "ENABLE_CHATBOT_TOGGLE": "enable the chatbot",
     "PUBLIC_ALERT_NOT_AUTHENTICATED": "You are not authenticated. You cannot save any data",
     "BUILDER_VIEW_TITLE": "Prepare Your Lesson",
-    "BUILDER_NOT_SAVE_ALERT_SAVE_BTN": "save",
-    "BUILDER_NOT_SAVE_ALERT_MSG": "Do not forget to save your work.",
+    "BUILDER_NOT_SAVE_ALERT_SAVE_BTN": "retry",
+    "BUILDER_NOT_SAVE_ALERT_MSG": "An error occurred, your changes are not saved! Please retry to save.",
+    "BUILDER_OFFLINE_ALERT_MSG": "You're offline. Please do not leave the page until the connection comes back to avoid losing your work!",
     "BUILDER_TEXTFIELD_LESSON_TITLE": "Enter the lesson title",
     "BUILDER_TEXTFIELD_TEXT_STUDENT": "Enter the text students will see",
     "BUILDER_CHATBOT_SETTING_TITLE": "Chatbot settings",
     "BUILDER_CHATBOT_SETTING_INFO": "If enabled, it will be possible to ask questions about the keywords directly in the chat. Otherwise, the definitions will be displayed.",
+    "BUILDER_CHATBOT_SETTING_INIT_PROMPT_LABEL": "Enter the intial prompt describing the conversation (as a template for {{keyword}})",
+    "BUILDER_CHATBOT_SETTING_FIRST_LINE_LABEL": "Enter the chatbot's first line (as a template for {{keyword}})",
     "BUILDER_KEYWORDS_SETTING_TITLE": "Keywords settings",
-    "BUILDER_SAVE_BTN": "Save"
+    "BUILDER_SAVE_BTN": "Save",
+    "PLAYER_SYNC_ICON_LOADING_LABEL": "synchronizing",
+    "PLAYER_SYNC_ICON_SAVED_LABEL": "saved {{timeAgo}}",
+    "PLAYER_SYNC_ICON_NO_CHANGES_LABEL": "no changes",
+    "PLAYER_SYNC_ICON_ERROR_LABEL": "an error occurred during the synchronization"
   }
 }
