@@ -16,11 +16,27 @@ import {
   EDITABLE_TABLE_DISCARD_ALL_BUTTON_CY,
   EDITABLE_TABLE_FILTER_INPUT_CY,
   EDITABLE_TABLE_SAVE_ALL_BUTTON_CY,
+  buildEditableSelectAllButtonCy,
 } from '@/config/selectors';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 
 import { StyledTd, StyledTh } from './styles';
-import { Column, RowType } from './types';
+import { CheckBoxState, Column, RowType } from './types';
+
+const computeCheckBoxState = (
+  isChecked: boolean,
+  isIndeterminate: boolean,
+): CheckBoxState => {
+  if (isChecked) {
+    return CheckBoxState.CHECKED;
+  }
+
+  if (isIndeterminate) {
+    return CheckBoxState.INDETERMINATE;
+  }
+
+  return CheckBoxState.UNCHECKED;
+};
 
 type Props<T extends RowType> = {
   isEditing: boolean;
@@ -111,6 +127,9 @@ const TableHeader = <T extends RowType>({
         {isSelectable && (
           <StyledTh>
             <Checkbox
+              data-cy={buildEditableSelectAllButtonCy(
+                computeCheckBoxState(isGlobalChecked, isGlobalIndeterminate),
+              )}
               checked={isGlobalChecked}
               indeterminate={isGlobalIndeterminate}
               onChange={(_e, isChecked) => onGlobalCheckChanged(isChecked)}

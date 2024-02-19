@@ -1,3 +1,5 @@
+import { CheckBoxState } from '@/components/common/table/types';
+
 export const PLAYER_VIEW_CY = 'player_view';
 export const BUILDER_VIEW_CY = 'builder_view';
 export const APP_DATA_CONTAINER_CY = 'app_data_container';
@@ -34,10 +36,10 @@ export const CHATBOT_MODE_CY = 'chatbot_mode_cy';
 export const SETTINGS_SAVE_BUTTON_CY = 'settings_save_button';
 
 // editable table
+const removeRowIdSpaces = (rowId: string): string => rowId.replaceAll(' ', '-');
 export const EDITABLE_TABLE_CY = 'editable_table';
+export const EDITABLE_TABLE_ROW_CY = 'editable_table_row';
 export const EDITABLE_TABLE_FILTER_INPUT_CY = 'editable_table_filter_input';
-export const EDITABLE_TABLE_SELECT_ALL_BUTTON_CY =
-  'editable_table_select_all_button';
 export const EDITABLE_TABLE_DELETE_SELECTION_BUTTON_CY =
   'editable_table_delete_selection_button';
 export const EDITABLE_TABLE_SAVE_ALL_BUTTON_CY =
@@ -46,23 +48,29 @@ export const EDITABLE_TABLE_DISCARD_ALL_BUTTON_CY =
   'editable_table_discard_all_button';
 export const EDITABLE_TABLE_NO_DATA_CY = 'edit_table_no_data';
 export const EDITABLE_TABLE_FILTER_NO_RESULT_CY = 'edit_table_filter_no_result';
+export const buildEditableSelectAllButtonCy = (state: CheckBoxState): string =>
+  `editable_table_select_all_button_${state}`;
 export const buildEditableTableSelectButtonCy = (
   rowId: string,
   isChecked: boolean,
-): string => `editable_table_${rowId}_select_button_${isChecked}`;
+): string =>
+  `editable_table_${removeRowIdSpaces(rowId)}_select_button_${isChecked}`;
 export const buildEditableTableEditButtonCy = (rowId: string): string =>
-  `editable_table_${rowId}_edit_button`;
+  `editable_table_${removeRowIdSpaces(rowId)}_edit_button`;
 export const buildEditableTableDeleteButtonCy = (rowId: string): string =>
-  `editable_table_${rowId}_delete_button`;
+  `editable_table_${removeRowIdSpaces(rowId)}_delete_button`;
 export const buildEditableTableSaveButtonCy = (rowId: string): string =>
-  `editable_table_${rowId}_save_button`;
+  `editable_table_${removeRowIdSpaces(rowId)}_save_button`;
 export const buildEditableTableDiscardButtonCy = (rowId: string): string =>
-  `editable_table_${rowId}_discard_button`;
+  `editable_table_${removeRowIdSpaces(rowId)}_discard_button`;
 export const buildEditableTableTextInputCy = (
   rowId: string,
   columnName: string,
   readonly: boolean,
-): string => `editable_table_${rowId}_${columnName}_text_input_${readonly}`;
+): string =>
+  `editable_table_${removeRowIdSpaces(
+    rowId,
+  )}_${columnName}_text_input_${readonly}`;
 
 export const buildKeywordTextInputCy = (
   keyword: string,
@@ -74,7 +82,7 @@ export const buildKeywordDefinitionTextInputCy = (
 ): string => buildEditableTableTextInputCy(keyword, 'def', readonly);
 
 export const buildKeywordNotExistWarningCy = (keyword: string): string =>
-  `keyword_${keyword.replaceAll(' ', '-')}_not_in_text_warning`;
+  `keyword_${removeRowIdSpaces(keyword)}_not_in_text_warning`;
 
 export const buildDataCy = (selector: string): string =>
   `[data-cy=${selector}]`;

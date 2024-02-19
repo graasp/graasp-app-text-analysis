@@ -13,3 +13,9 @@ export type Column<T extends RowType> = {
   multiline?: boolean;
   renderAfter?: (row: Row<T>) => JSX.Element | null;
 };
+
+export enum CheckBoxState {
+  UNCHECKED = 'unchecked',
+  CHECKED = 'checked',
+  INDETERMINATE = 'indeterminate',
+}

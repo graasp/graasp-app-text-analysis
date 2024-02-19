@@ -15,11 +15,17 @@ import { CURRENT_MEMBER, MOCK_SERVER_ITEM } from '../../src/data/db';
 export const MOCK_TEXT_RESOURCE =
   'Lorem ipsum dolor sit amet. Ut optio laborum qui ducimus rerum eum illum possimus non quidem facere. A neque quia et placeat exercitationem vel necessitatibus Quis ea quod necessitatibus sit voluptas culpa ut laborum quia ad nobis numquam. Quo quibusdam maiores et numquam molestiae ut mollitia quaerat et voluptates autem qui expedita delectus aut aliquam expedita et odit incidunt. Id quia nulla est voluptate repellat non internos voluptatem sed cumque omnis et consequatur placeat qui illum aperiam eos consequatur suscipit.';
 
+export const MOCK_KEYWORD_NOT_IN_TEXT: Keyword = {
+  word: 'kjbjkhfbjhdbfjhd',
+  def: 'i am not in the text',
+};
+
 export const MOCK_KEYWORDS: Keyword[] = [
   { word: 'lorem', def: 'definition of lorem is blablabla' },
   { word: 'ispum', def: 'ipsum is blablabla' },
   { word: 'et', def: 'et means blablabla' },
   { word: 'expedita', def: 'expedita means blablabla' },
+  MOCK_KEYWORD_NOT_IN_TEXT,
 ];
 
 export const MOCK_TEXT_RESOURCE_SETTING: AppSetting = {

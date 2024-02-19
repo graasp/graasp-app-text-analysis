@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 
 import { Keyword } from '@/config/appSettingTypes';
+import { buildKeywordNotExistWarningCy } from '@/config/selectors';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 import { isKeywordPresent, isKeywordsEquals } from '@/utils/keywords';
 
@@ -48,7 +49,10 @@ const renderWarningIcon = (
           </>
         }
       >
-        <WarningIcon sx={{ marginLeft: '5px', color: '#FFCC00' }} />
+        <WarningIcon
+          data-cy={buildKeywordNotExistWarningCy(row.rowId)}
+          sx={{ marginLeft: '5px', color: '#FFCC00' }}
+        />
       </HtmlTooltip>
     );
   }

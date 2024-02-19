@@ -7,6 +7,7 @@ import {
   EDITABLE_TABLE_CY,
   EDITABLE_TABLE_FILTER_NO_RESULT_CY,
   EDITABLE_TABLE_NO_DATA_CY,
+  EDITABLE_TABLE_ROW_CY,
   buildEditableTableSelectButtonCy,
 } from '@/config/selectors';
 import { TEXT_ANALYSIS } from '@/langs/constants';
@@ -129,15 +130,17 @@ const EditableTable = <T extends RowType>({
     const newRow = editingRows.get(rowId);
 
     if (newRow) {
-      onUpdate(rowId, newRow).then(() => {
-        removeRowFromEditing(rowId);
-      });
-
-      // remove the update item from the selection because we don't know its new id from this component.
-      // TODO: remove this code if the keyword had a unique ID that didn't change after an update.
-      setSelected((currSelection) =>
-        currSelection.filter(({ rowId: rId }) => !isKeysEquals(rId, rowId)),
-      );
+      onUpdate(rowId, newRow)
+        .then(() => {
+          removeRowFromEditing(rowId);
+          // remove the update item from the selection because we don't know its new id from this component.
+          // TODO: remove this code if the keyword had a unique ID that didn't change after an update.
+          setSelected((currSelection) =>
+            currSelection.filter(({ rowId: rId }) => !isKeysEquals(rId, rowId)),
+          );
+        })
+        // catch the exception, but there is nothing to do here.
+        .catch((e) => e);
     }
   };
 
@@ -222,7 +225,7 @@ const EditableTable = <T extends RowType>({
         <tbody>
           {filteredRows.length ? (
             filteredRows.map((r) => (
-              <tr key={r.rowId}>
+              <tr key={r.rowId} data-cy={EDITABLE_TABLE_ROW_CY}>
                 {isSelectable && (
                   <StyledTd>
                     <Checkbox
