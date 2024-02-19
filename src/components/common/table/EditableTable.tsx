@@ -79,6 +79,11 @@ const EditableTable = <T extends RowType>({
   const getRow = (rowId: RowId): Row<T> | undefined =>
     rows.find((r) => isKeysEquals(r.rowId, rowId));
 
+  const hasMissingMandatoryValue = (row: Row<T>): boolean =>
+    columns.some((c) => !c.optional && !getColValue(row, c.key));
+
+  const hasMissingMandatoryValueInRows = rows.some(hasMissingMandatoryValue);
+
   const addInEditing = (row: Row<T>): void =>
     setEditingRows((currState) => new Map([...currState, [row.rowId, row]]));
 
@@ -213,6 +218,7 @@ const EditableTable = <T extends RowType>({
           isEditing={Boolean(editingRows.size)}
           isSelectable={isSelectable}
           isEditable={isEditable}
+          isValid={!hasMissingMandatoryValueInRows}
           totalColumns={totalColumns}
           isGlobalChecked={isGlobalChecked}
           isGlobalIndeterminate={isGlobalIndeterminate}
@@ -271,6 +277,7 @@ const EditableTable = <T extends RowType>({
                     <TableActions
                       rowId={r.rowId}
                       isEditing={isEditing(r.rowId)}
+                      isValid={!hasMissingMandatoryValue(r)}
                       onEvent={handleActionEvents}
                     />
                   </StyledTd>

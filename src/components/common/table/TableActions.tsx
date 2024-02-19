@@ -23,11 +23,17 @@ export enum TableActionEvent {
 
 type Props = {
   isEditing: boolean;
+  isValid: boolean;
   rowId: string;
   onEvent: (rowId: string, event: TableActionEvent) => void;
 };
 
-const TableActions = ({ isEditing, rowId, onEvent }: Props): JSX.Element => {
+const TableActions = ({
+  isEditing,
+  isValid,
+  rowId,
+  onEvent,
+}: Props): JSX.Element => {
   const handleEvent = (event: TableActionEvent): void => onEvent(rowId, event);
 
   return (
@@ -41,7 +47,12 @@ const TableActions = ({ isEditing, rowId, onEvent }: Props): JSX.Element => {
               data-cy={buildEditableTableSaveButtonCy(rowId)}
               aria-label="save-row-icon"
               color="success"
-              onClick={() => handleEvent(TableActionEvent.SAVE)}
+              disabled={!isValid}
+              onClick={() => {
+                if (isValid) {
+                  handleEvent(TableActionEvent.SAVE);
+                }
+              }}
             >
               <SaveIcon />
             </IconButton>

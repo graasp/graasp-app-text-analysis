@@ -96,6 +96,55 @@ describe('Empty Keywords', () => {
       .click();
     cy.get(buildDataCy(EDITABLE_TABLE_NO_DATA_CY)).should('exist');
   });
+
+  // Detected incomplete keywords in the text.
+  // 'wef' was found incomplete in 'wefwef hello'.
+  // Check that only complete words are detected in text.
+  it('only detect complete keywords', () => {
+    const PRBLEMATIC_TEXT = 'wefwef hello';
+    const PROBLEMATIC_KEYWORDS = ['wef', 'he'];
+
+    cy.get(buildDataCy(TEXT_INPUT_FIELD_CY))
+      .should('be.visible')
+      .type(PRBLEMATIC_TEXT);
+
+    PROBLEMATIC_KEYWORDS.forEach((k) => {
+      cy.get(buildDataCy(ENTER_KEYWORD_FIELD_CY)).should('be.visible').type(k);
+
+      cy.get(buildDataCy(ADD_KEYWORD_BUTTON_CY))
+        .should('be.visible')
+        .should('not.be.disabled')
+        .click()
+        .should('be.disabled');
+
+      cy.get(buildDataCy(buildKeywordNotExistWarningCy(k))).should(
+        'be.visible',
+      );
+    });
+
+    cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).should('be.disabled');
+  });
+
+  it('detect keywords case insensitive', () => {
+    const TEXT = 'hello this is a Test';
+    const KEYWORDS = ['Hello', 'test'];
+
+    cy.get(buildDataCy(TEXT_INPUT_FIELD_CY)).should('be.visible').type(TEXT);
+
+    KEYWORDS.forEach((k) => {
+      cy.get(buildDataCy(ENTER_KEYWORD_FIELD_CY)).should('be.visible').type(k);
+
+      cy.get(buildDataCy(ADD_KEYWORD_BUTTON_CY))
+        .should('be.visible')
+        .should('not.be.disabled')
+        .click()
+        .should('be.disabled');
+
+      cy.get(buildDataCy(buildKeywordNotExistWarningCy(k))).should('not.exist');
+    });
+
+    cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).should('be.disabled');
+  });
 });
 
 describe.only('Existing Keywords', () => {
@@ -204,6 +253,26 @@ describe.only('Existing Keywords', () => {
   });
 
   describe('edit and delete single keyword', () => {
+    it('cannot save empty keyword', () => {
+      const KEYWORDS = getKeywords(MOCK_APP_SETTINGS_USING_CHATBOT).keywords;
+      const UPDATING_KEYWORD = KEYWORDS.at(0);
+
+      checkAllKeywords(KEYWORDS);
+
+      // edit the existing keyword to a keyword that are already in the table
+      cy.get(
+        buildDataCy(buildEditableTableEditButtonCy(UPDATING_KEYWORD.word)),
+      ).click();
+      cy.get(
+        buildDataCy(buildKeywordTextInputCy(UPDATING_KEYWORD.word, false)),
+      ).clear();
+
+      // should not be able to save the modifications
+      cy.get(
+        buildDataCy(buildEditableTableSaveButtonCy(UPDATING_KEYWORD.word)),
+      ).should('be.disabled');
+    });
+
     it('edit a keyword', () => {
       const KEYWORDS = getKeywords(MOCK_APP_SETTINGS_USING_CHATBOT).keywords;
       const UPDATING_KEYWORD = KEYWORDS.at(0);

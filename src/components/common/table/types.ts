@@ -11,6 +11,7 @@ export type Column<T extends RowType> = {
   key: RowKey<T>;
   displayColumn: string;
   multiline?: boolean;
+  optional?: boolean;
   renderAfter?: (row: Row<T>) => JSX.Element | null;
 };
 

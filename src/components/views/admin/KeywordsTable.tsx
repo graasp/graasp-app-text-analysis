@@ -83,6 +83,7 @@ const KeywordsTable = ({
       key: 'word',
       displayColumn: t(TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_KEYWORD_COLUMN),
       renderAfter: (content) => renderWarningIcon(content, text),
+      optional: false,
     },
     {
       key: 'def',

@@ -42,6 +42,7 @@ type Props<T extends RowType> = {
   isEditing: boolean;
   isSelectable: boolean;
   isEditable: boolean;
+  isValid: boolean;
   totalColumns: number;
   isGlobalChecked: boolean;
   isGlobalIndeterminate: boolean;
@@ -57,6 +58,7 @@ const TableHeader = <T extends RowType>({
   isEditing,
   isSelectable,
   isEditable,
+  isValid,
   totalColumns,
   isGlobalChecked,
   isGlobalIndeterminate,
@@ -98,8 +100,13 @@ const TableHeader = <T extends RowType>({
               >
                 <IconButton
                   data-cy={EDITABLE_TABLE_SAVE_ALL_BUTTON_CY}
+                  disabled={!isValid}
                   aria-label="save-all-rows-icon"
-                  onClick={onSaveAll}
+                  onClick={() => {
+                    if (isValid) {
+                      onSaveAll();
+                    }
+                  }}
                 >
                   <SaveIcon />
                 </IconButton>

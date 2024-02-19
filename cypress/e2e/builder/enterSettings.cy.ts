@@ -2,10 +2,8 @@ import { Context, PermissionLevel } from '@graasp/sdk';
 
 import { KeywordsData } from '../../../src/config/appSettingTypes';
 import {
-  ADD_KEYWORD_BUTTON_CY,
   BUILDER_VIEW_CY,
   CHATBOT_CONTAINER_CY,
-  ENTER_KEYWORD_FIELD_CY,
   INITIAL_CHATBOT_PROMPT_INPUT_FIELD_CY,
   INITIAL_PROMPT_INPUT_FIELD_CY,
   SETTINGS_SAVE_BUTTON_CY,
@@ -14,7 +12,6 @@ import {
   USE_CHATBOT_DATA_CY,
   buildDataCy,
   buildKeywordDefinitionTextInputCy,
-  buildKeywordNotExistWarningCy,
   buildKeywordTextInputCy,
 } from '../../../src/config/selectors';
 import {
@@ -78,55 +75,6 @@ describe('Enter Settings', () => {
     );
 
     cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).should('not.be.disabled');
-  });
-
-  // Detected incomplete keywords in the text.
-  // 'wef' was found incomplete in 'wefwef hello'.
-  // Check that only complete words are detected in text.
-  it('only detect complete keywords', () => {
-    const PRBLEMATIC_TEXT = 'wefwef hello';
-    const PROBLEMATIC_KEYWORDS = ['wef', 'he'];
-
-    cy.get(buildDataCy(TEXT_INPUT_FIELD_CY))
-      .should('be.visible')
-      .type(PRBLEMATIC_TEXT);
-
-    PROBLEMATIC_KEYWORDS.forEach((k) => {
-      cy.get(buildDataCy(ENTER_KEYWORD_FIELD_CY)).should('be.visible').type(k);
-
-      cy.get(buildDataCy(ADD_KEYWORD_BUTTON_CY))
-        .should('be.visible')
-        .should('not.be.disabled')
-        .click()
-        .should('be.disabled');
-
-      cy.get(buildDataCy(buildKeywordNotExistWarningCy(k))).should(
-        'be.visible',
-      );
-    });
-
-    cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).should('be.disabled');
-  });
-
-  it('detect keywords case insensitive', () => {
-    const TEXT = 'hello this is a Test';
-    const KEYWORDS = ['Hello', 'test'];
-
-    cy.get(buildDataCy(TEXT_INPUT_FIELD_CY)).should('be.visible').type(TEXT);
-
-    KEYWORDS.forEach((k) => {
-      cy.get(buildDataCy(ENTER_KEYWORD_FIELD_CY)).should('be.visible').type(k);
-
-      cy.get(buildDataCy(ADD_KEYWORD_BUTTON_CY))
-        .should('be.visible')
-        .should('not.be.disabled')
-        .click()
-        .should('be.disabled');
-
-      cy.get(buildDataCy(buildKeywordNotExistWarningCy(k))).should('not.exist');
-    });
-
-    cy.get(buildDataCy(SETTINGS_SAVE_BUTTON_CY)).should('be.disabled');
   });
 
   it('does not use chatbot (by default)', () => {
