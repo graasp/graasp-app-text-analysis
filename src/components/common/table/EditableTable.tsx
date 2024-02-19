@@ -3,6 +3,12 @@ import { useTranslation } from 'react-i18next';
 
 import { Checkbox, Stack, Typography } from '@mui/material';
 
+import {
+  EDITABLE_TABLE_CY,
+  EDITABLE_TABLE_FILTER_NO_RESULT_CY,
+  EDITABLE_TABLE_NO_DATA_CY,
+  buildEditableTableSelectButtonCy,
+} from '@/config/selectors';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 
 import ReadableTextField from './ReadableTextField';
@@ -199,7 +205,7 @@ const EditableTable = <T extends RowType>({
 
   return (
     <StyledBox>
-      <StyledTable>
+      <StyledTable data-cy={EDITABLE_TABLE_CY}>
         <TableHeader
           isEditing={Boolean(editingRows.size)}
           isSelectable={isSelectable}
@@ -220,6 +226,10 @@ const EditableTable = <T extends RowType>({
                 {isSelectable && (
                   <StyledTd>
                     <Checkbox
+                      data-cy={buildEditableTableSelectButtonCy(
+                        r.rowId,
+                        rowsInclude(selected, r.rowId),
+                      )}
                       onChange={(_e, isChecked) =>
                         handleCheckBoxChanged(isChecked, r.rowId)
                       }
@@ -235,7 +245,9 @@ const EditableTable = <T extends RowType>({
                   >
                     <Stack direction="row" spacing={1} alignItems="center">
                       <ReadableTextField
-                        value={getColValue(r, c.key.toString())}
+                        rowId={r.rowId}
+                        fieldName={c.key}
+                        value={getColValue(r, c.key)}
                         size="small"
                         onChange={(value) =>
                           handleRowChanged(r.rowId, {
@@ -265,12 +277,18 @@ const EditableTable = <T extends RowType>({
           ) : (
             <tr>
               <StyledTd colSpan={totalColumns} padding={3}>
-                <Typography>
-                  {!rows.length
-                    ? t(TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_NO_DATA)
-                    : t(TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_FILTER_NO_DATA, {
+                <Typography
+                  data-cy={
+                    rows.length
+                      ? EDITABLE_TABLE_FILTER_NO_RESULT_CY
+                      : EDITABLE_TABLE_NO_DATA_CY
+                  }
+                >
+                  {rows.length
+                    ? t(TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_FILTER_NO_DATA, {
                         filter,
-                      })}
+                      })
+                    : t(TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_NO_DATA)}
                 </Typography>
               </StyledTd>
             </tr>

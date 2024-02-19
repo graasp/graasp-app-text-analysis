@@ -8,11 +8,9 @@ export const SETTING_NAME_FIELD_CY = 'setting_name_field';
 export const SETTING_VALUE_FIELD_CY = 'setting_value_field';
 export const TEXT_DISPLAY_FIELD_CY = 'text_display_field';
 
-export const KEYWORD_LIST_ITEM_CY = 'keyword_list_item';
 export const ENTER_KEYWORD_FIELD_CY = 'enter_keyword_field';
 export const ENTER_DEFINITION_FIELD_CY = 'enter_definition_field';
 export const ADD_KEYWORD_BUTTON_CY = 'add_keyword_button';
-export const DELETE_KEYWORD_BUTTON_CY = 'delete_keyword_button';
 
 export const CHATBOT_CONTAINER_CY = 'chatbot_container';
 export const INITIAL_PROMPT_INPUT_FIELD_CY = 'initial_prompt_input_field';
@@ -34,6 +32,46 @@ export const DICTIONNARY_MODE_CY = 'dictionnary_mode';
 export const CHATBOT_MODE_CY = 'chatbot_mode_cy';
 
 export const SETTINGS_SAVE_BUTTON_CY = 'settings_save_button';
+
+// editable table
+export const EDITABLE_TABLE_CY = 'editable_table';
+export const EDITABLE_TABLE_FILTER_INPUT_CY = 'editable_table_filter_input';
+export const EDITABLE_TABLE_SELECT_ALL_BUTTON_CY =
+  'editable_table_select_all_button';
+export const EDITABLE_TABLE_DELETE_SELECTION_BUTTON_CY =
+  'editable_table_delete_selection_button';
+export const EDITABLE_TABLE_SAVE_ALL_BUTTON_CY =
+  'editable_table_save_all_button';
+export const EDITABLE_TABLE_DISCARD_ALL_BUTTON_CY =
+  'editable_table_discard_all_button';
+export const EDITABLE_TABLE_NO_DATA_CY = 'edit_table_no_data';
+export const EDITABLE_TABLE_FILTER_NO_RESULT_CY = 'edit_table_filter_no_result';
+export const buildEditableTableSelectButtonCy = (
+  rowId: string,
+  isChecked: boolean,
+): string => `editable_table_${rowId}_select_button_${isChecked}`;
+export const buildEditableTableEditButtonCy = (rowId: string): string =>
+  `editable_table_${rowId}_edit_button`;
+export const buildEditableTableDeleteButtonCy = (rowId: string): string =>
+  `editable_table_${rowId}_delete_button`;
+export const buildEditableTableSaveButtonCy = (rowId: string): string =>
+  `editable_table_${rowId}_save_button`;
+export const buildEditableTableDiscardButtonCy = (rowId: string): string =>
+  `editable_table_${rowId}_discard_button`;
+export const buildEditableTableTextInputCy = (
+  rowId: string,
+  columnName: string,
+  readonly: boolean,
+): string => `editable_table_${rowId}_${columnName}_text_input_${readonly}`;
+
+export const buildKeywordTextInputCy = (
+  keyword: string,
+  readonly: boolean,
+): string => buildEditableTableTextInputCy(keyword, 'word', readonly);
+export const buildKeywordDefinitionTextInputCy = (
+  keyword: string,
+  readonly: boolean,
+): string => buildEditableTableTextInputCy(keyword, 'def', readonly);
 
 export const buildKeywordNotExistWarningCy = (keyword: string): string =>
   `keyword_${keyword.replaceAll(' ', '-')}_not_in_text_warning`;

@@ -1,10 +1,14 @@
 import { TextField, TextFieldProps, Typography, styled } from '@mui/material';
 
+import { buildEditableTableTextInputCy } from '@/config/selectors';
+
 type Props = {
   readonly: boolean;
   size?: TextFieldProps['size'];
   multiline?: TextFieldProps['multiline'];
   value: string | unknown;
+  rowId: string;
+  fieldName: string;
   onChange: (value: string) => void;
 };
 
@@ -20,15 +24,20 @@ const ReadableTextField = ({
   onChange,
   size,
   multiline,
+  rowId,
+  fieldName,
 }: Props): JSX.Element => {
   const handleOnChanges = (newValue: string): void => {
     onChange(newValue);
   };
 
+  const dataCy = buildEditableTableTextInputCy(rowId, fieldName, readonly);
+
   return readonly ? (
-    <ReadyonlyTextField>{`${value}`}</ReadyonlyTextField>
+    <ReadyonlyTextField data-cy={dataCy}>{`${value}`}</ReadyonlyTextField>
   ) : (
     <TextField
+      data-cy={dataCy}
       size={size}
       multiline={multiline}
       value={value}

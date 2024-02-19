@@ -12,6 +12,11 @@ import {
   Tooltip,
 } from '@mui/material';
 
+import {
+  EDITABLE_TABLE_DISCARD_ALL_BUTTON_CY,
+  EDITABLE_TABLE_FILTER_INPUT_CY,
+  EDITABLE_TABLE_SAVE_ALL_BUTTON_CY,
+} from '@/config/selectors';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 
 import { StyledTd, StyledTh } from './styles';
@@ -51,6 +56,7 @@ const TableHeader = <T extends RowType>({
       <tr>
         <StyledTd colSpan={isEditing ? totalColumns - 1 : totalColumns}>
           <TextField
+            data-cy={EDITABLE_TABLE_FILTER_INPUT_CY}
             placeholder={t(
               TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_SEARCH_PLACEHOLDER,
             )}
@@ -74,7 +80,11 @@ const TableHeader = <T extends RowType>({
                   TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_SAVE_ALL_ROWS_TOOLTIP,
                 )}
               >
-                <IconButton aria-label="save-all-rows-icon" onClick={onSaveAll}>
+                <IconButton
+                  data-cy={EDITABLE_TABLE_SAVE_ALL_BUTTON_CY}
+                  aria-label="save-all-rows-icon"
+                  onClick={onSaveAll}
+                >
                   <SaveIcon />
                 </IconButton>
               </Tooltip>
@@ -84,6 +94,7 @@ const TableHeader = <T extends RowType>({
                 )}
               >
                 <IconButton
+                  data-cy={EDITABLE_TABLE_DISCARD_ALL_BUTTON_CY}
                   aria-label="cancel-all-rows-icon"
                   onClick={onDiscardAll}
                 >

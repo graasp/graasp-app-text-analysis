@@ -3,6 +3,7 @@ import { t } from 'i18next';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Button } from '@mui/material';
 
+import { EDITABLE_TABLE_DELETE_SELECTION_BUTTON_CY } from '@/config/selectors';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 
 import { StyledTd } from './styles';
@@ -29,6 +30,7 @@ const TableFooter = ({
         <tr>
           <StyledTd colSpan={totalColumns}>
             <Button
+              data-cy={EDITABLE_TABLE_DELETE_SELECTION_BUTTON_CY}
               startIcon={<DeleteIcon />}
               variant="contained"
               onClick={handleDeleteSelection}
