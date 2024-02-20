@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/graasp/graasp-app-text-analysis/compare/v1.2.0...v1.3.0) (2024-02-19)
+
+
+### Features
+
+* implement auto save feature ([#112](https://github.com/graasp/graasp-app-text-analysis/issues/112)) ([3428862](https://github.com/graasp/graasp-app-text-analysis/commit/34288621931a539c4f70ec7352d44c3e02d5ffdb))
+
 ## [1.2.0](https://github.com/graasp/graasp-app-text-analysis/compare/v1.1.0...v1.2.0) (2024-02-13)
 
 
