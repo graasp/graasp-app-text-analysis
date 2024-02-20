@@ -11,18 +11,18 @@
     "BANNER_SHOW_KEYWORDS_BTN": "mostrar palabras clave",
     "BANNER_HIDE_KEYWORDS_BTN": "ocultar palabras clave",
     "KEYWORDS_INFO_ALERT_CHATBOT_ENABLED": "Cuando el chatbot está habilitado, se ignoran todas las definiciones de palabras clave. Esto se debe a que se muestra el chatbot en lugar de la definición.",
-    "KEYWORDS_NOT_IN_TEXT_TOOLTIP_TITLE": "Palabra clave no en el texto",
+    "KEYWORDS_NOT_IN_TEXT_TOOLTIP_TITLE": "La palabra clave no se encuentra en el texto",
     "KEYWORDS_NOT_IN_TEXT_TOOLTIP_MSG": "La palabra clave \"{{keyword}}\" no está en la versión guardada del texto estudiantes. No se mostrará en el reproductor.",
     "ENABLE_CHATBOT_TOGGLE": "habilitar el chatbot",
     "PUBLIC_ALERT_NOT_AUTHENTICATED": "No estás autenticado. No puedes guardar ningún dato.",
-    "BUILDER_VIEW_TITLE": "Prepare su lección",
-    "BUILDER_NOT_SAVE_ALERT_SAVE_BTN": "ahorrar",
+    "BUILDER_VIEW_TITLE": "Prepara tu lección",
+    "BUILDER_NOT_SAVE_ALERT_SAVE_BTN": "guardar",
     "BUILDER_NOT_SAVE_ALERT_MSG": "No olvides guardar tu trabajo.",
-    "BUILDER_TEXTFIELD_LESSON_TITLE": "Ingrese el título de la lección",
-    "BUILDER_TEXTFIELD_TEXT_STUDENT": "Ingrese el texto que verán los estudiantes",
+    "BUILDER_TEXTFIELD_LESSON_TITLE": "Ingresa el título de la lección",
+    "BUILDER_TEXTFIELD_TEXT_STUDENT": "Ingresa el texto que verán los estudiantes",
     "BUILDER_CHATBOT_SETTING_TITLE": "Configuración del chatbot",
-    "BUILDER_CHATBOT_SETTING_INFO": "Si está habilitado, será posible hacer preguntas sobre las palabras clave directamente en el chat. De lo contrario, se mostrarán las definiciones.",
+    "BUILDER_CHATBOT_SETTING_INFO": "Si habilitas el chatbot, será posible hacer preguntas sobre las palabras clave directamente en el chat. De lo contrario, se mostrarán las definiciones.",
     "BUILDER_KEYWORDS_SETTING_TITLE": "Configuración de palabras clave",
-    "BUILDER_SAVE_BTN": "Ahorrar"
+    "BUILDER_SAVE_BTN": "Guardar"
   }
 }
