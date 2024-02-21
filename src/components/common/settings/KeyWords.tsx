@@ -29,6 +29,7 @@ import {
   ENTER_DEFINITION_FIELD_CY,
   ENTER_KEYWORD_FIELD_CY,
   KEYWORD_LIST_ITEM_CY,
+  buildKeywordNotExistWarningCy,
 } from '../../../config/selectors';
 import {
   DEFAULT_IN_SECTION_SPACING,
@@ -132,7 +133,10 @@ const KeyWords: FC<Prop> = ({
             </>
           }
         >
-          <WarningIcon sx={{ marginLeft: '5px', color: '#FFCC00' }} />
+          <WarningIcon
+            data-cy={buildKeywordNotExistWarningCy(k.word)}
+            sx={{ marginLeft: '5px', color: '#FFCC00' }}
+          />
         </HtmlTooltip>
       )}
     </ListItem>
