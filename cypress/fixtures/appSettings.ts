@@ -89,3 +89,13 @@ export const MOCK_APP_SETTINGS_USING_CHATBOT = [
   ...MOCK_APP_SETTINGS,
   MOCK_USE_CHATBOT_SETTING,
 ];
+
+export const buildMock = (
+  text: string,
+  keywords: Keyword[],
+  useChatbot = false,
+): AppSetting[] => [
+  { ...MOCK_TEXT_RESOURCE_SETTING, data: { text } },
+  { ...MOCK_KEYWORDS_SETTING, data: { keywords } },
+  ...(useChatbot ? [MOCK_USE_CHATBOT_SETTING] : []),
+];

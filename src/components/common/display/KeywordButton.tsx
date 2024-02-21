@@ -4,7 +4,7 @@ import { FC } from 'react';
 
 import { Button } from '@mui/material';
 
-import { Keyword } from '../../../config/appSettingTypes';
+import { Keyword, KeywordWithLabel } from '../../../config/appSettingTypes';
 import { keywordDataCy } from '../../../config/selectors';
 
 type Prop = {
@@ -12,7 +12,7 @@ type Prop = {
     label: string;
     value: Keyword;
   };
-  onClick: (word: Keyword) => void;
+  onClick: (word: KeywordWithLabel) => void;
 };
 
 const KeywordButton: FC<Prop> = ({ word, onClick }) => {
@@ -33,7 +33,7 @@ const KeywordButton: FC<Prop> = ({ word, onClick }) => {
         fontSize: 'inherit',
         paddingY: '1px',
       }}
-      onClick={() => onClick(word.value)}
+      onClick={() => onClick({ ...word.value, label: word.label })}
     >
       <span>{word.label}</span>
     </Button>

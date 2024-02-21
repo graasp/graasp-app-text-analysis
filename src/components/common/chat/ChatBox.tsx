@@ -13,10 +13,12 @@ import {
 import { Alert, Box, Stack, styled } from '@mui/material';
 
 import { TEXT_ANALYSIS } from '@/langs/constants';
+import { replaceWordCaseInsensitive } from '@/utils/keywords';
 
 import { APP_DATA_TYPES, ChatAppData } from '../../../config/appDataTypes';
 import {
   INITIAL_PROMPT_SETTING_KEY,
+  KeywordWithLabel,
   TextResourceData,
 } from '../../../config/appSettingTypes';
 import { DEFAULT_INITIAL_PROMPT } from '../../../config/appSettings';
@@ -71,7 +73,7 @@ const StyledReactMarkdown = styled(ReactMarkdown)(({ theme }) => ({
   },
 }));
 
-type Prop = { focusWord: string; isOpen: boolean };
+type Prop = { focusWord: KeywordWithLabel; isOpen: boolean };
 
 const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
   const { t } = useTranslation();
@@ -87,21 +89,21 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
   const initialPrompt = (
     (appSettingArray.find((s) => s.name === INITIAL_PROMPT_SETTING_KEY)?.data ||
       DEFAULT_INITIAL_PROMPT) as TextResourceData
-  ).text.replaceAll('{{keyword}}', focusWord);
+  ).text.replaceAll('{{keyword}}', focusWord.label);
 
   const chatAppData = appDataArray
     .filter(
       (data) =>
         (data.type === APP_DATA_TYPES.BOT_COMMENT ||
           data.type === APP_DATA_TYPES.STUDENT_COMMENT) &&
-        data.data.keyword === focusWord,
+        data.data.keyword === focusWord.word,
     )
     .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1)) as ChatAppData[];
 
   const onSend = (input: string): void => {
     if (input.trim() !== '') {
       postAppDataAsync({
-        data: { message: input, keyword: focusWord },
+        data: { message: input, keyword: focusWord.word },
         type: APP_DATA_TYPES.STUDENT_COMMENT,
       })?.then(() => {
         const thread: ChatbotThreadMessage[] = chatAppData.map((data) => ({
@@ -116,7 +118,7 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
 
         const appData = {
           message: t(TEXT_ANALYSIS.CHAT_BOT_ERROR_MESSAGE),
-          keyword: focusWord,
+          keyword: focusWord.word,
         };
 
         postChatBot(prompt)
@@ -143,7 +145,7 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
       <InputBar onSend={(input) => onSend(input)} />
     );
 
-  const renderedMesssages = chatAppData.map((msg) =>
+  const renderedMesssages = chatAppData.map((msg, idx) =>
     msg.type === APP_DATA_TYPES.STUDENT_COMMENT ? (
       <UserBox data-cy={messagesDataCy(msg.id)} key={msg.id} initial={initial}>
         <StyledUserMessage key={msg.id} alignSelf="flex-end">
@@ -155,9 +157,19 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
         <StyledBotMessage
           key={msg.id}
           alignSelf="flex-start"
-          wordLowerCase={focusWord.toLowerCase()}
+          wordLowerCase={focusWord.word.toLowerCase()}
         >
-          <StyledReactMarkdown>{msg.data.message}</StyledReactMarkdown>
+          <StyledReactMarkdown>
+            {/* If it is the first chatbot message, replace all keywords by the label, to keep case as in the text. */}
+            {/* It is replaced here too, to handle AppData with keyword in lower case. */}
+            {idx === 0
+              ? replaceWordCaseInsensitive(
+                  msg.data.message,
+                  focusWord.word,
+                  focusWord.label,
+                )
+              : msg.data.message}
+          </StyledReactMarkdown>
         </StyledBotMessage>
       </ChatbotBox>
     ),
@@ -192,7 +204,7 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
           <ChatbotBox>
             <StyledBotMessage
               alignSelf="flex-start"
-              wordLowerCase={focusWord.toLowerCase()}
+              wordLowerCase={focusWord.word.toLowerCase()}
             >
               ...
             </StyledBotMessage>

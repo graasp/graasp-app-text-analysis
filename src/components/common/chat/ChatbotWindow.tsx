@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, IconButton, Tooltip, Typography } from '@mui/material';
 
-import { Keyword } from '../../../config/appSettingTypes';
+import { KeywordWithLabel } from '../../../config/appSettingTypes';
 import { CHAT_WINDOW_CY, DICTIONNARY_MODE_CY } from '../../../config/selectors';
 import {
   DEFAULT_BORDER_RADIUS,
@@ -16,7 +16,7 @@ import ChatBox from './ChatBox';
 
 type Prop = {
   closeChatbot: () => void;
-  focusWord: Keyword;
+  focusWord: KeywordWithLabel;
   useChatbot: boolean;
   isOpen: boolean;
   onDelete: () => void;
@@ -30,7 +30,7 @@ const ChatbotWindow: FC<Prop> = ({
   onDelete,
 }) => {
   const renderWindow = useChatbot ? (
-    <ChatBox focusWord={focusWord.word} isOpen={isOpen} />
+    <ChatBox focusWord={focusWord} isOpen={isOpen} />
   ) : (
     <Typography
       data-cy={DICTIONNARY_MODE_CY}
@@ -38,7 +38,7 @@ const ChatbotWindow: FC<Prop> = ({
       marginTop="0px"
       sx={{ flex: 2 }}
     >
-      <strong>{focusWord.word}: </strong>
+      <strong>{focusWord.label}: </strong>
       {focusWord.def}
     </Typography>
   );
