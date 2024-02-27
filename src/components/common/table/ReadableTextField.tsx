@@ -19,18 +19,14 @@ const ReadyonlyTextField = styled(Typography)(({ theme }) => ({
 }));
 
 const ReadableTextField = ({
-  readonly,
+  rowId,
   value,
-  onChange,
+  fieldName,
   size,
   multiline,
-  rowId,
-  fieldName,
+  readonly,
+  onChange,
 }: Props): JSX.Element => {
-  const handleOnChanges = (newValue: string): void => {
-    onChange(newValue);
-  };
-
   const dataCy = buildEditableTableTextInputCy(rowId, fieldName, readonly);
 
   return readonly ? (
@@ -41,7 +37,7 @@ const ReadableTextField = ({
       size={size}
       multiline={multiline}
       value={value}
-      onChange={(e) => handleOnChanges(e.target.value)}
+      onChange={(e) => onChange(e.target.value)}
       fullWidth
       sx={{
         minWidth: '150px',

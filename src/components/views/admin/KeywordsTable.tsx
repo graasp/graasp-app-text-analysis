@@ -69,7 +69,6 @@ const KeywordsTable = ({
     onDeleteSelection(selection.map((r) => ({ word: r.rowId, def: r.def })));
 
   return (
-    // TODO: add Provider of context here...
     <EditableTable
       columns={columns}
       rows={rows}

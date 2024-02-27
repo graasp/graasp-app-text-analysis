@@ -12,6 +12,7 @@ import {
   Tooltip,
 } from '@mui/material';
 
+import { UseEditableTableType } from '@/components/hooks/useEditableTable';
 import {
   EDITABLE_TABLE_DISCARD_ALL_BUTTON_CY,
   EDITABLE_TABLE_FILTER_INPUT_CY,
@@ -39,40 +40,30 @@ const computeCheckBoxState = (
 };
 
 type Props<T extends RowType> = {
-  isEditing: boolean;
+  columns: Column<T>[];
   isSelectable: boolean;
   isEditable: boolean;
-  isValid: boolean;
-  totalColumns: number;
-  isGlobalChecked: boolean;
-  isGlobalIndeterminate: boolean;
-  columns: Column<T>[];
 
-  onSaveAll: () => void;
-  onDiscardAll: () => void;
-  onFilterChanged: (filter: string) => void;
-  onGlobalCheckChanged: (isChecked: boolean) => void;
+  viewModel: UseEditableTableType<T>;
 };
 
 const TableHeader = <T extends RowType>({
-  isEditing,
+  columns,
   isSelectable,
   isEditable,
-  isValid,
-  totalColumns,
-  isGlobalChecked,
-  isGlobalIndeterminate,
-  columns,
 
-  onSaveAll,
-  onDiscardAll,
-  onFilterChanged,
-  onGlobalCheckChanged,
+  viewModel,
 }: Props<T>): JSX.Element => (
   <>
     <thead>
       <tr>
-        <StyledTd colSpan={isEditing ? totalColumns - 1 : totalColumns}>
+        <StyledTd
+          colSpan={
+            viewModel.isEditing
+              ? viewModel.totalColumns - 1
+              : viewModel.totalColumns
+          }
+        >
           <TextField
             data-cy={EDITABLE_TABLE_FILTER_INPUT_CY}
             placeholder={t(
@@ -87,10 +78,10 @@ const TableHeader = <T extends RowType>({
             }}
             variant="outlined"
             size="small"
-            onChange={(event) => onFilterChanged(event.target.value)}
+            onChange={(event) => viewModel.setTableFilter(event.target.value)}
           />
         </StyledTd>
-        {isEditing && (
+        {viewModel.isEditing && (
           <StyledTd>
             <Stack direction="row">
               <Tooltip
@@ -100,11 +91,11 @@ const TableHeader = <T extends RowType>({
               >
                 <IconButton
                   data-cy={EDITABLE_TABLE_SAVE_ALL_BUTTON_CY}
-                  disabled={!isValid}
+                  disabled={!viewModel.areRowsValid}
                   aria-label="save-all-rows-icon"
                   onClick={() => {
-                    if (isValid) {
-                      onSaveAll();
+                    if (viewModel.areRowsValid) {
+                      viewModel.handleSaveAll();
                     }
                   }}
                 >
@@ -119,7 +110,7 @@ const TableHeader = <T extends RowType>({
                 <IconButton
                   data-cy={EDITABLE_TABLE_DISCARD_ALL_BUTTON_CY}
                   aria-label="cancel-all-rows-icon"
-                  onClick={onDiscardAll}
+                  onClick={viewModel.handleDiscardAll}
                 >
                   <CancelIcon />
                 </IconButton>
@@ -135,11 +126,16 @@ const TableHeader = <T extends RowType>({
           <StyledTh>
             <Checkbox
               data-cy={buildEditableSelectAllButtonCy(
-                computeCheckBoxState(isGlobalChecked, isGlobalIndeterminate),
+                computeCheckBoxState(
+                  viewModel.isGlobalChecked,
+                  viewModel.isGlobalIndeterminate,
+                ),
               )}
-              checked={isGlobalChecked}
-              indeterminate={isGlobalIndeterminate}
-              onChange={(_e, isChecked) => onGlobalCheckChanged(isChecked)}
+              checked={viewModel.isGlobalChecked}
+              indeterminate={viewModel.isGlobalIndeterminate}
+              onChange={(_e, isChecked) =>
+                viewModel.handleGlobalOnChange(isChecked)
+              }
             />
           </StyledTh>
         )}
