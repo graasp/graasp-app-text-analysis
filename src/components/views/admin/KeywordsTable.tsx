@@ -2,62 +2,13 @@ import { t } from 'i18next';
 
 import { toast } from 'react-toastify';
 
-import WarningIcon from '@mui/icons-material/Warning';
-import {
-  Tooltip,
-  TooltipProps,
-  Typography,
-  styled,
-  tooltipClasses,
-} from '@mui/material';
-
+import MissingKeywordWarning from '@/components/common/table/MissingKeywordWarning';
 import { Keyword } from '@/config/appSettingTypes';
-import { buildKeywordNotExistWarningCy } from '@/config/selectors';
 import { TEXT_ANALYSIS } from '@/langs/constants';
-import { isKeywordPresent, isKeywordsEquals } from '@/utils/keywords';
+import { areKeywordsEquals } from '@/utils/keywords';
 
 import EditableTable from '../../common/table/EditableTable';
 import { Column, Row } from '../../common/table/types';
-
-const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: '#f5f5f9',
-    color: 'rgba(0, 0, 0, 0.87)',
-    maxWidth: 220,
-    fontSize: theme.typography.pxToRem(12),
-    border: '1px solid #dadde9',
-  },
-}));
-
-const renderWarningIcon = (
-  row: Row<Keyword>,
-  text: string,
-): JSX.Element | null => {
-  if (!isKeywordPresent(text, row.word)) {
-    return (
-      <HtmlTooltip
-        title={
-          <>
-            <Typography color="inherit">
-              {t(TEXT_ANALYSIS.KEYWORDS_NOT_IN_TEXT_TOOLTIP_TITLE)}
-            </Typography>
-            {t(TEXT_ANALYSIS.KEYWORDS_NOT_IN_TEXT_TOOLTIP_MSG, {
-              keyword: row.word,
-            })}
-          </>
-        }
-      >
-        <WarningIcon
-          data-cy={buildKeywordNotExistWarningCy(row.rowId)}
-          sx={{ marginLeft: '5px', color: '#FFCC00' }}
-        />
-      </HtmlTooltip>
-    );
-  }
-  return null;
-};
 
 const includes = (text: string, search: string): boolean =>
   text.toLowerCase().includes(search.toLowerCase());
@@ -82,7 +33,7 @@ const KeywordsTable = ({
     {
       key: 'word',
       displayColumn: t(TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_KEYWORD_COLUMN),
-      renderAfter: (content) => renderWarningIcon(content, text),
+      renderAfter: (content) => MissingKeywordWarning(content, text),
       optional: false,
     },
     {
@@ -96,8 +47,8 @@ const KeywordsTable = ({
 
   const handleSave = (rowId: string, newRow: Row<Keyword>): Promise<void> => {
     if (
-      !isKeywordsEquals(rowId, newRow) &&
-      keywords.find((k) => isKeywordsEquals(k, newRow))
+      !areKeywordsEquals(rowId, newRow) &&
+      keywords.find((k) => areKeywordsEquals(k, newRow))
     ) {
       const alreadyExistsMsg = t(
         TEXT_ANALYSIS.KEYWORD_ALREADY_EXIST_WARNING_MESSAGE,
@@ -118,6 +69,7 @@ const KeywordsTable = ({
     onDeleteSelection(selection.map((r) => ({ word: r.rowId, def: r.def })));
 
   return (
+    // TODO: add Provider of context here...
     <EditableTable
       columns={columns}
       rows={rows}

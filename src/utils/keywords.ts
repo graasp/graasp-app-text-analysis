@@ -14,7 +14,7 @@ export const replaceWordCaseInsensitive = (
   return text.replace(regex, replacement);
 };
 
-export const isKeywordsEquals = (
+export const areKeywordsEquals = (
   k1: Keyword | string,
   k2: Keyword | string,
 ): boolean => {
@@ -49,4 +49,4 @@ export const isKeywordsEquals = (
 export const includes = (
   keywords: Keyword[],
   keyword: Keyword | string,
-): boolean => keywords.find((k) => isKeywordsEquals(k, keyword)) !== undefined;
+): boolean => keywords.find((k) => areKeywordsEquals(k, keyword)) !== undefined;

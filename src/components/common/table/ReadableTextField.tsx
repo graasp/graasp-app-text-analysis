@@ -14,9 +14,9 @@ type Props = {
 
 // Set the same padding as for the text input to avoid
 // movements between Typography and Textfield texts.
-const ReadyonlyTextField = styled(Typography)({
-  padding: '8px 14px',
-});
+const ReadyonlyTextField = styled(Typography)(({ theme }) => ({
+  padding: `${theme.spacing(1)} ${theme.spacing(2)}`,
+}));
 
 const ReadableTextField = ({
   readonly,
