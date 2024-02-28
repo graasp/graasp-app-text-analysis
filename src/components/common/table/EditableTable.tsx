@@ -94,7 +94,7 @@ const EditableTable = <T extends RowType>({
                     <TableActions
                       rowId={r.rowId}
                       isEditing={viewModel.isEditingRow(r.rowId)}
-                      isValid={!viewModel.hasMissingMandatoryValue(r)}
+                      isValid={!viewModel.isValidRow(r)}
                       onEvent={viewModel.handleActionEvents}
                     />
                   </StyledTd>
@@ -115,7 +115,7 @@ const EditableTable = <T extends RowType>({
           isSelectable={isSelectable}
           isEditable={isEditable}
           totalColumns={viewModel.totalColumns}
-          numberFilteredSelection={viewModel.filteredSelection.length}
+          numberFilteredSelection={viewModel.numberFilteredSelection}
           handleDeleteSelection={viewModel.handleDeleteSelection}
         />
       </StyledTable>

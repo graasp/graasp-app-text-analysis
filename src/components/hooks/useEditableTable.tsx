@@ -13,40 +13,28 @@ import { TableActionEvent } from '../common/table/TableActions';
 import { Column, Row, RowId, RowType } from '../common/table/types';
 
 export type UseEditableTableType<T extends RowType> = {
-  tableFilter: string;
-  setTableFilter: (newFilter: string) => void;
-  selectedRows: Row<T>[];
-  setSelectedRows: React.Dispatch<React.SetStateAction<Row<T>[]>>;
-  editingRows: Map<RowId, Row<T>>;
-  setEditingRows: React.Dispatch<React.SetStateAction<Map<RowId, Row<T>>>>;
-  filteredRows: Row<T>[];
-  filteredSelection: Row<T>[];
   totalColumns: number;
-  isEditingRow: (rowId: RowId) => boolean;
+  numberFilteredSelection: number;
+  filteredRows: Row<T>[];
+  tableNoResultDataCy: string;
+  tableNoResultMessage: string;
   isEditing: boolean;
   isGlobalChecked: boolean;
   isGlobalIndeterminate: boolean;
-  tableNoResultDataCy: string;
-  tableNoResultMessage: string;
   areRowsValid: boolean;
+  isEditingRow: (rowId: RowId) => boolean;
   isRowChecked: (rowId: RowId) => boolean;
+  isValidRow: (row: Row<T>) => boolean;
   getColValue: (row: Row<T>, col: string) => unknown;
-  getRow: (rowId: RowId) => Row<T> | undefined;
-  hasMissingMandatoryValue: (row: Row<T>) => boolean;
-  isKeysEquals: (r1: RowId, r2: RowId) => boolean;
-  rowsInclude: (searchInRows: Row<T>[], rowId: RowId) => boolean;
-  addInEditing: (row: Row<T>) => void;
+  buildTableSelectButtonCy: (rowId: RowId) => string;
+  updateTableFilter: (newFilter: string) => void;
   handleCheckBoxChanged: (isChecked: boolean, rowId: RowId) => void;
   handleDeleteSelection: () => void;
   handleRowChanged: (row: Row<T>, columnKey: string, value: string) => void;
-  removeRowFromEditing: (rowId: RowId) => void;
-  saveRow: (rowId: RowId) => void;
   handleSaveAll: () => void;
   handleDiscardAll: () => void;
-  handleOnEdit: (rowId: RowId) => void;
   handleActionEvents: (rowId: RowId, event: TableActionEvent) => void;
   handleGlobalOnChange: (isChecked: boolean) => void;
-  buildTableSelectButtonCy: (rowId: RowId) => string;
 };
 
 type UseEditableTableProps<T extends RowType> = {
@@ -78,6 +66,7 @@ export const useEditableTable = <T extends RowType>({
   const filteredSelection = selectedRows.filter((r) =>
     rowIsInFilter(r, tableFilter),
   );
+  const numberFilteredSelection = filteredSelection.length;
   const totalColumns =
     columns.length +
     // add checkbox and actions columns
@@ -89,13 +78,11 @@ export const useEditableTable = <T extends RowType>({
   const isEditing = Boolean(editingRows.size);
 
   const isGlobalChecked = Boolean(
-    filteredSelection.length &&
-      filteredSelection.length === filteredRows.length,
+    numberFilteredSelection && numberFilteredSelection === filteredRows.length,
   );
 
   const isGlobalIndeterminate = Boolean(
-    filteredSelection.length &&
-      filteredSelection.length !== filteredRows.length,
+    numberFilteredSelection && numberFilteredSelection !== filteredRows.length,
   );
 
   const isKeysEquals = (r1: RowId, r2: RowId): boolean =>
@@ -110,10 +97,10 @@ export const useEditableTable = <T extends RowType>({
   const getRow = (rowId: RowId): Row<T> | undefined =>
     rows.find((r) => isKeysEquals(r.rowId, rowId));
 
-  const hasMissingMandatoryValue = (row: Row<T>): boolean =>
+  const isValidRow = (row: Row<T>): boolean =>
     columns.some((c) => c.optional === false && !getColValue(row, c.key));
 
-  const areRowsValid = !rows.some(hasMissingMandatoryValue);
+  const areRowsValid = !rows.some(isValidRow);
 
   const addInEditing = (row: Row<T>): void =>
     setEditingRows((currState) => new Map([...currState, [row.rowId, row]]));
@@ -270,39 +257,27 @@ export const useEditableTable = <T extends RowType>({
     buildEditableTableSelectButtonCy(rowId, isRowChecked(rowId));
 
   return {
-    tableFilter,
-    setTableFilter,
-    selectedRows,
-    setSelectedRows,
-    editingRows,
-    setEditingRows,
-    filteredRows,
-    filteredSelection,
     totalColumns,
-    isEditingRow,
+    numberFilteredSelection,
+    filteredRows,
+    tableNoResultDataCy,
+    tableNoResultMessage,
     isEditing,
     isGlobalChecked,
     isGlobalIndeterminate,
-    isKeysEquals,
-    isRowChecked,
-    rowsInclude,
-    getColValue,
-    getRow,
-    hasMissingMandatoryValue,
     areRowsValid,
-    addInEditing,
+    isEditingRow,
+    isRowChecked,
+    isValidRow,
+    getColValue,
+    buildTableSelectButtonCy,
+    updateTableFilter: setTableFilter,
     handleCheckBoxChanged,
     handleDeleteSelection,
     handleRowChanged,
-    removeRowFromEditing,
-    saveRow,
     handleSaveAll,
     handleDiscardAll,
-    handleOnEdit,
     handleActionEvents,
     handleGlobalOnChange,
-    tableNoResultDataCy,
-    tableNoResultMessage,
-    buildTableSelectButtonCy,
   };
 };

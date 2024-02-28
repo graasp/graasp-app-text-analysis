@@ -78,7 +78,9 @@ const TableHeader = <T extends RowType>({
             }}
             variant="outlined"
             size="small"
-            onChange={(event) => viewModel.setTableFilter(event.target.value)}
+            onChange={(event) =>
+              viewModel.updateTableFilter(event.target.value)
+            }
           />
         </StyledTd>
         {viewModel.isEditing && (
