@@ -246,7 +246,7 @@ export const useEditableTable = <T extends RowType>({
 
   const tableNoResultMessage = rows.length
     ? t(TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_FILTER_NO_DATA, {
-        tableFilter,
+        filter: tableFilter,
       })
     : t(TEXT_ANALYSIS.BUILDER_KEYWORDS_TABLE_NO_DATA);
 
