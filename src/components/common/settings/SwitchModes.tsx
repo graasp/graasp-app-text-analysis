@@ -19,6 +19,7 @@ const SwitchModes: FC<Prop> = ({ value, onChange }) => {
 
   return (
     <FormControlLabel
+      sx={{ maxWidth: 'max-content' }}
       control={
         <Switch
           data-cy={USE_CHATBOT_DATA_CY}
