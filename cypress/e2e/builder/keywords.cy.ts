@@ -147,7 +147,7 @@ describe('Empty Keywords', () => {
   });
 });
 
-describe.only('Existing Keywords', () => {
+describe('Existing Keywords', () => {
   beforeEach(() => {
     cy.setUpApi({
       database: {

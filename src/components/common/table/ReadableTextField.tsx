@@ -40,7 +40,7 @@ const ReadableTextField = ({
       onChange={(e) => onChange(e.target.value)}
       fullWidth
       sx={{
-        minWidth: '150px',
+        minWidth: '25ch',
       }}
     />
   );
