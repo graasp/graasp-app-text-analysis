@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { Box } from '@mui/material';
 
-import { Keyword } from '../../../config/appSettingTypes';
+import { Keyword, KeywordWithLabel } from '../../../config/appSettingTypes';
 import { TEXT_DISPLAY_FIELD_CY } from '../../../config/selectors';
 import {
   DEFAULT_BORDER_RADIUS,
@@ -14,7 +14,7 @@ import Highlighted from './Highlighted';
 type Prop = {
   text: string;
   highlight: boolean;
-  openChatbot: (word: Keyword) => void;
+  openChatbot: (word: KeywordWithLabel) => void;
   keywords: Keyword[];
   width?: string;
 };
