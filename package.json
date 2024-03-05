@@ -23,7 +23,7 @@
     "@tanstack/react-query": "^4.29.12",
     "@tanstack/react-query-devtools": "^4.29.12",
     "@testing-library/cypress": "9.0.0",
-    "@testing-library/jest-dom": "5.16.5",
+    "@testing-library/jest-dom": "5.17.0",
     "@testing-library/react": "14.1.2",
     "cypress-vite": "^1.5.0",
     "i18next": "^23.8.2",
