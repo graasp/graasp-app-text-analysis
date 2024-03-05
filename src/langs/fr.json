@@ -1,3 +1,28 @@
 {
-  "translations": {}
+  "translations": {
+    "CONTEXT_FETCHING_ERROR_MESSAGE": "Une erreur s'est produite lors de la récupération du contexte.",
+    "TOKEN_REQUEST_ERROR_MESSAGE": "Une erreur s'est produite lors de la demande du jeton.",
+    "CHAT_BOT_ERROR_MESSAGE": "Désolé, une erreur s'est produite avec le chatbot.",
+    "KEYWORD_ALREADY_EXIST_WARNING_MESSAGE": "Le mot-clé \"{{keyword}}\" existe déjà. Pour mettre à jour sa définition, supprimez-le et saisissez-le à nouveau avec la nouvelle définition.",
+    "FIRST_CHATBOT_MESSAGE": "Vous avez cliqué sur {{keyword}}, que voulez-vous savoir ?",
+    "MAX_CONVERSATION_LENGTH_ALERT": "Vous avez atteint le nombre maximum de messages autorisés dans la conversation",
+    "INPUT_BAR_REPLY_HERE": "répondez ici...",
+    "INPUT_BAR_SEND_BTN": "envoyer",
+    "BANNER_SHOW_KEYWORDS_BTN": "afficher les mots-clés",
+    "BANNER_HIDE_KEYWORDS_BTN": "masquer les mots-clés",
+    "KEYWORDS_INFO_ALERT_CHATBOT_ENABLED": "Lorsque le chatbot est activé, toutes les définitions de mots-clés sont ignorées. En effet, le chatbot est affiché à la place de la définition.",
+    "KEYWORDS_NOT_IN_TEXT_TOOLTIP_TITLE": "Mot-clé absent du texte",
+    "KEYWORDS_NOT_IN_TEXT_TOOLTIP_MSG": "Le mot-clé \"{{keyword}}\" ne figure pas dans la version enregistrée du texte des étudiants. Il ne sera pas affiché dans le lecteur.",
+    "ENABLE_CHATBOT_TOGGLE": "activer le chatbot",
+    "PUBLIC_ALERT_NOT_AUTHENTICATED": "Vous n'êtes pas authentifié. Vous ne pouvez enregistrer aucune donnée",
+    "BUILDER_VIEW_TITLE": "Préparez votre leçon",
+    "BUILDER_NOT_SAVE_ALERT_SAVE_BTN": "sauvegarder",
+    "BUILDER_NOT_SAVE_ALERT_MSG": "N'oubliez pas de sauvegarder votre travail.",
+    "BUILDER_TEXTFIELD_LESSON_TITLE": "Entrez le titre de la leçon",
+    "BUILDER_TEXTFIELD_TEXT_STUDENT": "Saisissez le texte que les élèves verront",
+    "BUILDER_CHATBOT_SETTING_TITLE": "Paramètres du chatbot",
+    "BUILDER_CHATBOT_SETTING_INFO": "Si activé, il sera possible de poser des questions sur les mots-clés directement dans le chat. Sinon, les définitions seront affichées.",
+    "BUILDER_KEYWORDS_SETTING_TITLE": "Paramètres des mots clés",
+    "BUILDER_SAVE_BTN": "Sauvegarder"
+  }
 }
