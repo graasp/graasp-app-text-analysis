@@ -1,5 +1,6 @@
 import React, { FC, PropsWithChildren, createContext, useMemo } from 'react';
 
+import { Data } from '@graasp/apps-query-client';
 import { AppSetting } from '@graasp/sdk';
 
 import { hooks, mutations } from '../../config/queryClient';
@@ -15,22 +16,24 @@ type PatchAppSettingType = {
   id: string;
 };
 
-type DeleteAppSettingType = {
-  id: string;
-};
-
 export type AppSettingContextType = {
-  postAppSetting: (payload: PostAppSettingType) => void;
-  patchAppSetting: (payload: PatchAppSettingType) => void;
-  deleteAppSetting: (payload: DeleteAppSettingType) => void;
+  postAppSetting: (payload: PostAppSettingType) => Promise<AppSetting<Data>>;
+  patchAppSetting: (payload: PatchAppSettingType) => Promise<AppSetting<Data>>;
   appSettingArray: AppSetting[];
+  isPatchError: boolean;
+  isPostError: boolean;
+  isLoading: boolean;
+  isSuccess: boolean;
 };
 
 const defaultContextValue = {
-  postAppSetting: () => null,
-  patchAppSetting: () => null,
-  deleteAppSetting: () => null,
+  postAppSetting: () => Promise.reject(),
+  patchAppSetting: () => Promise.reject(),
   appSettingArray: [],
+  isPatchError: false,
+  isPostError: false,
+  isLoading: false,
+  isSuccess: false,
 };
 
 const AppSettingContext =
@@ -39,17 +42,41 @@ const AppSettingContext =
 export const AppSettingProvider: FC<PropsWithChildren> = ({ children }) => {
   const appSetting = hooks.useAppSettings();
 
-  const { mutate: postAppSetting } = mutations.usePostAppSetting();
-  const { mutate: patchAppSetting } = mutations.usePatchAppSetting();
-  const { mutate: deleteAppSetting } = mutations.useDeleteAppSetting();
+  const {
+    mutateAsync: postAppSetting,
+    isError: isPostError,
+    isLoading: postLoading,
+    isSuccess: postSuccess,
+  } = mutations.usePostAppSetting();
+  const {
+    mutateAsync: patchAppSetting,
+    isError: isPatchError,
+    isLoading: patchLoading,
+    isSuccess: patchSuccess,
+  } = mutations.usePatchAppSetting();
+
+  const isLoading = postLoading || patchLoading;
+  const isSuccess = postSuccess || patchSuccess;
+
   const contextValue: AppSettingContextType = useMemo(
     () => ({
       postAppSetting,
       patchAppSetting,
-      deleteAppSetting,
+      isPatchError,
+      isPostError,
+      isLoading,
+      isSuccess,
       appSettingArray: appSetting.data || [],
     }),
-    [appSetting.data, deleteAppSetting, patchAppSetting, postAppSetting],
+    [
+      appSetting.data,
+      isLoading,
+      isSuccess,
+      patchAppSetting,
+      isPatchError,
+      postAppSetting,
+      isPostError,
+    ],
   );
 
   if (appSetting.isLoading) {

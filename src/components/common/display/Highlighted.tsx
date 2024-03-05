@@ -7,7 +7,7 @@ import { styled } from '@mui/material';
 
 import { isKeywordPresent } from '@/utils/keywords';
 
-import { Keyword } from '../../../config/appSettingTypes';
+import { Keyword, KeywordWithLabel } from '../../../config/appSettingTypes';
 import { DEFAULT_KEYWORD } from '../../../config/appSettings';
 import KeywordButton from './KeywordButton';
 
@@ -15,7 +15,7 @@ type Prop = {
   text: string;
   words: Keyword[];
   highlight: boolean;
-  openChatbot: (word: Keyword) => void;
+  openChatbot: (word: KeywordWithLabel) => void;
 };
 
 const StyledReactMarkdown = styled(ReactMarkdown)(({ theme }) => ({

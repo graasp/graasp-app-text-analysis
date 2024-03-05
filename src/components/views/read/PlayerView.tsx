@@ -9,7 +9,7 @@ import { APP_DATA_TYPES } from '../../../config/appDataTypes';
 import {
   INITIAL_CHATBOT_PROMPT_SETTING_KEY,
   KEYWORDS_SETTING_KEY,
-  Keyword,
+  KeywordWithLabel,
   LESSON_TITLE_SETTING_KEY,
   TEXT_RESOURCE_SETTING_KEY,
   USE_CHATBOT_SETTING_KEY,
@@ -38,7 +38,10 @@ const PlayerView: FC = () => {
   const [summon, setSummon] = useState(false);
   const [chatbot, setChatbot] = useState(false);
   const [useChatbot, setUseChatbot] = useState(false);
-  const [focusWord, setFocusWord] = useState<Keyword>(DEFAULT_KEYWORD);
+  const [focusWord, setFocusWord] = useState<KeywordWithLabel>({
+    label: '',
+    ...DEFAULT_KEYWORD,
+  });
 
   const { keywords } = getDataAppSetting(
     appSettingArray,
@@ -69,7 +72,7 @@ const PlayerView: FC = () => {
     DEFAULT_TEXT_RESOURCE_SETTING,
   ).text;
 
-  const openChatbot = (word: Keyword): void => {
+  const openChatbot = (word: KeywordWithLabel): void => {
     setChatbot(true);
     setFocusWord(word);
   };
@@ -80,7 +83,7 @@ const PlayerView: FC = () => {
       INITIAL_CHATBOT_PROMPT_SETTING_KEY,
       'text',
       { text: t(TEXT_ANALYSIS.FIRST_CHATBOT_MESSAGE) },
-    ).text.replaceAll('{{keyword}}', `**${focusWord.word}**`);
+    ).text.replaceAll('{{keyword}}', `**${focusWord.label}**`);
 
     if (keywordAppData.length === 0) {
       postAppData({
