@@ -1,3 +1,28 @@
 {
-  "translations": {}
+  "translations": {
+    "CONTEXT_FETCHING_ERROR_MESSAGE": "Beim Abrufen des Kontexts ist ein Fehler aufgetreten.",
+    "TOKEN_REQUEST_ERROR_MESSAGE": "Beim Anfordern des Tokens ist ein Fehler aufgetreten.",
+    "CHAT_BOT_ERROR_MESSAGE": "Leider ist beim Chatbot ein Fehler aufgetreten.",
+    "KEYWORD_ALREADY_EXIST_WARNING_MESSAGE": "Das Schlüsselwort „{{keyword}}“ existiert bereits. Um seine Definition zu aktualisieren, löschen Sie ihn und geben Sie ihn erneut mit der neuen Definition ein.",
+    "FIRST_CHATBOT_MESSAGE": "Sie haben auf {{keyword}} geklickt. Was möchten Sie darüber wissen?",
+    "MAX_CONVERSATION_LENGTH_ALERT": "Sie haben die maximal zulässige Anzahl an Nachrichten in der Konversation erreicht",
+    "INPUT_BAR_REPLY_HERE": "antworte hier ...",
+    "INPUT_BAR_SEND_BTN": "schicken",
+    "BANNER_SHOW_KEYWORDS_BTN": "Schlüsselwörter anzeigen",
+    "BANNER_HIDE_KEYWORDS_BTN": "Schlüsselwörter ausblenden",
+    "KEYWORDS_INFO_ALERT_CHATBOT_ENABLED": "Wenn der Chatbot aktiviert ist, werden alle Definitionen von Schlüsselwörtern ignoriert. Dies liegt daran, dass der Chatbot anstelle der Definition angezeigt wird.",
+    "KEYWORDS_NOT_IN_TEXT_TOOLTIP_TITLE": "Schlüsselwort nicht im Text",
+    "KEYWORDS_NOT_IN_TEXT_TOOLTIP_MSG": "Das Schlüsselwort „{{keyword}}“ ist nicht in der gespeicherten Version des Textes enthalten. Es wird nicht im Player angezeigt.",
+    "ENABLE_CHATBOT_TOGGLE": "Aktivieren Sie den Chatbot",
+    "PUBLIC_ALERT_NOT_AUTHENTICATED": "Sie sind nicht authentifiziert. Sie können keine Daten speichern",
+    "BUILDER_VIEW_TITLE": "Bereiten Sie Ihre Lektion vor",
+    "BUILDER_NOT_SAVE_ALERT_SAVE_BTN": "speichern",
+    "BUILDER_NOT_SAVE_ALERT_MSG": "Vergessen Sie nicht, Ihre Arbeit zu speichern.",
+    "BUILDER_TEXTFIELD_LESSON_TITLE": "Geben Sie den Lektionstitel ein",
+    "BUILDER_TEXTFIELD_TEXT_STUDENT": "Geben Sie den Text ein, den die Schüler sehen werden",
+    "BUILDER_CHATBOT_SETTING_TITLE": "Chatbot-Einstellungen",
+    "BUILDER_CHATBOT_SETTING_INFO": "Wenn aktiviert, ist es möglich, direkt im Chat Fragen zu den Schlüsselwörtern zu stellen. Andernfalls werden die Definitionen angezeigt.",
+    "BUILDER_KEYWORDS_SETTING_TITLE": "Schlüsselworteinstellungen",
+    "BUILDER_SAVE_BTN": "Speichern"
+  }
 }
