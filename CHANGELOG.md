@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/graasp/graasp-app-text-analysis/compare/v1.3.0...v1.4.0) (2024-03-05)
+
+
+### Features
+
+* conserve text keyword case in keyword or chatbot views ([#114](https://github.com/graasp/graasp-app-text-analysis/issues/114)) ([ab25824](https://github.com/graasp/graasp-app-text-analysis/commit/ab25824c27c8f7a14ccbd131c494f31ff896e089))
+* improve keywords in builder to allow edition and filter ([#117](https://github.com/graasp/graasp-app-text-analysis/issues/117)) ([ee6d052](https://github.com/graasp/graasp-app-text-analysis/commit/ee6d0526a750ebfc9ab0fefec0c6e7bdbcd42f36))
+* translate ar.json via GitLocalize ([#111](https://github.com/graasp/graasp-app-text-analysis/issues/111)) ([cdd9fd1](https://github.com/graasp/graasp-app-text-analysis/commit/cdd9fd181abb9d5a1701bd4191ec091ac38e09d1))
+* translate de.json via GitLocalize ([#109](https://github.com/graasp/graasp-app-text-analysis/issues/109)) ([7b5ce00](https://github.com/graasp/graasp-app-text-analysis/commit/7b5ce00d52a88d0c3e0af90e61e73d00b2dc54be))
+* translate it.json via GitLocalize ([#110](https://github.com/graasp/graasp-app-text-analysis/issues/110)) ([53c6364](https://github.com/graasp/graasp-app-text-analysis/commit/53c63649f4cd28f28fae049b21948c0e603f32e8))
+
+
+### Bug Fixes
+
+* **fr:** add fr translations ([#108](https://github.com/graasp/graasp-app-text-analysis/issues/108)) ([b0136ca](https://github.com/graasp/graasp-app-text-analysis/commit/b0136caa0a28658a7b05052deeac8f503817e3ac))
+
 ## [1.3.0](https://github.com/graasp/graasp-app-text-analysis/compare/v1.2.0...v1.3.0) (2024-02-19)
 
 
