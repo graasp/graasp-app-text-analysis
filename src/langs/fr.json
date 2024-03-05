@@ -3,7 +3,7 @@
     "CONTEXT_FETCHING_ERROR_MESSAGE": "Une erreur s'est produite lors de la récupération du contexte.",
     "TOKEN_REQUEST_ERROR_MESSAGE": "Une erreur s'est produite lors de la demande du jeton.",
     "CHAT_BOT_ERROR_MESSAGE": "Désolé, une erreur s'est produite avec le chatbot.",
-    "KEYWORD_ALREADY_EXIST_WARNING_MESSAGE": "Le mot-clé \"{{keyword}}\" existe déjà. Pour mettre à jour sa définition, supprimez-la et saisissez-la à nouveau avec la nouvelle définition.",
+    "KEYWORD_ALREADY_EXIST_WARNING_MESSAGE": "Le mot-clé \"{{keyword}}\" existe déjà. Pour mettre à jour sa définition, supprimez-le et saisissez-le à nouveau avec la nouvelle définition.",
     "FIRST_CHATBOT_MESSAGE": "Vous avez cliqué sur {{keyword}}, que voulez-vous savoir ?",
     "MAX_CONVERSATION_LENGTH_ALERT": "Vous avez atteint le nombre maximum de messages autorisés dans la conversation",
     "INPUT_BAR_REPLY_HERE": "répondez ici...",
