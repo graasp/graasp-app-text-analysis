@@ -11,6 +11,8 @@ export const INITIAL_CHATBOT_PROMPT_SETTING_KEY =
 export type TextResourceData = { text: string };
 export type TextResourceSetting = AppSetting & { data: TextResourceData };
 export type Keyword = { word: string; def: string };
+// The label is the keyword with the same case as in the text
+export type KeywordWithLabel = Keyword & { label: string };
 export type KeywordsData = { keywords: Keyword[] };
 export type KeywordsSetting = AppSetting & { data: KeywordsData };
 export type UseChatbotData = { useBot: boolean };

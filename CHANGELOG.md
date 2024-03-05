@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/graasp/graasp-app-text-analysis/compare/v1.2.0...v1.3.0) (2024-02-19)
+
+
+### Features
+
+* implement auto save feature ([#112](https://github.com/graasp/graasp-app-text-analysis/issues/112)) ([3428862](https://github.com/graasp/graasp-app-text-analysis/commit/34288621931a539c4f70ec7352d44c3e02d5ffdb))
+
+## [1.2.0](https://github.com/graasp/graasp-app-text-analysis/compare/v1.1.0...v1.2.0) (2024-02-13)
+
+
+### Features
+
+* add translations ([#103](https://github.com/graasp/graasp-app-text-analysis/issues/103)) ([756b4d5](https://github.com/graasp/graasp-app-text-analysis/commit/756b4d55e2c71cd7070a62ae8c766538865cd79f))
+* fix keywords and show unsaved warning when changes only ([#102](https://github.com/graasp/graasp-app-text-analysis/issues/102)) ([b891785](https://github.com/graasp/graasp-app-text-analysis/commit/b891785bfb66a53360d5ee6361982af46abb94fb))
+* use only one button to hide/display the keywords ([b891785](https://github.com/graasp/graasp-app-text-analysis/commit/b891785bfb66a53360d5ee6361982af46abb94fb))
+* use text highlighted color in the chabot messages ([b891785](https://github.com/graasp/graasp-app-text-analysis/commit/b891785bfb66a53360d5ee6361982af46abb94fb))
+
+
+### Bug Fixes
+
+* **chore:** add test:ci in package.json scripts ([e6980e5](https://github.com/graasp/graasp-app-text-analysis/commit/e6980e5115fc8c05ac588a3a7e08113fee0ebf25))
+* update cypress.yml github action ([1b4eea5](https://github.com/graasp/graasp-app-text-analysis/commit/1b4eea5bd1804c849791737b28a26ca5ca1c16ce))
+* update deployment files and sentry config ([6c360e5](https://github.com/graasp/graasp-app-text-analysis/commit/6c360e5e649d3474541b596e57e065af00300fce))
+
 ## [1.1.0](https://github.com/graasp/graasp-app-text-analysis/compare/v1.0.1...v1.1.0) (2024-01-10)
 
 
