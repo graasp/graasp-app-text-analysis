@@ -57,6 +57,7 @@ const theme = createTheme({
     secondary: pink,
     default: grey['500'],
     background: {
+      default: 'transparent',
       paper: '#fff',
     },
   },
