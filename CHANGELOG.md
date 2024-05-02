@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.1](https://github.com/graasp/graasp-app-text-analysis/compare/v1.4.0...v1.4.1) (2024-05-02)
+
+
+### Bug Fixes
+
+* update background to transparent ([d73c41d](https://github.com/graasp/graasp-app-text-analysis/commit/d73c41d5677eb069e8c0adf20227b28c0221ae5c))
+
 ## [1.4.0](https://github.com/graasp/graasp-app-text-analysis/compare/v1.3.0...v1.4.0) (2024-03-05)
 
 
