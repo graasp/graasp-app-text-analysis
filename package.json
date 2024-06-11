@@ -8,6 +8,7 @@
     "Fanny Lasne",
     "Basile Spaenlehauer"
   ],
+  "type": "module",
   "homepage": ".",
   "dependencies": {
     "@emotion/react": "11.11.4",
