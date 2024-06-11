@@ -2,7 +2,7 @@ import { v4 as uuid } from 'uuid';
 
 import { AppData, AppDataVisibility } from '@graasp/sdk';
 
-import { APP_DATA_TYPES } from '../../src/config/appDataTypes';
+import { AppDataTypes } from '../../src/config/appDataTypes';
 import { CURRENT_MEMBER, MOCK_SERVER_ITEM } from '../../src/data/db';
 
 export const MOCK_SERVER_API_HOST = 'http://localhost:3636';
@@ -19,7 +19,7 @@ export const MOCK_APP_DATA: AppData[] = [
     item: MOCK_SERVER_ITEM,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    type: APP_DATA_TYPES.BOT_COMMENT,
+    type: AppDataTypes.BOT_COMMENT,
     visibility: AppDataVisibility.Member,
   },
   {
@@ -33,7 +33,7 @@ export const MOCK_APP_DATA: AppData[] = [
     item: MOCK_SERVER_ITEM,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    type: APP_DATA_TYPES.STUDENT_COMMENT,
+    type: AppDataTypes.STUDENT_COMMENT,
     visibility: AppDataVisibility.Member,
   },
   {
@@ -47,7 +47,7 @@ export const MOCK_APP_DATA: AppData[] = [
     item: MOCK_SERVER_ITEM,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    type: APP_DATA_TYPES.BOT_COMMENT,
+    type: AppDataTypes.BOT_COMMENT,
     visibility: AppDataVisibility.Member,
   },
   {
@@ -61,7 +61,7 @@ export const MOCK_APP_DATA: AppData[] = [
     item: MOCK_SERVER_ITEM,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    type: APP_DATA_TYPES.STUDENT_COMMENT,
+    type: AppDataTypes.STUDENT_COMMENT,
     visibility: AppDataVisibility.Member,
   },
   {
@@ -75,7 +75,7 @@ export const MOCK_APP_DATA: AppData[] = [
     item: MOCK_SERVER_ITEM,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    type: APP_DATA_TYPES.BOT_COMMENT,
+    type: AppDataTypes.BOT_COMMENT,
     visibility: AppDataVisibility.Member,
   },
 ];

@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 
 import { TEXT_ANALYSIS } from '@/langs/constants';
 
-import { APP_DATA_TYPES } from '../../../config/appDataTypes';
+import { AppDataTypes } from '../../../config/appDataTypes';
 import {
   INITIAL_CHATBOT_PROMPT_SETTING_KEY,
   KEYWORDS_SETTING_KEY,
@@ -88,7 +88,7 @@ const PlayerView: FC = () => {
     if (keywordAppData.length === 0) {
       postAppData({
         data: { message: initialChatbotPrompt, keyword: focusWord.word },
-        type: APP_DATA_TYPES.BOT_COMMENT,
+        type: AppDataTypes.BOT_COMMENT,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

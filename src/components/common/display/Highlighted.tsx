@@ -58,7 +58,7 @@ const Highlighted: FC<Prop> = ({ text, words, highlight, openChatbot }) => {
     .join('');
 
   // eslint-disable-next-line
-  const parseComponent = ({ children }: { children: any }) => {
+  const parseComponent = ({ children }: { children?: any }) => {
     // todo: handle this better
     if (typeof children[0] !== 'string') {
       return children[0];

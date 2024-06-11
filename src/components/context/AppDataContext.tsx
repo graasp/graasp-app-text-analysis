@@ -1,15 +1,14 @@
 import React, { FC, PropsWithChildren, createContext, useMemo } from 'react';
 
-import { AppData } from '@graasp/sdk';
+import { AppData, AppDataVisibility } from '@graasp/sdk';
 
-import { APP_DATA_VISIBILITY } from '../../config/appDataTypes';
 import { hooks, mutations } from '../../config/queryClient';
 import Loader from '../common/Loader';
 
 type PostAppDataType = {
   data: { [key: string]: unknown };
   type: string;
-  visibility?: APP_DATA_VISIBILITY;
+  visibility?: AppDataVisibility;
 };
 
 type PatchAppDataType = {

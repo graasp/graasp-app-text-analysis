@@ -15,7 +15,7 @@ import { Alert, Box, Stack, styled } from '@mui/material';
 import { TEXT_ANALYSIS } from '@/langs/constants';
 import { replaceWordCaseInsensitive } from '@/utils/keywords';
 
-import { APP_DATA_TYPES, ChatAppData } from '../../../config/appDataTypes';
+import { AppDataTypes, ChatAppData } from '../../../config/appDataTypes';
 import {
   INITIAL_PROMPT_SETTING_KEY,
   KeywordWithLabel,
@@ -94,8 +94,8 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
   const chatAppData = appDataArray
     .filter(
       (data) =>
-        (data.type === APP_DATA_TYPES.BOT_COMMENT ||
-          data.type === APP_DATA_TYPES.STUDENT_COMMENT) &&
+        (data.type === AppDataTypes.BOT_COMMENT ||
+          data.type === AppDataTypes.STUDENT_COMMENT) &&
         data.data.keyword === focusWord.word,
     )
     .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1)) as ChatAppData[];
@@ -104,10 +104,10 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
     if (input.trim() !== '') {
       postAppDataAsync({
         data: { message: input, keyword: focusWord.word },
-        type: APP_DATA_TYPES.STUDENT_COMMENT,
+        type: AppDataTypes.STUDENT_COMMENT,
       })?.then(() => {
         const thread: ChatbotThreadMessage[] = chatAppData.map((data) => ({
-          botDataType: APP_DATA_TYPES.BOT_COMMENT,
+          botDataType: AppDataTypes.BOT_COMMENT,
           msgType: data.type,
           data: data.data.message,
         }));
@@ -129,7 +129,7 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
             setLoading(false);
             postAppData({
               data: appData,
-              type: APP_DATA_TYPES.BOT_COMMENT,
+              type: AppDataTypes.BOT_COMMENT,
             });
           });
       });
@@ -146,7 +146,7 @@ const ChatBox: FC<Prop> = ({ focusWord, isOpen }) => {
     );
 
   const renderedMesssages = chatAppData.map((msg, idx) =>
-    msg.type === APP_DATA_TYPES.STUDENT_COMMENT ? (
+    msg.type === AppDataTypes.STUDENT_COMMENT ? (
       <UserBox data-cy={messagesDataCy(msg.id)} key={msg.id} initial={initial}>
         <StyledUserMessage key={msg.id} alignSelf="flex-end">
           {msg.data.message}

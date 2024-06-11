@@ -4,7 +4,16 @@
   "semi": true,
   "singleQuote": true,
   "jsxSingleQuote": false,
-  "importOrder": ["^react", "^@?graasp*", "^@?mui*", "^@.*", "^[./]"],
+  "importOrder": [
+    "^react",
+    "^@?graasp*",
+    "^@?mui*",
+    "^@.*",
+    "^[./]"
+  ],
   "importOrderSeparation": true,
-  "importOrderSortSpecifiers": true
+  "importOrderSortSpecifiers": true,
+  "plugins": [
+    "@trivago/prettier-plugin-sort-imports"
+  ]
 }

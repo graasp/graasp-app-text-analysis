@@ -86,9 +86,9 @@ describe('Empty Keywords', () => {
 
     cy.get(buildDataCy(ADD_KEYWORD_BUTTON_CY))
       .should('be.visible')
-      .should('not.be.disabled')
-      .click()
-      .should('be.disabled');
+      .and('not.be.disabled');
+    cy.get(buildDataCy(ADD_KEYWORD_BUTTON_CY)).click();
+    cy.get(buildDataCy(ADD_KEYWORD_BUTTON_CY)).should('be.disabled');
     cy.get(buildDataCy(EDITABLE_TABLE_NO_DATA_CY)).should('not.exist');
 
     cy.get(buildDataCy(buildEditableTableDeleteButtonCy(NEW_KEYWORD.word)))
@@ -113,9 +113,9 @@ describe('Empty Keywords', () => {
 
       cy.get(buildDataCy(ADD_KEYWORD_BUTTON_CY))
         .should('be.visible')
-        .should('not.be.disabled')
-        .click()
-        .should('be.disabled');
+        .and('not.be.disabled');
+      cy.get(buildDataCy(ADD_KEYWORD_BUTTON_CY)).click();
+      cy.get(buildDataCy(ADD_KEYWORD_BUTTON_CY)).should('be.disabled');
 
       cy.get(buildDataCy(buildKeywordNotExistWarningCy(k))).should(
         'be.visible',
@@ -136,9 +136,9 @@ describe('Empty Keywords', () => {
 
       cy.get(buildDataCy(ADD_KEYWORD_BUTTON_CY))
         .should('be.visible')
-        .should('not.be.disabled')
-        .click()
-        .should('be.disabled');
+        .and('not.be.disabled');
+      cy.get(buildDataCy(ADD_KEYWORD_BUTTON_CY)).click();
+      cy.get(buildDataCy(ADD_KEYWORD_BUTTON_CY)).should('be.disabled');
 
       cy.get(buildDataCy(buildKeywordNotExistWarningCy(k))).should('not.exist');
     });
@@ -189,10 +189,8 @@ describe('Existing Keywords', () => {
       // try to add the existing keyword
       cy.get(buildDataCy(ADD_KEYWORD_BUTTON_CY))
         .should('be.visible')
-        .should('not.be.disabled')
-        .click()
-        // the button should not be disabled because it fails
-        .should('not.be.disabled');
+        .and('not.be.disabled');
+      cy.get(buildDataCy(ADD_KEYWORD_BUTTON_CY)).click();
 
       // check that the keyword is not added in the table
       cy.get(buildDataCy(EDITABLE_TABLE_ROW_CY)).should(
@@ -228,9 +226,12 @@ describe('Existing Keywords', () => {
       cy.get(
         buildDataCy(buildEditableTableEditButtonCy(UPDATING_KEYWORD.word)),
       ).click();
-      cy.get(buildDataCy(buildKeywordTextInputCy(UPDATING_KEYWORD.word, false)))
-        .clear()
-        .type(EXISTING_KEYWORD.word);
+      cy.get(
+        buildDataCy(buildKeywordTextInputCy(UPDATING_KEYWORD.word, false)),
+      ).clear();
+      cy.get(
+        buildDataCy(buildKeywordTextInputCy(UPDATING_KEYWORD.word, false)),
+      ).type(EXISTING_KEYWORD.word);
 
       // try to save the modifications, it should fail
       cy.get(
@@ -293,16 +294,22 @@ describe('Existing Keywords', () => {
       cy.get(
         buildDataCy(buildEditableTableEditButtonCy(UPDATING_KEYWORD.word)),
       ).click();
-      cy.get(buildDataCy(buildKeywordTextInputCy(UPDATING_KEYWORD.word, false)))
-        .clear()
-        .type(NEW_KEYWORD.word);
+      cy.get(
+        buildDataCy(buildKeywordTextInputCy(UPDATING_KEYWORD.word, false)),
+      ).clear();
+      cy.get(
+        buildDataCy(buildKeywordTextInputCy(UPDATING_KEYWORD.word, false)),
+      ).type(NEW_KEYWORD.word);
       cy.get(
         buildDataCy(
           buildKeywordDefinitionTextInputCy(UPDATING_KEYWORD.word, false),
         ),
-      )
-        .clear()
-        .type(NEW_KEYWORD.def);
+      ).clear();
+      cy.get(
+        buildDataCy(
+          buildKeywordDefinitionTextInputCy(UPDATING_KEYWORD.word, false),
+        ),
+      ).type(NEW_KEYWORD.def);
 
       // save the modifications
       cy.get(
@@ -355,9 +362,10 @@ describe('Existing Keywords', () => {
         KEYWORDS.length,
       );
 
-      cy.get(buildTextFieldSelectorCy(EDITABLE_TABLE_FILTER_INPUT_CY))
-        .clear()
-        .type(FILTER_WORD);
+      cy.get(buildTextFieldSelectorCy(EDITABLE_TABLE_FILTER_INPUT_CY)).clear();
+      cy.get(buildTextFieldSelectorCy(EDITABLE_TABLE_FILTER_INPUT_CY)).type(
+        FILTER_WORD,
+      );
 
       cy.get(buildDataCy(EDITABLE_TABLE_ROW_CY)).should('have.length', 1);
       cy.get(buildDataCy(buildKeywordTextInputCy(FILTER_WORD, true)));
@@ -373,9 +381,10 @@ describe('Existing Keywords', () => {
     it('invalid filter display no result', () => {
       const FILTER_WORD = 'kd kjfd fkjbd';
 
-      cy.get(buildTextFieldSelectorCy(EDITABLE_TABLE_FILTER_INPUT_CY))
-        .clear()
-        .type(FILTER_WORD);
+      cy.get(buildTextFieldSelectorCy(EDITABLE_TABLE_FILTER_INPUT_CY)).clear();
+      cy.get(buildTextFieldSelectorCy(EDITABLE_TABLE_FILTER_INPUT_CY)).type(
+        FILTER_WORD,
+      );
 
       cy.get(buildDataCy(EDITABLE_TABLE_ROW_CY)).should('have.length', 0);
       cy.get(buildDataCy(EDITABLE_TABLE_FILTER_NO_RESULT_CY)).should('exist');
@@ -399,9 +408,10 @@ describe('Existing Keywords', () => {
       ).click();
 
       // filter by keyword
-      cy.get(buildTextFieldSelectorCy(EDITABLE_TABLE_FILTER_INPUT_CY))
-        .clear()
-        .type(FILTER_WORD);
+      cy.get(buildTextFieldSelectorCy(EDITABLE_TABLE_FILTER_INPUT_CY)).clear();
+      cy.get(buildTextFieldSelectorCy(EDITABLE_TABLE_FILTER_INPUT_CY)).type(
+        FILTER_WORD,
+      );
 
       cy.get(buildDataCy(EDITABLE_TABLE_ROW_CY)).should('have.length', 1);
       cy.get(buildDataCy(buildKeywordTextInputCy(FILTER_WORD, true)));
@@ -461,18 +471,23 @@ describe('Existing Keywords', () => {
       // updates the keywords without saving for now
       UPDATING_KEYWORDS.forEach((k, idx) => {
         cy.get(buildDataCy(buildEditableTableEditButtonCy(k))).click();
-        cy.get(buildDataCy(buildKeywordTextInputCy(k, false)))
-          .clear()
-          .type(NEW_KEYWORDS[idx].word);
-        cy.get(buildDataCy(buildKeywordDefinitionTextInputCy(k, false)))
-          .clear()
-          .type(NEW_KEYWORDS[idx].def);
+        cy.get(buildDataCy(buildKeywordTextInputCy(k, false))).clear();
+        cy.get(buildDataCy(buildKeywordTextInputCy(k, false))).type(
+          NEW_KEYWORDS[idx].word,
+        );
+        cy.get(
+          buildDataCy(buildKeywordDefinitionTextInputCy(k, false)),
+        ).clear();
+        cy.get(buildDataCy(buildKeywordDefinitionTextInputCy(k, false))).type(
+          NEW_KEYWORDS[idx].def,
+        );
       });
 
       // filter by keyword
-      cy.get(buildTextFieldSelectorCy(EDITABLE_TABLE_FILTER_INPUT_CY))
-        .clear()
-        .type(FILTER_WORD);
+      cy.get(buildTextFieldSelectorCy(EDITABLE_TABLE_FILTER_INPUT_CY)).clear();
+      cy.get(buildTextFieldSelectorCy(EDITABLE_TABLE_FILTER_INPUT_CY)).type(
+        FILTER_WORD,
+      );
 
       cy.get(buildDataCy(EDITABLE_TABLE_ROW_CY)).should('have.length', 1);
 
@@ -599,12 +614,16 @@ describe('Existing Keywords', () => {
       // updates the keywords without saving for now
       UPDATING_KEYWORDS.forEach((k, idx) => {
         cy.get(buildDataCy(buildEditableTableEditButtonCy(k))).click();
-        cy.get(buildDataCy(buildKeywordTextInputCy(k, false)))
-          .clear()
-          .type(NEW_KEYWORDS[idx].word);
-        cy.get(buildDataCy(buildKeywordDefinitionTextInputCy(k, false)))
-          .clear()
-          .type(NEW_KEYWORDS[idx].def);
+        cy.get(buildDataCy(buildKeywordTextInputCy(k, false))).clear();
+        cy.get(buildDataCy(buildKeywordTextInputCy(k, false))).type(
+          NEW_KEYWORDS[idx].word,
+        );
+        cy.get(
+          buildDataCy(buildKeywordDefinitionTextInputCy(k, false)),
+        ).clear();
+        cy.get(buildDataCy(buildKeywordDefinitionTextInputCy(k, false))).type(
+          NEW_KEYWORDS[idx].def,
+        );
       });
 
       // save all the modifications
@@ -641,12 +660,16 @@ describe('Existing Keywords', () => {
       UPDATING_KEYWORDS.forEach((k, idx) => {
         // edit the existing keyword to a keyword that are already in the table
         cy.get(buildDataCy(buildEditableTableEditButtonCy(k))).click();
-        cy.get(buildDataCy(buildKeywordTextInputCy(k, false)))
-          .clear()
-          .type(NEW_KEYWORDS[idx].word);
-        cy.get(buildDataCy(buildKeywordDefinitionTextInputCy(k, false)))
-          .clear()
-          .type(NEW_KEYWORDS[idx].def);
+        cy.get(buildDataCy(buildKeywordTextInputCy(k, false))).clear();
+        cy.get(buildDataCy(buildKeywordTextInputCy(k, false))).type(
+          NEW_KEYWORDS[idx].word,
+        );
+        cy.get(
+          buildDataCy(buildKeywordDefinitionTextInputCy(k, false)),
+        ).clear();
+        cy.get(buildDataCy(buildKeywordDefinitionTextInputCy(k, false))).type(
+          NEW_KEYWORDS[idx].def,
+        );
       });
 
       // discard all the modifications

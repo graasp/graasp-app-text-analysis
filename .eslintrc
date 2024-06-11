@@ -1,29 +1,36 @@
 {
-  "env": {
-    "browser": true,
-    "es2021": true
-  },
   "extends": [
     "airbnb",
-    "plugin:cypress/recommended",
-    "plugin:@typescript-eslint/recommended",
+    "airbnb-typescript",
+    "plugin:import/typescript", // this is needed because airbnb uses eslint-plugin-import
     "prettier",
-    "plugin:react/recommended"
+    "plugin:cypress/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/recommended"
   ],
+  "plugins": ["@typescript-eslint", "prettier", "react-hooks"],
+  "env": {
+    "browser": true,
+    "node": true,
+    "mocha": true,
+    "jest": true
+  },
   "globals": {
     "cy": true,
     "Cypress": true
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
+    "project": "./tsconfig.eslint.json",
     "ecmaFeatures": {
       "jsx": true
     },
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react", "react-hooks", "@typescript-eslint", "prettier"],
   "rules": {
+    "react/prop-types": "off",
     "react/no-array-index-key": "off",
     "react/jsx-props-no-spreading": "off",
     "react/destructuring-assignment": "off",
@@ -31,6 +38,7 @@
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/ban-ts-comment": "off",
     "import/no-import-module-exports": "off",
+    "no-console": ["error", { "allow": ["error", "warn", "debug", "info"] }],
     "import/no-extraneous-dependencies": [
       "error",
       {
@@ -51,7 +59,9 @@
     "@typescript-eslint/explicit-function-return-type": [
       "error",
       {
-        "allowExpressions": true
+        "allowExpressions": true,
+        "allowHigherOrderFunctions": true,
+        "allowTypedFunctionExpressions": true
       }
     ],
     "@typescript-eslint/no-var-requires": "off",
@@ -75,21 +85,28 @@
     ],
     // eslint rule reports false error
     "no-shadow": "off",
-    "@typescript-eslint/no-shadow": ["error"]
+    "@typescript-eslint/no-shadow": ["error"],
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ]
   },
   "settings": {
-    "react": {
-      "version": "detect"
-    },
-    "import/resolver": {
-      "typescript": {},
-      "node": {
-        "extensions": [".ts", ".tsx"],
-        "moduleDirectory": ["src", "node_modules"]
-      }
-    },
+    "import/extensions": [".js", ".jsx", ".ts", ".tsx"],
     "import/parsers": {
       "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      },
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
     }
   }
 }
