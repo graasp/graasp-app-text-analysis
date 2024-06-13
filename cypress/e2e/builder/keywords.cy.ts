@@ -101,12 +101,12 @@ describe('Empty Keywords', () => {
   // 'wef' was found incomplete in 'wefwef hello'.
   // Check that only complete words are detected in text.
   it('only detect complete keywords', () => {
-    const PRBLEMATIC_TEXT = 'wefwef hello';
+    const PROBLEMATIC_TEXT = 'wefwef hello';
     const PROBLEMATIC_KEYWORDS = ['wef', 'he'];
 
     cy.get(buildDataCy(TEXT_INPUT_FIELD_CY))
       .should('be.visible')
-      .type(PRBLEMATIC_TEXT);
+      .type(PROBLEMATIC_TEXT);
 
     PROBLEMATIC_KEYWORDS.forEach((k) => {
       cy.get(buildDataCy(ENTER_KEYWORD_FIELD_CY)).should('be.visible').type(k);

@@ -9,6 +9,6 @@
     "strict": true,
     "sourceMap": false
   },
-  "include": ["**/*.ts", "../src/data/members.ts", "cypress.d.ts"],
+  "include": ["**/*.ts", "cypress.d.ts"],
   "exclude": ["coverage", ".nyc_output"]
 }

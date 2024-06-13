@@ -6,7 +6,8 @@
   "author": "Graasp",
   "contributors": [
     "Fanny Lasne",
-    "Basile Spaenlehauer"
+    "Basile Spaenlehauer",
+    "Thibault Reidy"
   ],
   "type": "module",
   "homepage": ".",
@@ -24,7 +25,6 @@
     "@tanstack/react-query": "^4.36.1",
     "@tanstack/react-query-devtools": "^4.36.1",
     "@testing-library/cypress": "10.0.2",
-    "@testing-library/jest-dom": "6.4.6",
     "@testing-library/react": "16.0.0",
     "cypress-vite": "^1.5.0",
     "i18next": "^23.11.5",
@@ -59,18 +59,13 @@
     "prettier:write": "prettier --write {src,cypress}/**/*.{js,ts,tsx,json}",
     "type-check": "tsc --noEmit && tsc --noEmit -p cypress/tsconfig.json",
     "check": "yarn prettier:check && yarn lint && yarn type-check",
-    "hooks:uninstall": "husky uninstall",
-    "hooks:install": "husky install",
+    "hooks": "husky",
     "cypress:open": "env-cmd -f ./.env.test cypress open --browser chrome",
     "test": "yarn build:test && concurrently -k -s first \"yarn preview:test\" \"yarn cypress:run\"",
     "test:ci": "env-cmd -f ./.env.test cypress run --browser chrome --headless && nyc report --reporter=text --reporter=text-summary",
     "cypress:run": "env-cmd -f ./.env.test cypress run --browser chrome",
-    "postinstall": "husky install",
-    "cov:report": "open ./coverage/lcov-report/index.html",
-    "release": "standard-version -a",
-    "release:first": "standard-version -a --first-release",
-    "release:minor": "standard-version -a --release-as minor",
-    "release:major": "standard-version -a --release-as major"
+    "postinstall": "husky",
+    "cov:report": "open ./coverage/lcov-report/index.html"
   },
   "devDependencies": {
     "@commitlint/cli": "19.3.0",
@@ -78,7 +73,6 @@
     "@cypress/code-coverage": "3.12.39",
     "@trivago/prettier-plugin-sort-imports": "4.3.0",
     "@types/i18n": "^0.13.12",
-    "@types/jest": "29.5.12",
     "@types/lodash.debounce": "^4.0.9",
     "@types/lodash.isequal": "^4.5.8",
     "@types/lodash.isobject": "3.0.9",
@@ -92,7 +86,7 @@
     "@typescript-eslint/parser": "7.13.0",
     "@vitejs/plugin-react": "^4.3.1",
     "concurrently": "8.2.2",
-    "cypress": "^13.11.0",
+    "cypress": "13.10",
     "env-cmd": "10.1.0",
     "eslint": "8.57.0",
     "eslint-config-airbnb": "19.0.4",
@@ -109,15 +103,12 @@
     "husky": "9.0.11",
     "nyc": "17.0.0",
     "prettier": "3.3.2",
-    "pretty-quick": "4.0.0",
-    "rollup-plugin-visualizer": "^5.12.0",
-    "standard-version": "9.5.0",
+    "tsc": "^2.0.4",
     "vite": "^5.2.13",
     "vite-plugin-checker": "^0.6.4",
     "vite-plugin-dts": "^3.9.1",
     "vite-plugin-istanbul": "^6.0.2",
-    "vitest": "^1.6.0",
-    "wait-on": "7.2.0"
+    "vitest": "^1.6.0"
   },
   "browserslist": {
     "production": [
@@ -135,13 +126,9 @@
     "all": true,
     "include": [
       "src/**/*.{js,ts,jsx,tsx}"
-    ],
-    "exclude": [
-      "src/setupTests.ts",
-      "src/**/*.d.ts"
     ]
   },
-  "packageManager": "yarn@4.0.2",
+  "packageManager": "yarn@4.3.0",
   "msw": {
     "workerDirectory": "public"
   }

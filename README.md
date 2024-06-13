@@ -1,13 +1,4 @@
-# Graasp App: Text Analysis
-
-```
-  Create a env.development file with:
-
-  PORT=3005
-  VITE_GRAASP_APP_KEY=<app KEY>
-  VITE_ENABLE_MOCK_API=true
-  VITE_API_HOST=<request address for the backend>
-```
+# Text Analysis App
 
 [![GitHub package.json version](https://img.shields.io/github/package-json/v/graasp/graasp-app-text-analysis?color=green&style=flat-square)](https://github.com/graasp/graasp-app-text-analysis)
 [![GitLocalize](https://gitlocalize.com/repo/9343/whole_project/badge.svg)](https://gitlocalize.com/repo/9343?utm_source=badge)
@@ -15,6 +6,22 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
+This is a Graasp app that allows to discuss concepts from a text either with definitions or through a chatbot.
+
+## Development
+
+To develop on this app you should create a `.env.development` file with:
+
+```dotenv
+VITE_PORT=3005
+# this key needs to be set in the backend also if using a local graasp backend
+# See https://graasp.github.io/docs/developer/apps/local-development for more info
+VITE_GRAASP_APP_KEY=<app KEY> 
+# Whether to enable the mock API (so you do not need to have the real backend running)
+VITE_ENABLE_MOCK_API=true
+# the base url of the api (http://localhost:3000)
+VITE_API_HOST=<request address for the backend>
+```
 
 ## Contributors ✨
 

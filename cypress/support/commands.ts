@@ -3,8 +3,9 @@ import { PermissionLevel } from '@graasp/sdk';
 
 import '@testing-library/cypress/add-commands';
 
-import { CURRENT_MEMBER, MEMBERS, MOCK_SERVER_ITEM } from '../../src/data/db';
 import { MOCK_SERVER_API_HOST } from '../fixtures/appData';
+import { MOCK_SERVER_ITEM } from '../fixtures/item';
+import { CURRENT_MEMBER, MEMBERS } from '../fixtures/members';
 
 // ***********************************************
 // This example commands.js shows you how to

@@ -267,12 +267,11 @@ For this we will need to add the following packages into `package.json`:
 - `husky`
 - `@commitlint/cli`
 - `@commitlint/config-conventional`
-- `pretty-quick`
 
 We can add them with:
 
 ```
-yarn add -D husky @commitlint/cli @commitlint/config-conventional pretty-quick
+yarn add -D husky @commitlint/cli @commitlint/config-conventional
 ```
 
 We can then install the git hooks with:
@@ -303,7 +302,7 @@ Here are a few examples that you can add:
 ```bash
 yarn husky add .husky/commit-msg 'yarn commitlint --edit ${1}';
 yarn husky add .husky/post-checkout 'yarn install';
-yarn husky add .husky/pre-commit 'yarn pretty-quick --staged && yarn lint && yarn test';
+yarn husky add .husky/pre-commit 'yarn check';
 yarn husky add .husky/post-commit 'git status';
 yarn husky add .husky/pre-push 'yarn lint && yarn build && yarn test';
 yarn husky add .husky/post-merge 'yarn install';

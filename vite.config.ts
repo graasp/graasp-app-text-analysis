@@ -47,7 +47,7 @@ export default ({ mode }: { mode: string }): UserConfigExport => {
         extension: ['.js', '.ts', '.tsx'],
         requireEnv: false,
         forceBuildInstrument: mode === 'test',
-        checkProd: true,
+        checkProd: false,
       }),
     ],
     resolve: {

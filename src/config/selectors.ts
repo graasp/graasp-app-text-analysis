@@ -1,5 +1,3 @@
-import { CheckBoxState } from '@/components/common/table/types';
-
 export const PLAYER_VIEW_CY = 'player_view';
 export const BUILDER_VIEW_CY = 'builder_view';
 export const APP_DATA_CONTAINER_CY = 'app_data_container';
@@ -48,7 +46,7 @@ export const EDITABLE_TABLE_DISCARD_ALL_BUTTON_CY =
   'editable_table_discard_all_button';
 export const EDITABLE_TABLE_NO_DATA_CY = 'edit_table_no_data';
 export const EDITABLE_TABLE_FILTER_NO_RESULT_CY = 'edit_table_filter_no_result';
-export const buildEditableSelectAllButtonCy = (state: CheckBoxState): string =>
+export const buildEditableSelectAllButtonCy = (state: string): string =>
   `editable_table_select_all_button_${state}`;
 export const buildEditableTableSelectButtonCy = (
   rowId: string,

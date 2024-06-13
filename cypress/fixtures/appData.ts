@@ -3,7 +3,8 @@ import { v4 as uuid } from 'uuid';
 import { AppData, AppDataVisibility } from '@graasp/sdk';
 
 import { AppDataTypes } from '../../src/config/appDataTypes';
-import { CURRENT_MEMBER, MOCK_SERVER_ITEM } from '../../src/data/db';
+import { MOCK_SERVER_ITEM } from './item';
+import { CURRENT_MEMBER } from './members';
 
 export const MOCK_SERVER_API_HOST = 'http://localhost:3636';
 

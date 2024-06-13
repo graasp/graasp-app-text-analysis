@@ -10,7 +10,8 @@ import {
   TEXT_RESOURCE_SETTING_KEY,
   USE_CHATBOT_SETTING_KEY,
 } from '../../src/config/appSettingTypes';
-import { CURRENT_MEMBER, MOCK_SERVER_ITEM } from '../../src/data/db';
+import { MOCK_SERVER_ITEM } from './item';
+import { CURRENT_MEMBER } from './members';
 
 export const MOCK_TEXT_RESOURCE =
   'Lorem ipsum dolor sit amet. Ut optio laborum qui ducimus rerum eum illum possimus non quidem facere. A neque quia et placeat exercitationem vel necessitatibus Quis ea quod necessitatibus sit voluptas culpa ut laborum quia ad nobis numquam. Quo quibusdam maiores et numquam molestiae ut mollitia quaerat et voluptates autem qui expedita delectus aut aliquam expedita et odit incidunt. Id quia nulla est voluptate repellat non internos voluptatem sed cumque omnis et consequatur placeat qui illum aperiam eos consequatur suscipit.';
