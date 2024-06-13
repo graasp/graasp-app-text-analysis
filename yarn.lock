@@ -4204,29 +4204,29 @@ __metadata:
   linkType: hard
 
 "@types/lodash.isequal@npm:^4.5.6":
-  version: 4.5.6
-  resolution: "@types/lodash.isequal@npm:4.5.6"
+  version: 4.5.8
+  resolution: "@types/lodash.isequal@npm:4.5.8"
   dependencies:
     "@types/lodash": "npm:*"
-  checksum: 0f065989408a9e0584e6c27495be2cd4602e62650f55266aa195812582444463c0c8570c674ae84f947c11748f49ab43fd5b482fa120e08eeee4c23b162edc38
+  checksum: f3180c2d2925514fff1908a1303c11468c9f39b47fd7b053416aad3f1447f8e4a9894dd0460187ac9ac19387e25aec8dd8214d13a50a0967e0dc9cca8e4c5353
   languageName: node
   linkType: hard
 
-"@types/lodash.isobject@npm:3.0.7":
-  version: 3.0.7
-  resolution: "@types/lodash.isobject@npm:3.0.7"
+"@types/lodash.isobject@npm:3.0.9":
+  version: 3.0.9
+  resolution: "@types/lodash.isobject@npm:3.0.9"
   dependencies:
     "@types/lodash": "npm:*"
-  checksum: 0ee50208a4bc641172d4e79f497c8cd59e437ad6109f2118bfe45c4e8815ecd0e5ea563fb04f307580a1e8f34e6e364b45eac8097db0448f521c78a50a2ce0ab
+  checksum: 09785a1c150759730b4eb32f7435eeeb8e52c78ea8030f744bcf83d6a9dfda493327dad31fb74d0c7e180cdb920bf68a37ac5f69dcc5285d092c5c3301ffb1c3
   languageName: node
   linkType: hard
 
-"@types/lodash.isstring@npm:4.0.7":
-  version: 4.0.7
-  resolution: "@types/lodash.isstring@npm:4.0.7"
+"@types/lodash.isstring@npm:4.0.9":
+  version: 4.0.9
+  resolution: "@types/lodash.isstring@npm:4.0.9"
   dependencies:
     "@types/lodash": "npm:*"
-  checksum: 0718eadc1c53c830dde7133dca5cf13a46444512d8a80ffd98ba29a06f2eb926317b22b0eafe066b70a13844356063640be1e441a22d19518a1991eba250e677
+  checksum: ef381be69b459caa42d7c5dc4ff5b3653e6b3c9b2393f6e92848efeafe7690438e058b26f036b11b4e535fc7645ff12d1203847b9a82e9ae0593bdd3b25a971b
   languageName: node
   linkType: hard
 
@@ -8729,8 +8729,8 @@ __metadata:
     "@types/jest": "npm:29.5.12"
     "@types/lodash.debounce": "npm:^4.0.9"
     "@types/lodash.isequal": "npm:^4.5.6"
-    "@types/lodash.isobject": "npm:3.0.7"
-    "@types/lodash.isstring": "npm:4.0.7"
+    "@types/lodash.isobject": "npm:3.0.9"
+    "@types/lodash.isstring": "npm:4.0.9"
     "@types/node": "npm:20.10.8"
     "@types/randomcolor": "npm:0.5.9"
     "@types/react": "npm:18.2.79"
