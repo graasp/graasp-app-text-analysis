@@ -10,8 +10,8 @@
   ],
   "homepage": ".",
   "dependencies": {
-    "@emotion/react": "11.11.1",
-    "@emotion/styled": "11.11.0",
+    "@emotion/react": "11.11.4",
+    "@emotion/styled": "11.11.5",
     "@graasp/apps-query-client": "^3.4.15",
     "@graasp/sdk": "^4.12.2",
     "@graasp/ui": "4.1.1",
