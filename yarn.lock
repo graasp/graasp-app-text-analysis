@@ -3083,29 +3083,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/base@npm:5.0.0-beta.7":
-  version: 5.0.0-beta.7
-  resolution: "@mui/base@npm:5.0.0-beta.7"
-  dependencies:
-    "@babel/runtime": "npm:^7.22.5"
-    "@emotion/is-prop-valid": "npm:^1.2.1"
-    "@mui/types": "npm:^7.2.4"
-    "@mui/utils": "npm:^5.13.7"
-    "@popperjs/core": "npm:^2.11.8"
-    clsx: "npm:^1.2.1"
-    prop-types: "npm:^15.8.1"
-    react-is: "npm:^18.2.0"
-  peerDependencies:
-    "@types/react": ^17.0.0 || ^18.0.0
-    react: ^17.0.0 || ^18.0.0
-    react-dom: ^17.0.0 || ^18.0.0
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-  checksum: d03d6d5266056266eb650b011cf341d2405c1c50fb7552f3a5ed2743a5105cfae006e6ad7881fba364a26f61c5de99b1063de30541d4b5db8b171e07baef0dfd
-  languageName: node
-  linkType: hard
-
 "@mui/core-downloads-tracker@npm:^5.13.7":
   version: 5.14.0
   resolution: "@mui/core-downloads-tracker@npm:5.14.0"
@@ -3152,22 +3129,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/lab@npm:5.0.0-alpha.136":
-  version: 5.0.0-alpha.136
-  resolution: "@mui/lab@npm:5.0.0-alpha.136"
+"@mui/lab@npm:5.0.0-alpha.170":
+  version: 5.0.0-alpha.170
+  resolution: "@mui/lab@npm:5.0.0-alpha.170"
   dependencies:
-    "@babel/runtime": "npm:^7.22.5"
-    "@mui/base": "npm:5.0.0-beta.7"
-    "@mui/system": "npm:^5.14.0"
-    "@mui/types": "npm:^7.2.4"
-    "@mui/utils": "npm:^5.13.7"
-    clsx: "npm:^1.2.1"
+    "@babel/runtime": "npm:^7.23.9"
+    "@mui/base": "npm:5.0.0-beta.40"
+    "@mui/system": "npm:^5.15.15"
+    "@mui/types": "npm:^7.2.14"
+    "@mui/utils": "npm:^5.15.14"
+    clsx: "npm:^2.1.0"
     prop-types: "npm:^15.8.1"
-    react-is: "npm:^18.2.0"
   peerDependencies:
     "@emotion/react": ^11.5.0
     "@emotion/styled": ^11.3.0
-    "@mui/material": ^5.0.0
+    "@mui/material": ">=5.15.0"
     "@types/react": ^17.0.0 || ^18.0.0
     react: ^17.0.0 || ^18.0.0
     react-dom: ^17.0.0 || ^18.0.0
@@ -3178,7 +3154,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: 4d3f7a129f5807cdcc1e37261aa9612e0551f41444cde8eba6e86016da2a829c62d4614b02c2117fe165a402af281f1307afe63086f1db0c938064ea922f3f2a
+  checksum: be723d3824a8c56681c2fa71f3bfda5cad9404ed527ab82258ae85219fbb28e8080b90870954c064491699c15409fc2aa4e008e29011cadae1cb978179166f2d
   languageName: node
   linkType: hard
 
@@ -3324,7 +3300,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/system@npm:^5.13.7, @mui/system@npm:^5.14.0":
+"@mui/system@npm:^5.13.7":
   version: 5.14.0
   resolution: "@mui/system@npm:5.14.0"
   dependencies:
@@ -8715,7 +8691,7 @@ __metadata:
     "@graasp/sdk": "npm:^4.12.2"
     "@graasp/ui": "npm:4.1.1"
     "@mui/icons-material": "npm:5.11.16"
-    "@mui/lab": "npm:5.0.0-alpha.136"
+    "@mui/lab": "npm:5.0.0-alpha.170"
     "@mui/material": "npm:5.13.7"
     "@sentry/react": "npm:7.54.0"
     "@sentry/tracing": "npm:7.54.0"
