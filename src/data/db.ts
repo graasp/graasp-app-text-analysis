@@ -30,6 +30,7 @@ export const MEMBERS: { [key: string]: CompleteMember } = {
     updatedAt: new Date().toISOString(),
     email: 'anna@email.com',
     extra: {},
+    enableSaveActions: true,
   },
   BOB: {
     id: '1f0a2774-a965-4b97-afb4-bccc3796e060',
@@ -39,6 +40,7 @@ export const MEMBERS: { [key: string]: CompleteMember } = {
     updatedAt: new Date().toISOString(),
     email: 'bob@email.com',
     extra: {},
+    enableSaveActions: true,
   },
 };
 
