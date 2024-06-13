@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.2](https://github.com/graasp/graasp-app-text-analysis/compare/v1.4.1...v1.4.2) (2024-06-13)
+
+
+### Bug Fixes
+
+* **italian:** add missing translations ([#120](https://github.com/graasp/graasp-app-text-analysis/issues/120)) ([95e85e5](https://github.com/graasp/graasp-app-text-analysis/commit/95e85e586bcf517c3ae9e68ceee4bdf78ae0b56f))
+* update query-client version ([#128](https://github.com/graasp/graasp-app-text-analysis/issues/128)) ([2813ce9](https://github.com/graasp/graasp-app-text-analysis/commit/2813ce995c618b460fcde1f00bdb1ebd3eb06f0c))
+
 ## [1.4.1](https://github.com/graasp/graasp-app-text-analysis/compare/v1.4.0...v1.4.1) (2024-05-02)
 
 
