@@ -16,7 +16,7 @@
     "@graasp/sdk": "^4.12.2",
     "@graasp/ui": "4.1.1",
     "@mui/icons-material": "5.11.16",
-    "@mui/lab": "5.0.0-alpha.136",
+    "@mui/lab": "5.0.0-alpha.173",
     "@mui/material": "5.13.7",
     "@sentry/react": "7.54.0",
     "@sentry/tracing": "7.54.0",
