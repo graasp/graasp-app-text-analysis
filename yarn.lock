@@ -5837,7 +5837,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:^3.4.2, chokidar@npm:^3.5.1, chokidar@npm:^3.5.3":
+"chokidar@npm:^3.4.2, chokidar@npm:^3.5.1":
   version: 3.5.3
   resolution: "chokidar@npm:3.5.3"
   dependencies:
@@ -6555,14 +6555,13 @@ __metadata:
   linkType: hard
 
 "cypress-vite@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "cypress-vite@npm:1.5.0"
-  dependencies:
-    chokidar: "npm:^3.5.3"
-    debug: "npm:^4.3.4"
+  version: 1.10.2
+  resolution: "cypress-vite@npm:1.10.2"
   peerDependencies:
-    vite: ^2.9.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
-  checksum: 905f903ccdd00d12f1b5b91d75123a9dfc3b33e678a9fbe89be244ad802c8ec46c876ac389900b385d3ca421310d4ea15c77f802be794549e1975de1f04b5848
+    chokidar: ^2 || ^3 || ^4 || ^5
+    debug: ^2 || ^3 || ^4
+    vite: ^2.9 || ^3 || ^4 || ^5 || ^6 || ^7 || ^8
+  checksum: b220b63a3dba983a2c60b2f3ffec879b0e1c23268a79571cb2d21a8fd535a7c171b9678645dfa4351812c59229868bb7c84a4f86d88c478ffa81bdc30f68c95d
   languageName: node
   linkType: hard
 
